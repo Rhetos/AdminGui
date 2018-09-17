@@ -1,10 +1,8 @@
 ﻿import { Component, ChangeDetectorRef, ChangeDetectionStrategy, Output, ViewChild, AfterViewInit, EventEmitter, ViewContainerRef, ElementRef, Injector, Injectable, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { BrowserXhr } from '@angular/http';
-import { AppSettings, AppSettingsDefault } from 'basecode/core';
-import { FormBuilder } from '@angular/forms'
-import { LoginService } from 'services/index';
-import { LoginInfo } from 'models/index';
+import { AppSettings, AppSettingsDefault, LoginService, LoginInfo } from 'basecode/core';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'header-admingui',
@@ -45,13 +43,13 @@ export class HeaderAdminGuiAppComponent {
      * Log Out
      * @param 
      */
-    logOut() {
-        var isLogOut = confirm("Are you sure you want to logout?");
-        if (isLogOut) {
-            this.loginService.logout();
-            window.location.href = location.origin + (location.pathname.split('/').splice(0, location.pathname.split('/').length - 3).join('/')) + '/Resources/AspNetFormsAuth/Login.html?ReturnUrl=%2f';
+    //logOut() {
+    //    var isLogOut = confirm("Are you sure you want to logout?");
+    //    if (isLogOut) {
+    //        this.loginService.logout();
+    //        window.location.href = location.origin + (location.pathname.split('/').splice(0, location.pathname.split('/').length - 3).join('/')) + '/Resources/AspNetFormsAuth/Login.html?ReturnUrl=%2f';
 
-        }
-    }
+    //    }
+    //}
 
 }

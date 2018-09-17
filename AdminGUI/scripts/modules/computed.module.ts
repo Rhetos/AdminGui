@@ -7,7 +7,7 @@ import { ReComputeComponent } from '../components/recompute.component';
 import { DiffComponent } from '../components/diff.component';
 import { DiffGridComponent } from '../components/diff-grid.component';
 import { ComputedViewComponent } from '../components/computed-view.component';
-import { COMPUTED_ROUTES_PROVIDERS } from '../routings/computed.routing.ts';
+import { COMPUTED_ROUTES_PROVIDERS } from '../routings/computed.routing';
 import { BaseCodeModule } from './basecode.module';
 
 import { DiffViewComponent } from '../components/diff-view.component';

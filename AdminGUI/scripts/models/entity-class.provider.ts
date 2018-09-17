@@ -1,4 +1,4 @@
-﻿import { Dictionary } from './dictionary.ts';
+﻿import { Dictionary } from './dictionary';
 export class EntityClassProvider {
     public static mapEntity: Dictionary = new Dictionary();
 }

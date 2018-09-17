@@ -39,6 +39,7 @@ namespace Angular2ModelGenerator
         public static readonly CsTag<DataStructureInfo> SetModelDataTag = "SetModelDataTag";
         public static readonly CsTag<DataStructureInfo> InvalidDataTag = "InvalidDataTag";
         public static readonly CsTag<DataStructureInfo> FiltersTag = "FiltersTag";
+        public static readonly CsTag<DataStructureInfo> AdditionalFunctionsTag = "AdditionalFunctionsTag";
 
         private static string _urlPath = "generic-grid";
         [Obsolete]
@@ -64,6 +65,15 @@ namespace Angular2ModelGenerator
                 || conceptInfo is BrowseDataStructureInfo
                 || conceptInfo is QueryableExtensionInfo
                 || conceptInfo is ComputedInfo;
+        }
+
+        public static string getParentInstanceOfBrowse(DataStructureInfo conceptInfo)
+        {
+            if (conceptInfo is BrowseDataStructureInfo) {
+                BrowseDataStructureInfo browseInfo = (BrowseDataStructureInfo)conceptInfo;
+                return "\"" + browseInfo.Source.Module.Name + "." + browseInfo.Source.Name + "\"";
+            }
+            return "null";
         }
 
         private static string ImplementationCodeSnippet(DataStructureInfo info)
@@ -107,6 +117,11 @@ export class {0}{1} extends BaseEntity implements BaseEntityWithFilters
             {8}
         ];
     }}
+
+    getParentName(): string {{
+        return {9};
+    }}
+    {10}
 }}
 ",
                 info.Module.Name,
@@ -117,7 +132,9 @@ export class {0}{1} extends BaseEntity implements BaseEntityWithFilters
                 _urlPath,
                 ValidatorTag.Evaluate(info),
                 InvalidDataTag.Evaluate(info),
-                FiltersTag.Evaluate(info)
+                FiltersTag.Evaluate(info),
+                getParentInstanceOfBrowse(info),
+                AdditionalFunctionsTag.Evaluate(info)
             );
             // Added as entityProvider only that its Model can be used for form creating.
             AppEntityProviderCodeGenerator.AddEntityProvider(info.Module.Name, info.Name);

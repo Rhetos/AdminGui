@@ -110,6 +110,7 @@
     <Compile Include="SimpleBusinessLogic\MaxLengthTagCodeGenerator.cs" />
     <Compile Include="SimpleBusinessLogic\MinLengthTagCodeGenerator.cs" />
     <Compile Include="SimpleBusinessLogic\RegExTagCodeGenerator.cs" />
+    <Compile Include="SimpleBusinessLogic\RowPermissionsCodeGenerator.cs" />
     <Compile Include="SimpleBusinessLogic\RequiredTagCodeGenerator.cs" />
   </ItemGroup>
   <ItemGroup />

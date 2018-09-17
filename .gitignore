@@ -1,5 +1,4 @@
 AdminGUI/make.out
-AdminGUI/typings/
 AdminGUI/wwwroot/templates/
 AdminGUI/scripts/basecode.d.ts
 *.nupkg
@@ -8,3 +7,7 @@ RhetosPackages/Source/RhetosConceptsAndExtensions/obj/
 make.out
 *.suo
 RhetosPackages/BasecodePlugins/RhetosConceptsAndExtensions.dll
+RhetosPackages/Source/Angular2ModelGenerator/bin/*
+RhetosPackages/Source/AdminGuiRhetosExtensions/bin/
+RhetosPackages/Source/Angular2ModelGenerator/obj/
+RhetosPackages/Source/AdminGuiRhetosExtensions/obj/

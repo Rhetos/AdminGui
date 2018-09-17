@@ -6,7 +6,7 @@ import { ActiveMenuItem, AppSettings, AppSettingsDefault, IEmptyConstruct, AppMe
 import { Message } from 'primeng/primeng';
 import { DomHandler } from 'primeng/components/dom/domhandler';
 
-import { AllModels, AllMenuItemModels } from '../models/rhetos.angular2.ts';
+import { AllModels, AllMenuItemModels } from '../models/rhetos.angular2';
 
 declare var jQuery: JQueryStatic;
 

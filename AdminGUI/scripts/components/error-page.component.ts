@@ -2,7 +2,7 @@
 import { ErrorInCommand } from 'basecode/core';
 
 @Component({
-    selector:'error',
+    selector:'error-page',
     templateUrl: './templates/components/error-page.component.html'
 })
 export class ErrorPageComponent {

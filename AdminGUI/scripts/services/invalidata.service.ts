@@ -1,10 +1,9 @@
 ﻿import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
-import { IEntityDataService, IEmptyConstruct, NotificationService} from 'basecode/core';
-import { AppSettings } from 'app/app.settings';
+import { IEntityDataService, IEmptyConstruct, NotificationService, AppSettings} from 'basecode/core';
 
-import { IInvalidEntity, IInvalidFilter, IInvalidChunk, IInvalidDataFilter } from '../models/admingui-interface.ts';
+import { IInvalidEntity, IInvalidFilter, IInvalidChunk, IInvalidDataFilter } from '../models/admingui-interface';
 
 const headers = new Headers({ 'Content-Type': 'application/json' });;
 const options = new RequestOptions({ headers: headers });

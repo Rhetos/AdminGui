@@ -1,4 +1,4 @@
-﻿import { EntityClassProvider } from './entity-class.provider.ts';
+﻿import { EntityClassProvider } from './entity-class.provider';
 import { DecoratorRegistrations } from 'basecode/core';
 
 export interface IEntityProvider {

@@ -1,11 +1,8 @@
 /node_modules
-/wwwroot/css
 /wwwroot/js
-/wwwroot/css
 /wwwroot/lib
 /wwwroot/Scripts
-BaseCode.xproj.user
-.vs/BaseCode/v14/.suo
+/wwwroot/css
 .vs/restore.dg
 bin/
 bower_components/
