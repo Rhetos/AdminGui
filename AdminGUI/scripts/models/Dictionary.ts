@@ -1,4 +1,4 @@
-﻿import { IEntityProvider } from './admingui-interface.ts';
+﻿import { IEntityProvider } from './admingui-interface';
 export class Dictionary {
     private items: Array<IEntityProvider> = new Array<IEntityProvider>();
 

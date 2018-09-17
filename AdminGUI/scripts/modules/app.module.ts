@@ -5,10 +5,10 @@ import { LocationStrategy, HashLocationStrategy} from '@angular/common';
 import { HttpModule } from '@angular/http';
 
 import { AdminGuiComponent } from '../app/admin-gui.component';
-import { APP_ROUTES_PROVIDERS } from '../routings/app.routing.ts';
+import { APP_ROUTES_PROVIDERS } from '../routings/app.routing';
 import { HeaderAdminGuiAppComponent } from '../controls/header-admingui.control';
-import { AllModels, AllMenuItemModels } from '../models/rhetos.angular2.ts';
-import { InvalidDataService } from '../services/invalidata.service.ts';
+import { AllModels, AllMenuItemModels } from '../models/rhetos.angular2';
+import { InvalidDataService } from '../services/invalidata.service';
 import { BaseCodeModule } from './basecode.module';
 import { HomeComponent } from '../components/home.component';
 import { ProfilePageComponent } from '../components/profile-page.component';

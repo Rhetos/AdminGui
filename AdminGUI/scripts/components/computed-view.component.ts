@@ -1,14 +1,12 @@
 ﻿import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, NgZone, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http, Headers, RequestOptions } from '@angular/http';
-
-import { GenericFormComponent } from 'components/generic-form.component';
-import { BusyOverlayComponent } from 'components/busy-overlay.component';
+import { GenericFormComponent, BusyOverlayComponent } from 'basecode/core';
 
 import { EntityClassProvider } from '../models/entity-class.provider';
-import { ReComputeComponent } from './recompute.component.ts';
-import { DiffComponent } from './diff.component.ts';
-import { DiffGridComponent } from './diff-grid.component.ts';
+import { ReComputeComponent } from './recompute.component';
+import { DiffComponent } from './diff.component';
+import { DiffGridComponent } from './diff-grid.component';
 
 
 @Component({

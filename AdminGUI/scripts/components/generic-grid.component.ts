@@ -6,7 +6,7 @@ import { GridPrimeControl } from 'basecode/controls';
 import { IButtonInfo, ButtonInfo, FieldFilter, FilterMatchMode, IComposableFilter, IEmptyConstruct, IEntityDataService, ErrorInCommand, ErrorService } from 'basecode/core';
 
 import { EntityClassProvider } from '../models/entity-class.provider';
-import { InvalidDataService } from '../services/invalidata.service.ts';
+import { InvalidDataService } from '../services/invalidata.service';
 //import { Err } from 'basecode/core';
 
 @Component({
@@ -18,6 +18,8 @@ export class GenericGridComponent implements AfterViewInit {
 
     /** Entity type */
     private entityType: any = null;
+
+    private parentType: any = null;
 
     /** Link for update entity */
     private claimLink: string = "";
@@ -92,7 +94,9 @@ export class GenericGridComponent implements AfterViewInit {
             // Get entity type by ID from factory
             let claim = params['claim'];
             this.entityType = EntityClassProvider.mapEntity.getByID(claim);
-
+            let parentName: string = (new this.entityType()).getParentName();
+            if (parentName)
+                this.parentType = EntityClassProvider.mapEntity.getByID(parentName);
             this.claimLink = "/generic-grid/" + claim;
             this.entityService.userHasPermission(this.entityType, 'New').then((result: boolean) => {
                 if (result)
