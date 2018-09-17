@@ -12,9 +12,39 @@ var http = require('http');
 //var fs = require('fs');
 // var gcallback = require('gulp-callback')
 
+var Builder = require("systemjs-builder");
+
+// SystemJS build options.
+var builderOptions = {
+    normalize: true,
+    runtime: false,
+    sourceMaps: false,
+    sourceMapContents: false,
+    minify: true,
+    mangle: false
+};
+var builder = new Builder('./');
+builder.config({
+    paths: {
+        "n:*": "node_modules/*",
+        "rxjs/*": "node_modules/rxjs/*.js",
+    },
+    map: {
+        "rxjs": "n:rxjs",
+    },
+    packages: {
+        "rxjs": {main: "Rx.js", defaultExtension: "js"},
+    }
+});
+
+gulp.task("build-RxJS-System", function() {
+	builder.bundle('rxjs', 'node_modules/.tmp/Rx.umd.min.js', builderOptions).then(function(output) {
+		gulp.src("node_modules/.tmp/Rx.umd.min.js").pipe(gulp.dest('wwwroot/lib/rxjs'));
+	});
+});
+
 var compileTS = require('gulp-typescript');
 var projects = [
-        {name: 'basecode', files: './../2CS.BaseCode/scripts', project: compileTS.createProject('./../2CS.BaseCode/tsconfig.json'), rootDir: './../2CS.BaseCode/scripts/'},
         {name: 'currentApp', files: 'scripts', project: compileTS.createProject('tsconfig.json'), rootDir: ''}
 ];
 
@@ -26,36 +56,47 @@ var paths = {
     compiledTS: "./dist/",
     appjs: "./wwwroot/js/",
     bower: "./bower_components/",
+	external_libs: "./external_scripts/",
 	componentCss: "./wwwroot/css/"
 };
 
 var libs = [
     { basePath: paths.npm, relPath: "moment/moment.js" },
-    { basePath: paths.npm, relPath: "@angular/common/common.umd.min.js" },
-    { basePath: paths.npm, relPath: "@angular/compiler/compiler.umd.min.js" },
-    { basePath: paths.npm, relPath: "@angular/core/core.umd.min.js" },
-    { basePath: paths.npm, relPath: "@angular/http/http.umd.min.js" },
-    { basePath: paths.npm, relPath: "@angular/platform-browser/platform-browser.umd.min.js" },
-    { basePath: paths.npm, relPath: "@angular/platform-browser-dynamic/platform-browser-dynamic.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/common/bundles/common.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/compiler/bundles/compiler.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/core/bundles/core.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/http/bundles/http.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/platform-browser/bundles/platform-browser.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min.js" },
     { basePath: paths.npm, relPath: "@angular/core/src/util/decorators.js" },
     { basePath: paths.npm, relPath: "@angular/core/src/facade/lang.js" },
-    { basePath: paths.npm, relPath: "@angular/router/router.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/router/bundles/router.umd.min.js" },
+    { basePath: paths.npm, relPath: "@angular/forms/bundles/forms.umd.min.js" },
+	
+	{ basePath: paths.npm, relPath: "basecode/bundles/basecode.min.js" },
+	// { basePath: paths.npm, relPath: "basecode/bundles/basecode.umd.min.js" },
+	
     { basePath: paths.npm, relPath: "es6-shim/es6-shim.min.js" },
     { basePath: paths.npm, relPath: "zone.js/dist/zone.js" },
-    { basePath: paths.npm, relPath: "rxjs/bundles/Rx.min.js" },
+	// { basePath: paths.npm, relPath: "rxjs/bundles/Rx.min.js" },
     { basePath: paths.npm, relPath: "reflect-metadata/reflect.js" },
     { basePath: paths.npm, relPath: "systemjs/dist/system.src.js" },
     { basePath: paths.npm, relPath: "systemjs/dist/system-polyfills.js" },
     // { basePath: paths.npm, relPath: "angular2-cookie/bundles/angular2-cookie.min.js" }, // no need for now
+	{ basePath: paths.npm, relPath: "ng2-file-upload/components/file-upload/*.js" },
+    { basePath: paths.npm, relPath: "ng2-file-upload/ng2-file-upload.js" },
+    { basePath: paths.npm, relPath: "cropit/dist/jquery.cropit.js" },
 	
     { basePath: paths.bower + "jquery/dist/", relPath: "jquery.min.js" },
     { basePath: paths.bower + "jquery-ui/", relPath: "jquery-ui.min.js" },
     { basePath: paths.bower + "bootstrap/dist/js/", relPath: "bootstrap.min.js" },
 
+	{ basePath: paths.external_libs, relPath: "tag-autocomplete-jquery.control.js" },
     { basePath: paths.external_libs, relPath: "jquery.datetimepicker.min.js" },
     // { basePath: paths.external_libs, relPath: "kendo.all.min.js" }, // no need for now
     // { basePath: paths.external_libs, relPath: "pqgrid.min.js" }, // no need for now
     // { basePath: paths.external_libs, relPath: "alasql.js" }, // no need for now
+	{ basePath: paths.external_libs, relPath: "FileSaver.min.js" },
     { basePath: paths.external_libs, relPath: "xlsx.core.min.js" }
 ];
 
@@ -88,37 +129,33 @@ gulp.task('compile-ts', function() {
 
 var log = console.log.bind(console);
 
+// to ensure that rxjs is builded once more and that last version will be used
 gulp.task("libs", function () {
     libs.map(function (x) {
-        gulp.src(x.basePath + x.relPath).pipe(gulp.dest(paths.lib + x.relPath.substr(0, x.relPath.lastIndexOf('/'))));
+        var dest = x.relPath.substr(0, x.relPath.lastIndexOf('/'));
+        dest = dest.indexOf('angular') !== -1 ? dest.substr(0, dest.lastIndexOf('/')) : dest;
+        gulp.src(x.basePath + x.relPath).pipe(gulp.dest(paths.lib + dest));
     });
     gulp.src("./node_modules/primeng/components/**/*.js").pipe(gulp.dest(paths.lib + 'primeng/components/'));
     gulp.src("./node_modules/primeng/primeng.js").pipe(gulp.dest(paths.lib + 'primeng/'));
 
     gulp.src("./node_modules/primeui/themes/smoothness/**/*").pipe(gulp.dest('wwwroot/css/primeui/theme/'));
     gulp.src("./node_modules/primeui/primeui-ng-all.min.css").pipe(gulp.dest('wwwroot/css/primeui/'));
-    //ADD
-    gulp.src("./../2CS.BaseCode/wwwroot/css/**/*").pipe(gulp.dest('wwwroot/css/'));
+   
 	gulp.src('./scripts/**/*.css').pipe(gulp.dest(paths.componentCss));
-	gulp.src('./scripts/es5-shim.js').pipe(gulp.dest('wwwroot/lib/es6-shim/'));
-    gulp.src("./../2CS.BaseCode/wwwroot/lib/**/*").pipe(gulp.dest('wwwroot/lib/'));
-    gulp.src("./../2CS.BaseCode/wwwroot/js/**/*").pipe(gulp.dest('wwwroot/js/'));
-    gulp.src("./../2CS.BaseCode/wwwroot/Scripts/**/*").pipe(gulp.dest('wwwroot/Scripts/'));
+	gulp.src('./scripts/es5-shim.js').pipe(gulp.dest('wwwroot/lib/es6-shim/'));    
+	gulp.src("./scripts/systemjs.config.js").pipe(gulp.dest('wwwroot/js/'));
+    //gulp.src("./node_modules/.tmp/Rx.umd.min.js").pipe(gulp.dest('wwwroot/lib/rxjs'));
+	
 });
 
 gulp.task("appCopy", function () {
-    gulp.src("dist/*").pipe(gulp.dest(paths.appjs));
-    gulp.src("./scripts/systemjs.config.js").pipe(gulp.dest(paths.appjs));
-    gulp.src("Scripts/**/*").pipe(gulp.dest("wwwroot/Scripts/"));
+	//Comment by Duong 17/10
+    //gulp.src("dist/*").pipe(gulp.dest(paths.appjs));
+    //gulp.src("./scripts/systemjs.config.js").pipe(gulp.dest(paths.appjs));
     //ADD
     gulp.src("scripts/**/*").pipe(gulp.dest("wwwroot/Scripts/")); //add by Quan 22/6/2016
-    gulp.src("scripts/services/login.info.ts").pipe(gulp.dest("wwwroot/Scripts/services/")); //add by Quan 22/6/2016
-    gulp.src("./../2CS.BaseCode/wwwroot/scripts/systemjs.config.js").pipe(gulp.dest('wwwroot/scripts/'));
-});
-
-gulp.task("baseCodeRef", function () {
-    gulp.src("./../2CS.BaseCode/dist/basecode.d.ts").pipe(gulp.dest("./scripts/"));
-    gulp.src("./../2CS.BaseCode/typings/**/*").pipe(gulp.dest("./typings/"));
+    gulp.src("scripts/services/login.info.ts").pipe(gulp.dest("wwwroot/Scripts/services/"));
 });
 
 gulp.task("appCopyWithCompile", ['compile-ts', 'appCopy'], function () {
@@ -126,8 +163,7 @@ gulp.task("appCopyWithCompile", ['compile-ts', 'appCopy'], function () {
 
 gulp.task('templates', function () {
     gulp.src('./scripts/**/*.html').pipe(gulp.dest(paths.componentTemplates));
-    gulp.src('./../2CS.BaseCode/scripts/**/*.html').pipe(gulp.dest(paths.componentTemplates));
-    gulp.src('./../2CS.BaseCode/scripts/template_overwrites/*.html').pipe(gulp.dest(paths.componentOverwriteTemplates));
+
 });
 
 gulp.task("clean", function (callback) {
@@ -135,11 +171,11 @@ gulp.task("clean", function (callback) {
 
     rimraf(paths.appjs, dummyFun);
     rimraf(paths.compiledTS, dummyFun);
-    rimraf(paths.lib, callback);
+    rimraf(paths.lib, dummyFun);
     rimraf(paths.componentTemplates, callback);
 });
 
-gulp.task('default', ['libs', 'templates', 'appCopy', 'baseCodeRef'], function () {
+gulp.task('default' ,['build-RxJS-System','libs', 'templates', 'appCopy'], function () {
 	// nothing
 });
 
