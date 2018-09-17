@@ -1,6 +1,3 @@
-[submodule "2CS.BaseCode"]
-	path = 2CS.BaseCode
-	url = https://2cs.visualstudio.com/2CS.BaseCode/_git/2CS.BaseCode
 [submodule "2CS.RhetosBuild"]
 	path = 2CS.RhetosBuild
 	url = https://2cs.visualstudio.com/_git/2CS.RhetosBuild
