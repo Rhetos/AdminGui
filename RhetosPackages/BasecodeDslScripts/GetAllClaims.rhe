@@ -1,0 +1,29 @@
+Module Common {
+	Computed GetAllClaims '(repository, executionContext) =>
+		{
+			var claims = repository.Common.Claim.Query()
+					.Where(c => c.Active == true)
+					.ToList()
+					.Select(c => new Rhetos.Security.Claim(c.ClaimResource, c.ClaimRight));
+					
+			const int numOfClaims = 2000;
+				
+			var authorizations = new List<bool>();
+			for (int group = 0; group <= (claims.Count() - 1) / numOfClaims; group++)
+				authorizations.AddRange(executionContext.AuthorizationManager.GetAuthorizations(claims.Skip(group*numOfClaims).Take(numOfClaims).ToList()));
+			
+			if (claims.Count() != authorizations.Count)
+				throw new Rhetos.FrameworkException("Unexpected number of items in claim authorizations.");
+
+			return claims.Zip(authorizations, (claim, authorized) => new { claim, authorized })
+				.Where(claimAuthorization => claimAuthorization.authorized)
+				.Select(claimAuthorization => new GetAllClaims { ClaimResource = claimAuthorization.claim.Resource, ClaimRight = claimAuthorization.claim.Right, Applies = true })
+				.ToArray();
+		}'
+	{
+		UseExecutionContext;
+		ShortString ClaimRight;
+		ShortString ClaimResource;
+		Bool Applies;
+	}
+}
