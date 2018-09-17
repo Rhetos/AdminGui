@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Rhetos.AdminGuiCompile</id>
+    <version>1.0.0-A1609151442-4db4d42</version>
+    <authors>2ClickSolutions</authors>
+    <owners>2CS</owners>
+    <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
+    <projectUrl>https://github.com/rhetos/rhetos</projectUrl>
+    <description>Rhetos.AdminGuiCompile.</description>
+    <copyright>Copyright 2ClickSolutions 2016</copyright>
+    <tags>2ClickSolutions</tags>
+  </metadata>
+  <files>
+	<file src="\scripts\**\*" target="Resources\scripts" />
+	<file src="\node_modules\@angular\**\*.d.ts" target="Resources\node_modules\@angular" />
+	<file src="\node_modules\moment\**\*.d.ts" target="Resources\node_modules\moment" />
+	<file src="\node_modules\ng2-file-upload\**\*.d.ts" target="Resources\node_modules\ng2-file-upload" />
+	<file src="\node_modules\primeng\**\*.d.ts" target="Resources\node_modules\primeng" />
+	<file src="\node_modules\reflect-metadata\**\*.d.ts" target="Resources\node_modules\reflect-metadata" />
+	<file src="\node_modules\rxjs\**\*.d.ts" target="Resources\node_modules\rxjs" />
+	<file src="\node_modules\zone.js\**\*.d.ts" target="Resources\node_modules\zone.js" />
+	<file src="\typings\**\*" target="Resources\typings" />
+	<file src="\tsconfig.json" target="Resources\tsconfig.json" />
+  </files>
+</package>
+

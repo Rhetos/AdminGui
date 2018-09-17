@@ -1,0 +1,135 @@
+/* Add here all your CSS customizations */
+demo-app {
+    width: 100%;
+}
+
+.box-mini {
+    display: inline-block;
+    margin: 3px 0 0 0;
+    position: relative;
+    vertical-align: middle;
+    width: 220px;
+}
+
+    .box-mini a {
+        white-space: nowrap;
+    }
+
+.cell5 {
+    width: 5%;
+}
+
+.cell10 {
+    width: 10%;
+}
+
+.cell12 {
+    width: 12%;
+}
+
+.cell15 {
+    width: 15%;
+}
+
+.cell20 {
+    width: 20%;
+}
+
+.cell30 {
+    width: 30%;
+}
+
+.cell40 {
+    width: 40%;
+}
+
+.cell50 {
+    width: 50%;
+}
+
+.cell60 {
+    width: 60%;
+}
+
+.datepicker-orient-top {
+    z-index:999999999;
+}
+
+select:required:invalid {
+  color: gray;
+  font-style: italic;
+}
+option[value=":none"][disabled] {
+  display: none;
+}
+option {
+  color: black;
+}
+
+.ui-paginator {
+    text-align:right !important;
+}
+
+.ui-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: left;
+  display: none;
+  min-width: 160px;
+  _width: 160px;
+  padding: 4px 0;
+  margin: 2px 0 0 0;
+  list-style: none;
+  background-color: #ffffff;
+  border-color: #ccc;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+}
+.ui-autocomplete .ui-menu-item > a.ui-corner-all {
+  display: block;
+  padding: 3px 15px;
+  clear: both;
+  font-weight: normal;
+  line-height: 18px;
+  color: #555555;
+  white-space: nowrap;
+}
+.ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-hover, .ui-autocomplete .ui-menu-item > a.ui-corner-all.ui-state-active {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #0088cc;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  background-image: none;
+}
+
+.modal-block .form-group{
+    padding-left:15px;
+    padding-right:15px;
+}
+
+#partyPopupForm{
+    padding-right:10px;
+    padding-left:10px;
+    padding-bottom:10px;
+}
+
+.modal-block-primary .fa
+{
+    color: #fff;
+}

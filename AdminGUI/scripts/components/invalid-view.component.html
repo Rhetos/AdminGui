@@ -1,0 +1,148 @@
+﻿<busy-overlay [busy]="busy" [srclink]="srclink"></busy-overlay>
+<div class="modal fade" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static" #invalidPopupModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBack()">&times;</button>
+                <h4 class="modal-title">Invalid Popup</h4>
+            </div>
+            <div>
+                <ul class="nav nav-main">
+                    <li>
+                        <span>
+                            <input type="checkbox" id="SelectAll" style="position:relative; top:25px; width:30px; left: 5px" (change)="toggleAllCheckBox()" [checked]="isSelectAll" />
+                            <a style="position:relative; left:40px; cursor: pointer;">
+                                Select All
+                            </a>
+                        </span>
+                    </li>
+                    <li *ngFor="let menuItem1 of listCheckBox; let i = index">
+                        <span>
+                            <input *ngIf="menuItem1.isVisible && menuItem1.Children.length === 0" type="checkbox" id="{{menuItem1.name}}" style="position:relative; top:25px;left:5px; width: 30px" />
+                            <a *ngIf="menuItem1.isVisible && menuItem1.Children.length === 0" (click)="showChildren(i)" style="position:relative; left:35px; cursor: pointer;">
+                                {{menuItem1.name}}
+                            </a>
+                        </span>
+
+                        <span>
+                            <input *ngIf="menuItem1.isVisible && menuItem1.Children.length !== 0" type="checkbox" id="{{menuItem1.name}}" style="position:relative; top:25px;left:5px; width: 30px" (change)="toggleAllChildren(i)" [checked]="listCheckBox[i].isChecked" />
+                            <a *ngIf="menuItem1.isVisible && menuItem1.Children.length !== 0" (click)="showChildren(i)" style="position:relative; left:35px; cursor: pointer;">
+                                {{menuItem1.name}}
+                            </a>
+                        </span>
+
+                        <ul *ngIf="menuItem1.isVisible && menuItem1.Children.length !== 0" [hidden]="!listCheckBox[i].isShowChildren">
+
+                            <li *ngFor="let menuItem2 of menuItem1.Children; let idxChild = index">
+                                <a *ngIf="menuItem2.isVisible && menuItem2.Children.length === 0">
+                                    <input type="checkbox" id="{{menuItem2.name}}" style="position:relative; top:25px; width:30px" (change)="toggleChildren(i,idxChild)" [checked]="listCheckBox[i].Children[idxChild].isChecked" />
+                                    <span style="position:relative; left:40px; cursor: pointer;" (click)="showDaughter(i, idxChild)">{{menuItem2.name}}</span>
+                                </a>
+                                <a *ngIf="menuItem2.isVisible && menuItem2.Children.length !== 0">
+                                    <input type="checkbox" id="{{menuItem2.name}}" style="position:relative; top:25px; width:30px" (change)="toggleChildren(i,idxChild)" [checked]="listCheckBox[i].Children[idxChild].isChecked" />
+                                    <span style="position:relative; left:40px; cursor: pointer;" (click)="showDaughter(i, idxChild)">{{menuItem2.name}}</span>
+                                </a>
+
+                                <ul *ngIf="menuItem2.isVisible && menuItem2.Children.length !== 0" [hidden]="!listCheckBox[i].Children[idxChild].isShowChildren">
+
+                                    <li *ngFor="let menuItem3 of menuItem2.Children; let idxDaughter = index">
+                                        <a *ngIf="menuItem3.isVisible && menuItem3.Children.length === 0">
+                                            <input type="checkbox" id="{{menuItem3.name}}" style="position:relative; top:25px; width:30px" (change)="toggleDaughter(i,idxChild,idxDaughter)" [checked]="listCheckBox[i].Children[idxChild].Children[idxDaughter].isChecked" />
+                                            <span style="position:relative; left:40px; cursor: pointer;">{{menuItem3.name}}</span>
+                                        </a>
+                                        <a *ngIf="menuItem3.isVisible && menuItem3.Children.length !== 0">
+                                            <input type="checkbox" id="{{menuItem3.name}}" style="position:relative; top:25px; width:30px" (change)="toggleDaughter(i,idxChild,idxDaughter)" [checked]="listCheckBox[i].Children[idxChild].Children[idxDaughter].isChecked" />
+                                            <span style="position:relative; left:40px; cursor: pointer;">{{menuItem3.name}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+                <br />
+            </div>
+
+            <footer class="panel-footer">
+                <div class="row">
+                    <div>
+                        <button type="button" class="btn btn-primary" (click)="submitEntitesFilter()" style="width:80px; margin-left:30px" [disabled]="isChooseFilters == false">Checking</button>
+                        <button type="button" class="btn btn-default ml-xs" (click)="onBack()" style="width:80px; margin-left:30px">Cancel</button>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+</div>
+<section class="panel">
+    <div class="panel-body">
+        <p-tabView (onChange)="loadCheckingHistory($event)">
+            <p-tabPanel header="Summary Page">
+                <button id="checkButton" class="btn btn-primary" type="button" (click)="onShowPopup()" [disabled]="!enableChooseTables">
+                    Choose tables to check invalid
+                </button>
+                <br>
+                <label>
+                    Checking invalid processing
+                </label>
+                <div class="progress progress-sm progress-half-rounded m-none mt-xs light" style="height: 17px">
+                    <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" [style.width]="percentTotalChecking">
+                        {{percentTotalChecking}}
+                    </div>
+                </div>
+                <div style="margin-top: 10px; margin-bottom: 10px; float:right">
+                    <button type="button" *ngIf="buttonName =='Pause'" class="btn btn-primary" (click)="onPause()" style="width:110px; margin-left:30px" [disabled]="!enablePause || enableChooseTables">
+                        <i class="fa fa-pause"></i>
+                        {{buttonName}}
+                    </button>
+                    <button type="button" *ngIf="buttonName =='Resume' || buttonName =='ResumeAll' " class="btn btn-primary" (click)="onResume()" style="width:110px; margin-left:30px" [disabled]="!enableResume || enableChooseTables">
+                        <i class="fa fa-play"></i>
+                        {{buttonName}}
+                    </button>
+                    <button type="button" class="btn btn-default ml-xs" (click)="onCancel()" style="width:110px; margin-left:30px" [disabled]="!enableStop || enableChooseTables">
+                        <i class="fa fa-stop"></i>
+                        Stop
+                    </button>
+                </div>
+
+                <div class="col-sm-offset-11">
+                    <div class="input-group" style="width:100px;float:right">
+                        <input type="number" class="form-control text-right" placeholder="Page Size" [(ngModel)]="pageSize" (change)="changePageSize($event)" maxlength="3" style="width:60px">
+                    </div>
+                </div>
+                <p-column field="Status" header="Status" [filter]="true" filterMatchMode="contains"></p-column>
+                <div style="margin-top:100px">
+
+                    <p-dataTable [value]="data" [rows]="pageSize" [paginator]="true" [pageLinks]="pageLinks" (onRowDblclick)="doubleClick($event)" [totalRecords]="totalRecords" [responsive]="true" #table>
+                        <header>Sumary Page</header>
+                        <p-column field="Module" header="Module" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="Table" header="Table" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="InvalidData" header="InvalidData" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="Status" header="Status" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="NumInvalid" header="Num of invalid rows" [filter]="true" filterMatchMode="contains"></p-column>
+                    </p-dataTable>
+
+                    <router-outlet></router-outlet>
+
+                    <script>
+                        // Preserve Scroll Position
+                        if (typeof localStorage !== 'undefined') {
+                            if (localStorage.getItem('sidebar-left-position') !== null) {
+                                var initialPosition = localStorage.getItem('sidebar-left-position'),
+                                sidebarLeft = document.querySelector('#sidebar-left .nano-content');
+                                sidebarLeft.scrollTop = initialPosition;
+                            }
+                        }
+                    </script>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="History Detail">
+                <history #history></history>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</section>

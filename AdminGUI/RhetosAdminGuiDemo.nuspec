@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Rhetos.AdminGui.Demo</id>
+    <version>1.0.0-A1609161233-4db4d42</version>
+    <authors>2ClickSolutions</authors>
+    <owners>2CS</owners>
+    <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
+    <projectUrl>https://github.com/rhetos/rhetos</projectUrl>
+    <description>Demo AdminGui application.</description>
+    <copyright>Copyright 2ClickSolutions 2016</copyright>
+    <tags>2ClickSolutions</tags>
+  </metadata>
+  <files>
+    <file src="\wwwroot\**\*" target="Resources" />
+    <file src="..\RhetosPackages\DemoDataMigration\**\*.sql" target="DataMigration" />
+    <file src="..\RhetosPackages\DemoDSLScripts\**\*.rhe" target="DslScripts" />
+  </files>
+</package>
+

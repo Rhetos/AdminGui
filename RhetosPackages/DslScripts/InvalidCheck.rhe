@@ -1,0 +1,290 @@
+Module CheckingInvalid {
+	Entity  InvalidCheckingHistory{
+		ShortString CurrentUser {Required;}
+		DateTime StartTime {Required;}
+		DateTime EndTime;
+		ShortString Status {Required;}
+		Bool IsChecked {Required;}
+		Bool Lasted {Required;}
+	}
+	Entity InvalidEntity {
+		ShortString EntityName {Required;}		
+		Integer NumRecord {Required;} // tu lay
+		Bool IsChecked {Required;} // false
+		Reference InvalidCheckingHistory;
+	}
+	
+	Entity InvalidFilter {
+		ShortString FilterName {Required;}
+		ShortString Status {Required;}
+		Bool IsChecked {Required;}
+		Reference InvalidEntity;
+	}
+	
+	Entity InvalidChunk {
+		Guid StartID {Required;}
+		Guid EndID {Required;}
+		Integer NumRecord {Required;}
+		Integer NumInvalid {Required;}
+		Bool IsChecked {Required;}
+		Reference InvalidFilter;
+	}
+	
+	SqlQueryable CheckingHistoryResultSql '
+		Select ID, cast(cast(StartTime as date) as nvarchar) as CheckingDate, cast(cast(StartTime as time) as nvarchar) as CheckingTime, Status, CurrentUser
+		From CheckingInvalid.InvalidCheckingHistory
+	'
+	{
+		Extends CheckingInvalid.InvalidCheckingHistory;
+		SqlDependsOn CheckingInvalid.InvalidCheckingHistory;
+		ShortString CheckingDate;
+		ShortString CheckingTime;
+		ShortString Status;
+		ShortString CurrentUser;
+	}
+	
+	QueryableExtension CheckingHistoryResult CheckingInvalid.CheckingHistoryResultSql
+		'(source, repository, executionContext) => source
+			.Where(item => item.CurrentUser == executionContext.UserInfo.UserName)
+			.OrderByDescending(item => item.CheckingDate)
+			.ThenByDescending(item => item.CheckingTime)
+			.Select(item => new Common.Queryable.CheckingInvalid_CheckingHistoryResult
+				{
+                    ID = item.ID,
+					Base = item,
+					CheckingDate = item.CheckingDate,
+					CheckingTime = item.CheckingTime,
+					Status = item.Status
+				})
+			'
+	{
+		UseExecutionContext;
+		ShortString CheckingDate;
+		ShortString CheckingTime;
+		ShortString Status;
+	}
+	
+	SqlQueryable CheckingResultSql '
+		Select fc.ID, fc.FilterName, fc.Status, fc.NumInvalid, e.EntityName,h.CurrentUser, h.ID as HistoryID, h.Lasted
+		From
+			(Select f.ID, f.FilterName, f.Status, f.InvalidEntityID,  SUM(c.NumInvalid) as NumInvalid, f.IsChecked
+			from [CheckingInvalid].[InvalidChunk] c join [CheckingInvalid].[InvalidFilter] f on c.InvalidFilterID = f.ID
+			group by f.ID, f.FilterName, f.Status, f.InvalidEntityID, f.IsChecked) fc
+			join [CheckingInvalid].[InvalidEntity] e 
+			on e.ID = fc.InvalidEntityID
+			join [CheckingInvalid].[InvalidCheckingHistory] h
+			on h.ID = e.InvalidCheckingHistoryID			
+	'
+	{
+		Extends CheckingInvalid.InvalidFilter;
+		SqlDependsOn CheckingInvalid.InvalidCheckingHistory;
+		SqlDependsOn CheckingInvalid.InvalidEntity;
+		SqlDependsOn CheckingInvalid.InvalidFilter;
+		SqlDependsOn CheckingInvalid.InvalidChunk;
+		ShortString FilterName;
+		ShortString Status;
+		Integer NumInvalid;
+		ShortString EntityName;
+		ShortString CurrentUser;
+		Guid HistoryID;
+		Bool Lasted;
+	}
+	
+	QueryableExtension CheckingResult CheckingInvalid.CheckingResultSql
+		'(source, repository, executionContext) => source
+			.Where(item => item.CurrentUser == executionContext.UserInfo.UserName)
+			.Select(item => new Common.Queryable.CheckingInvalid_CheckingResult
+				{
+                    ID = item.ID,
+					Base = item,
+					FilterName = item.FilterName,
+					Status = item.Status,
+					NumInvalid = item.NumInvalid,
+					EntityName = item.EntityName,
+					HistoryID = item.HistoryID,
+					Lasted = item.Lasted
+				})
+			'
+	{
+		UseExecutionContext;
+		ShortString FilterName;
+		ShortString Status;
+		Integer NumInvalid;
+		ShortString EntityName;
+		Guid HistoryID;
+		Bool Lasted;
+	}
+	
+	SqlQueryable CheckingDatastructureSql '
+		Select c.ID,e.ID as EntityID, e.EntityName, h.CurrentUser, e.NumRecord as TotalRecord, f.ID as FilterID, f.FilterName, f.Status, c.StartID, c.EndID, c.NumRecord, c.NumInvalid
+		From
+			CheckingInvalid.InvalidCheckingHistory h,
+			CheckingInvalid.InvalidEntity e, 
+			CheckingInvalid.InvalidFilter f, 
+			CheckingInvalid.InvalidChunk c
+		Where 
+			h.Lasted = ''TRUE''
+			and h.IsChecked = ''FALSE''
+			and e.IsChecked = ''FALSE''
+			and f.IsChecked = ''FALSE''
+			and c.IsChecked = ''FALSE'' 
+			and e.InvalidCheckingHistoryID = h.ID
+			and c.InvalidFilterID = f.ID 
+			and f.InvalidEntityID = e.ID
+	'
+	{
+		Extends CheckingInvalid.InvalidChunk;
+		SqlDependsOn CheckingInvalid.InvalidCheckingHistory;
+		SqlDependsOn CheckingInvalid.InvalidEntity;
+		SqlDependsOn CheckingInvalid.InvalidFilter;
+		SqlDependsOn CheckingInvalid.InvalidChunk;
+		Guid EntityID;
+		ShortString EntityName;
+		ShortString CurrentUser;
+		Integer TotalRecord;
+		Guid FilterID;
+		ShortString FilterName;
+		ShortString Status;
+		Guid StartID;
+		Guid EndID;
+		Integer NumRecord;
+		Integer NumInvalid;		
+	}	
+	
+	QueryableExtension CheckingDatastructure CheckingInvalid.CheckingDatastructureSql
+		'(source, repository, executionContext) => source
+			.Where(item => item.CurrentUser == executionContext.UserInfo.UserName)
+			.Select(item => new Common.Queryable.CheckingInvalid_CheckingDatastructure
+				{
+                    ID = item.ID,
+					Base = item,
+					EntityID = item.EntityID,
+					EntityName = item.EntityName,
+					TotalRecord = item.TotalRecord,
+					FilterID = item.FilterID,
+					FilterName = item.FilterName,
+					Status = item.Status,
+					StartID = item.StartID,
+					EndID = item.EndID,
+					NumRecord = item.NumRecord,
+					NumInvalid = item.NumInvalid,					
+				})
+			'
+	{
+		UseExecutionContext;
+		Guid EntityID;
+		ShortString EntityName;
+		Integer TotalRecord;
+		Guid FilterID;
+		ShortString FilterName;
+		ShortString Status;
+		Guid StartID;
+		Guid EndID;
+		Integer NumRecord;
+		Integer NumInvalid;	
+	}
+	
+	
+	SqlQueryable CheckedHistorySql '
+		Select ID, CurrentUser
+		From CheckingInvalid.InvalidCheckingHistory
+		Where IsChecked = ''FALSE'' and Lasted = ''TRUE'';
+	'
+	{
+		Extends CheckingInvalid.InvalidCheckingHistory;
+		SqlDependsOn CheckingInvalid.InvalidCheckingHistory;
+		ShortString CurrentUser;
+	}
+	
+	QueryableExtension CheckedHistory CheckingInvalid.CheckedHistorySql
+		'(source, repository, executionContext) => source
+			.Where(item => item.CurrentUser == executionContext.UserInfo.UserName)
+			.Select(item => new Common.Queryable.CheckingInvalid_CheckedHistory
+				{
+                    ID = item.ID,
+					Base = item,
+				})
+			'
+	{
+		UseExecutionContext;
+	}
+	
+	ExternalAction InitialCheckingAction 'AdminGuiRhetosExtensions.ActionInvalid.InitialCheckingAction,AdminGuiRhetosExtensions' 'AdminGuiRhetosExtensions.InitialParam'
+    {
+		LongString EntityData;
+    }
+	ExternalAction UpdateInvalidData 'AdminGuiRhetosExtensions.ActionInvalid.UpdateInvalidData,AdminGuiRhetosExtensions' 'AdminGuiRhetosExtensions.UpdateInvalidParam'
+    {
+		Guid ChunkID;
+        Guid FilterID;
+        Guid EntityID;
+        Integer NumInvalid;
+    }
+	
+	Action StopCheckingInvalid'(parameter, repository, userInfo, executionContext) => { 
+		var invalidHistory = repository.CheckingInvalid.InvalidCheckingHistory.Query().Where(item => item.Lasted == true).SingleOrDefault();
+		
+		if (invalidHistory != null) {
+			repository.CheckingInvalid.InvalidCheckingHistory.Update(new[] { new CheckingInvalid.InvalidCheckingHistory
+                    {
+                        ID = invalidHistory.ID,
+                        CurrentUser = invalidHistory.CurrentUser,
+                        IsChecked = true,
+                        StartTime = invalidHistory.StartTime,
+                        EndTime = DateTime.Now,
+                        Status = "Check completed",
+						Lasted = invalidHistory.Lasted
+                    }});;
+					
+			var listInvalidEntity = repository.CheckingInvalid.InvalidEntity.Query().Where(item => item.IsChecked == false && invalidHistory.CurrentUser == userInfo.UserName && item.InvalidCheckingHistoryID == invalidHistory.ID).ToArray();
+
+			if(listInvalidEntity.Count() > 0){
+				foreach(var invalidEntity in listInvalidEntity)
+					repository.CheckingInvalid.InvalidEntity.Update(new[] { new CheckingInvalid.InvalidEntity
+						{
+							ID = invalidEntity.ID,
+							EntityName = invalidEntity.EntityName,
+							NumRecord = invalidEntity.NumRecord,
+							InvalidCheckingHistoryID = invalidEntity.InvalidCheckingHistoryID,
+							IsChecked = true,
+						}});;
+			}
+
+			var listInvalidFilter = repository.CheckingInvalid.InvalidFilter.Query().Where(item => item.IsChecked == false).ToArray();
+			listInvalidFilter = listInvalidFilter.Where(item => listInvalidEntity.Where(e => e.ID == item.InvalidEntityID).Count() > 0).ToArray();
+			
+			if(listInvalidFilter.Count() > 0){
+				foreach(var invalidFilter in listInvalidFilter)
+					repository.CheckingInvalid.InvalidFilter.Update(new[] { new CheckingInvalid.InvalidFilter
+						{
+							ID = invalidFilter.ID,
+							FilterName = invalidFilter.FilterName,
+							Status = "Check completed",
+							IsChecked = true,
+							InvalidEntityID = invalidFilter.InvalidEntityID
+						}});
+			}
+
+			var listInvalidChunk = repository.CheckingInvalid.InvalidChunk.Query().Where(item => item.IsChecked == false).ToArray();
+			listInvalidChunk = listInvalidChunk.Where(item => listInvalidFilter.Where(f => f.ID == item.InvalidFilterID).Count() > 0).ToArray();
+			
+			if(listInvalidChunk.Count() > 0){
+				foreach(var invalidChunk in listInvalidChunk)
+					repository.CheckingInvalid.InvalidChunk.Update(new[] { new CheckingInvalid.InvalidChunk
+						{
+							ID = invalidChunk.ID,
+							StartID = invalidChunk.StartID,
+							EndID = invalidChunk.EndID,
+							NumRecord = invalidChunk.NumRecord,
+							NumInvalid = invalidChunk.NumInvalid,
+							IsChecked = true,
+							InvalidFilterID = invalidChunk.InvalidFilterID
+						}});
+			}
+		}
+		
+	}'
+	{
+		UseExecutionContext;
+	}
+}

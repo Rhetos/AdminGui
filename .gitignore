@@ -1,0 +1,10 @@
+AdminGUI/make.out
+AdminGUI/typings/
+AdminGUI/wwwroot/templates/
+AdminGUI/scripts/basecode.d.ts
+*.nupkg
+RhetosPackages/Source/RhetosConceptsAndExtensions/bin/
+RhetosPackages/Source/RhetosConceptsAndExtensions/obj/
+make.out
+*.suo
+RhetosPackages/BasecodePlugins/RhetosConceptsAndExtensions.dll

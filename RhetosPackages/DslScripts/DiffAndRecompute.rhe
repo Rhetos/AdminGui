@@ -1,0 +1,79 @@
+Module AdminGUI
+{
+	/// TODO: ADD PLUGIN "EntityComputedDiffWithCodeGenerator" SIMILAR TO EntityComputedFromCodeGenerator THAT WILL GENERATE DiffWith_source METHOD SIMILAR TO RecomputeFrom_source
+	/// 		THAT METHOD SHOULD RETURN toInsert, toUpdate, toDelete INSTEAD OF UPDATING RECOMPUTED DATA
+	ExternalReference "Newtonsoft.Json.JsonConvert, Newtonsoft.Json";
+	// This will be exposed to REST interface and is a way to get all differences between persisted data and computation.
+
+	ReportFile Diff
+		'((object[][] reportData, string convertFormat, Common.ExecutionContext executionContext) => {
+		// Find the "diff" method on the target repository:
+		Diff parameter = (Diff)reportData[0][0];
+		
+		string diffMethodName = "DiffWith" + parameter.Source.Split(''.'')[1];
+
+		// get generic repository for target entity (persisted)
+		var targetRepos = executionContext.GenericRepository(parameter.Target).EntityRepository;
+		Type targetReposType = targetRepos.GetType();
+
+		// this is method that will be generated with new plugin EntityComputedDiffWithCodeGenerator
+		System.Reflection.MethodInfo diffMethod = targetReposType.GetMethod(diffMethodName);
+
+		// Call the "diff" method:
+		object filter = null;
+
+		if (parameter.FilterName != null) {
+			Type filterType = Type.GetType(parameter.FilterName);
+			System.Console.WriteLine(filterType);
+			System.Console.WriteLine(parameter.FilterData);
+			filter = Newtonsoft.Json.JsonConvert.DeserializeObject(parameter.FilterData, filterType);		
+		}
+				
+		object[] changeObject = new object[] { parameter.Source, filter, null, null, null  };
+		diffMethod.Invoke(targetRepos, changeObject);
+		
+		if(parameter.NumRecord > 100) parameter.NumRecord = 100;
+		var result = new { 
+			toInsertRecords = (changeObject[2] as System.Collections.Generic.IEnumerable<object>).Take((int)parameter.NumRecord), 
+			toInsertCount = (changeObject[2] as System.Collections.Generic.IEnumerable<object>).Count(),
+			toUpdateRecords = (changeObject[3] as System.Collections.Generic.IEnumerable<object>).Take((int)parameter.NumRecord), 
+			toUpdateCount = (changeObject[3] as System.Collections.Generic.IEnumerable<object>).Count(),
+			toDeleteRecords = (changeObject[4] as System.Collections.Generic.IEnumerable<object>).Take((int)parameter.NumRecord), 
+			toDeleteCount = (changeObject[4] as System.Collections.Generic.IEnumerable<object>).Count()
+		};
+		string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+		
+		// Generate the report:
+		return new Rhetos.Dom.DefaultConcepts.ReportFile { Name = "ReportData.txt", Content = Encoding.UTF8.GetBytes(jsonData) }; 
+		
+		})'
+	{
+		ShortString Source; // "School.ComputeStudentDetails" 2
+		ShortString Target; // "School.StudentDetails" 3 
+		ShortString FilterName; // Simplified assembly qualified name of the filter type. "System.Guid[]" 1
+		LongString FilterData; // JSON 0
+		Integer NumRecord;
+		
+		FilterBy Diff '(repository, parameter) => new [] { parameter } ';
+		DataSources 'Diff';
+	}
+
+	// This will be exposed to REST interface in order to enable recompute Persisted target for every row that matches given Filter
+	Action Recompute'(parameter, repository, userInfo, executionContext) => { 
+		var targetRepos = executionContext.GenericRepository(parameter.Target);
+		object filter = null;
+		if (parameter.FilterName != null) {
+			Type filterType = Type.GetType(parameter.FilterName);		
+			filter = Newtonsoft.Json.JsonConvert.DeserializeObject(parameter.FilterData, filterType);
+		}
+
+		targetRepos.RecomputeFrom(parameter.Source, filter);
+	}'
+	{
+		ShortString Source; // "School.ComputeStudentDetails"
+		ShortString Target; // "School.StudentDetails"
+		ShortString FilterName; // "Guid[]"
+		LongString FilterData; // JSON
+		UseExecutionContext;
+	}
+}

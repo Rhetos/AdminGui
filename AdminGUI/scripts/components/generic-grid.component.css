@@ -1,0 +1,12 @@
+ul.listInvalid {
+	font-size: 150%;
+	color: red;
+	font-weight: bold;
+}
+ul.listInvalid > li {
+	list-style-type: square;
+	color: #0088cc;
+	font-size : 80%;
+	padding: 8px 0;
+	font-weight: normal;
+}

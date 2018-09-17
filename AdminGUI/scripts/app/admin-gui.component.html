@@ -1,0 +1,40 @@
+﻿<section class="body" [hidden]="!_loginInfo_.UserLoggedIn">
+    <header-admingui></header-admingui>
+    <div class="inner-wrapper">
+        <!-- start: sidebar -->
+        <aside id="sidebar-left" class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    Rhetos Administration
+                </div>
+                <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+                    <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                </div>
+            </div>
+            <app-menu [home]="_homePage" [rootRoute]="_rootRoute"></app-menu>
+        </aside>
+        <!-- end: sidebar -->
+        <section role="main" class="content-body">
+            <header class="page-header">
+                <h2>{{activeMenuItem.SelectedItem.Name}}</h2>
+                <div class="right-wrapper pull-right">
+                    <ol class="breadcrumbs">
+                        <li>
+                            <a href="#/app" (click)="home()">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        <li *ngFor="let crumbs of activeMenuItem.Crumbs">
+                            <span>{{crumbs}} &nbsp;</span>
+                        </li>
+                    </ol>
+                </div>
+            </header>
+            <p-growl [value]="msgs"></p-growl>
+            <router-outlet></router-outlet>
+        </section>
+    </div>
+    <footer class="panel-footer">
+        Made by 2ClickSolutions
+    </footer>
+</section>
