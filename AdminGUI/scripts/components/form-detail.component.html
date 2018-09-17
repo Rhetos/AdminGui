@@ -1,0 +1,13 @@
+﻿<div class="modal fade" tabindex="-1" role="dialog" #lookupPopupModal data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onBack()">&times;</button>
+                <h4 class="modal-title">Generic Form</h4>
+            </div>
+            <div class="modal-body" *ngIf="entity">
+                <generic-detail [entityID]="entityID" [entityType]="entityType" [entity]="entity" [showSubmit]="showSubmitBuntton" (entitySaved)="onNotification($event)" [formTitle]="title" [formSubTitle]="subTitle"> </generic-detail>
+            </div>
+        </div>
+    </div>
+</div>

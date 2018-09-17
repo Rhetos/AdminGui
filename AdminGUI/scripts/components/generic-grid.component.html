@@ -1,0 +1,28 @@
+﻿<section class="panel">
+    <div [hidden]="isError" class="panel-body">
+        <button class="btn btn-default" (click)="invalidOnClick()">Check all invalid data</button>
+        <ul *ngIf="listInvalidData && listInvalidData.length>0 && hideInvalidData" class="listInvalid">
+            List All Invalid Data
+            <li *ngFor="let item of listInvalidData">
+                {{item.name}} : {{item.value}} invalid items
+            </li>
+        </ul>
+        <button class="btn btn-default" *ngIf="hideInvalidData" (click)="hideInvalidFiltersOnClick()">Hide invalid data result</button>
+        <select id="invalidDataFilter" class="form-control" [(ngModel)]="nameFilter" autocomplete="off">
+            <option value="" selected>Not selected</option>
+            <option *ngFor="let filter of invalidDataFilters" [value]="filter.filter">{{filter.name}}</option>
+        </select>
+        <select id="availableFilters" class="form-control" [(ngModel)]="currentFilterWithParams" autocomplete="off">
+            <option value="" selected>Not selected</option>
+            <option *ngFor="let filter of availableFilters" [value]="filter.filter">{{filter.name}}</option>
+        </select>
+        <div *ngIf="filterWithParamsVisible">
+            <generic-detail [entityType]="filterType" [entity]="filterData" [submitButtonName]="'Search'" [formTitle]="'Search'" [closeButtonName]="'Hide filter'" (formSubmitted)="searchWithFilter($event)"> </generic-detail>
+        </div>
+        <grid-prime [entityType]="entityType" [editLink]="claimLink" [addNewLink]="claimCreateLink" [showRefreshButton]="true" [srclink]="'./css/cog11.svg'" #gridprime></grid-prime>
+        <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="isError">
+        <error [errorMessage]="errorMessage"></error>
+    </div>
+</section>

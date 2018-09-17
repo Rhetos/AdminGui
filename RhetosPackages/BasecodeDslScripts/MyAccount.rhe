@@ -1,0 +1,8 @@
+Module Common {
+	Parameter MyAccount {}
+	ComposableFilterBy Principal.'Common.MyAccount' '(query, parameters, repository, executionContext) => {
+		return query.Where(user => user.Name == executionContext.UserInfo.UserName);
+	}' {
+		UseExecutionContext;
+	}
+}

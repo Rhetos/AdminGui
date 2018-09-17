@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <base href=".">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="css/primeui/theme/theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/primeui/primeui-ng-all.min.css" />
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/pqgrid.min.css" />
+
+    <!-- Polyfill(s) for older browsers -->
+	<script src="lib/es6-shim/es5-shim.js"></script>
+    <script src="lib/es6-shim/es6-shim.min.js"></script>
+    <!-- 1. Load libraries -->
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/jquery-ui.min.js"></script> <!-- Get error "Uncaught TypeError: b.widget is not a function". However, browser still works -->
+    <!-- <script src="lib/bootstrap.min.js"></script> -->
+
+    <script src="lib/zone.js/dist/zone.js"></script>
+    <script src="lib/reflect-metadata/Reflect.js"></script>
+    <script src="lib/systemjs/dist/system.src.js"></script>
+    <!-- <script src="lib/pqgrid.min.js"></script> -->
+    <!-- 2. Configure SystemJS -->
+    <script src="js/systemjs.config.js"></script>
+    <script src="lib/rxjs/bundles/Rx.min.js"></script>
+    <script src="js/admingui.js"></script>
+    <script src="js/basecode.js"></script>
+    <script src="lib/xlsx.core.min.js"></script>
+	
+    <script>
+        var CurrentTheme = CurrentTheme || {};
+
+        System.import('modules/app.module').catch(function(err) { console.log(err);});
+
+    </script>
+
+    <!-- new -->
+    <title>Rhetos Administration</title>
+    <meta name="keywords" content="HTML5 Admin Template" />
+    <meta name="description" content="Rhetos Administration">
+    <meta name="author" content="okler.net">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Web Fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Specific Page Vendor CSS -->
+    <link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="assets/vendor/magnific-popup/magnific-popup.css" />
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="assets/stylesheets/theme.css" />
+
+    <!-- Skin CSS -->
+    <link rel="stylesheet" href="assets/stylesheets/skins/default.css" />
+
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="assets/stylesheets/theme-custom.css">
+   
+    <!-- Head Libs -->
+    <script src="assets/vendor/modernizr/modernizr.js"></script>
+
+    <!-- Vendor -->
+    <script src="assets/vendor/nanoscroller/nanoscroller.js"></script>
+    <script src="assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+
+    <!-- Theme Base, Components and Settings -->
+    <script src="assets/javascripts/theme.js"></script>
+
+    <!-- Theme Custom -->
+    <script src="assets/javascripts/theme.custom.js"></script>
+    <script src="assets/vendor/pnotify/pnotify.custom.js"></script>
+
+    <!-- Theme Initialization Files -->
+    <script src="assets/javascripts/theme.init.js"></script>
+
+</head>
+
+<!-- 3. Display the application -->
+<body>
+    <admin-gui></admin-gui>
+
+    <div id="loader" class="overlay-loader">
+        <div id="global-loader-background" class="loader-background"></div>
+        <img id="global-loader-icon" class="loader-icon spinning-cog" src="css/cog11.svg" data-cog="cog11">
+    </div>
+</body>
+</html>
+

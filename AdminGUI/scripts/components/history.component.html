@@ -1,0 +1,52 @@
+﻿<busy-overlay [busy]="busy" [srclink]="srclink"></busy-overlay>
+
+<div class="col-sm-offset-11">
+    <div class="input-group" style="width:100px;float:right">
+        <input type="number" class="form-control text-right" placeholder="Page Size" [(ngModel)]="pageSize" (change)="changePageSize($event)" maxlength="3" style="width:60px">
+    </div>
+</div>
+<br />
+
+<div style="margin-top:20px">
+    <p-dataTable [value]="pureData" [rows]="pageSize" [paginator]="true" [pageLinks]="pageLinks" (onRowDblclick)="doubleClick($event)" [totalRecords]="totalRecords" #table>
+        <header>History Page</header>
+        <p-column field="CheckingDate" header="Checking Date" [filter]="true" filterMatchMode="contains"></p-column>
+        <p-column field="CheckingTime" header="Checking Time" [filter]="true" filterMatchMode="contains"></p-column>
+        <p-column field="Status" header="Status" [filter]="true" filterMatchMode="contains"></p-column>
+    </p-dataTable>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static" #historyPopupModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onHistoryBack()">&times;</button>
+                <h4 class="modal-title">History Popup</h4>
+            </div>
+
+            <div class="modal-body">
+                <busy-overlay [busy]="detailBusy" [srclink]="srclink"></busy-overlay>
+                <div class="col-sm-offset-11">
+                    <div class="input-group" style="width:100px;float:right">
+                        <input type="number" class="form-control text-right" placeholder="Page Size" [(ngModel)]="detailPageSize" (change)="changeDetailPageSize($event)" maxlength="3" style="width:60px">
+                    </div>
+                </div>
+                <br />
+
+                <div style="margin-top:20px">
+                    <p-dataTable [value]="detailData" [rows]="detailPageSize" [paginator]="true" [pageLinks]="detailPageLinks" [totalRecords]="detailTotalRecords" #detailTable>
+                        <header>History Detail</header>
+                        <p-column field="Module" header="Module" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="Table" header="Table" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="InvalidData" header="InvalidData" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="Status" header="Status" [filter]="true" filterMatchMode="contains"></p-column>
+                        <p-column field="NumInvalid" header="Num of invalid rows" [filter]="true" filterMatchMode="contains"></p-column>
+                    </p-dataTable>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

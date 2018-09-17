@@ -1,0 +1,31 @@
+﻿table.invalidTable {
+  border-collapse:collapse;
+  font:normal normal 11px Verdana,Arial,Sans-Serif;
+  color:#666;
+}
+
+table.invalidTable tr{
+  background:#fafafa;
+}
+
+table.invalidTable th,
+table.invalidTable td {
+  vertical-align:top;
+  padding:5px 10px;
+  border:1px solid #fff;
+}
+
+table.invalidTable tr:nth-child(even) {
+  background:#f5f5f5;
+}
+
+table.invalidTable th {
+  background:#418AA4;
+  color:#fff;
+  font-weight:bold;
+}
+
+table.invalidTable tr.hightlight:hover{
+    background-color: #b8d1f3;
+    cursor: pointer;
+}

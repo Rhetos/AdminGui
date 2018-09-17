@@ -1,0 +1,22 @@
+Module Common {
+	
+	SqlQueryable GetUserInfo "
+		SELECT [Common].[PrincipalHasRole].ID as ID, [Common].[Principal].Name as UserName, [Common].[Role].Name as HasRole 
+		FROM ( ([Common].[PrincipalHasRole] join [Common].[Principal] on [Common].[PrincipalHasRole].PrincipalID = [Common].[Principal].ID)  )
+			join [Common].[Role] on [Common].[PrincipalHasRole].RoleID =[Common].[Role].ID
+	"
+	{
+		SqlDependsOn Common.Principal;
+		SqlDependsOn Common.PrincipalHasRole;
+		SqlDependsOn Common.Role;
+		ShortString UserName;
+		ShortString HasRole;
+	}
+	
+	Parameter CurrentUser {}
+	ComposableFilterBy GetUserInfo.'Common.CurrentUser' '(query, parameters, repository, executionContext) => {
+		return query.Where(user => user.UserName == executionContext.UserInfo.UserName);
+	}' {
+		UseExecutionContext;
+	}
+}

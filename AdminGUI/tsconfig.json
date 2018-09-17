@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "sourceMap": true,
+    "target": "es5",
+    "module": "system",
+    "moduleResolution": "node",
+
+    "project": "demoapp",
+    "rootDir": "./scripts/",
+    "outFile": "./dist/admingui.js",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true
+  },
+  "baseUrl": ".",
+  "paths": {
+    "*": [
+      "*",
+      "scripts/*"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot",
+    "dist"
+  ]
+}

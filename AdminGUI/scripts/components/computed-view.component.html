@@ -1,0 +1,40 @@
+﻿<busy-overlay [busy]="busy" [srclink]="srclink"></busy-overlay>
+<section class="panel">
+    <div class="panel-body">
+        <select id="invalidDataFilter" class="form-control" [(ngModel)]="nameFilter" (change)="onFilterChange()" autocomplete="off">
+            <option value="" selected>Not selected</option>
+            <option *ngFor="let filter of arrayDataFilters" [value]="filter.filter">{{filter.name}}</option>
+        </select>
+        <br />
+        <button class="btn btn-default" (click)="btnDiff_Click()">Get Diff</button><span style="margin-left:10px;"><button class="btn btn-default" (click)="btnReCompute_Click()">Recompute persisted data</button></span>
+        <input [(ngModel)]="numRecord" class="form-control text-right ng-pristine ng-valid ng-touched" placeholder="Page Size" style="width:75px" type="number" />
+        <div class="modal fade" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static" #diffPopupModal>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onDiffBack()">&times;</button>
+                        <h4 class="modal-title">Diff Popup</h4>
+                    </div>
+                    <div *ngIf="refreshDiff">
+                        <diff [nameFilter]="nameFilter" [filterType]="filterType" [module]="module" [source]="source" [target]="target" (diffEvent)="onDiff($event)" (hideDiffPopup)="hideDiffPopup()" (stateBusy)="stateBusy($event)" [numRecord]="numRecord" #diff></diff>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static" #reComputePopupModal>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="onReComputeBack()">&times;</button>
+                        <h4 class="modal-title">ReCompute Popup</h4>
+                    </div>
+                    <div *ngIf="refreshRecompute">
+                        <recompute [nameFilter]="nameFilter" [filterType]="filterType" [module]="module" [source]="source" [target]="target" (reComputeEvent)="onReComputeBack()" (hideRecomputePopup)="hideRecomputePopup()" #reCompute></recompute>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <diff-grid [jsonData]="jsonData" [module]="module" [source]="source" [target]="target" #diffgrid></diff-grid>
+    </div>
+</section>
+

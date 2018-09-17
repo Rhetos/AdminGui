@@ -1,0 +1,24 @@
+﻿<div *ngIf="jsonData  && (insertCount !=0 || updateCount !=0 || deleteCount !=0)">
+    <div style="margin-top:15px">
+        <label class="text-info"><b>Total Insert Record: {{insertCount}}</b></label>
+        <br />
+        <label class="text-info"><b>Total Update Record: {{updateCount}}</b></label>
+        <br />
+        <label class="text-info"><b>Total Delete Record: {{deleteCount}}</b></label>
+    </div>
+    <div style="margin-top:15px">
+        <table style="width:100%" class="difftable">
+            <tr>
+                <th>RowNumber</th>
+            <th style="width:50%">Description</th>
+                <th>Indication of change </th>
+            </tr>
+            <tr *ngFor="let item of dataArray">
+                <td (dblclick)="changeToDiffView(item)">{{item.RowNumber}}</td>
+                <td (dblclick)="changeToDiffView(item)">{{item.Description}}</td>
+                <td (dblclick)="changeToDiffView(item)">{{item.Indication}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<router-outlet></router-outlet>
