@@ -9,25 +9,12 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 CD %~dp0
 %~d0
 
-CD 2CS.BaseCode
-CALL tsc || GOTO Error0
+CD AdminGui
 
-@ECHO.
-call :ColorText *** 2CS.BaseCode TypeScript compiled. ***
-@ECHO.
+REM CALL tsc  > make.out|| GOTO Error0
 
-CALL gulp default > make.out || GOTO Error0
-CD ..\AdminGui
-CALL gulp baseCodeRef > make.out || GOTO Error0
-
-@ECHO.
-call :ColorText *** 2CS.BaseCode copied to AdminGui. ***
-@ECHO.
-
-CALL tsc  > make.out|| GOTO Error0
-
-@ECHO.
-call :ColorText *** AdminGui TypeScript compiled. ***
+REM @ECHO.
+REM call :ColorText *** AdminGui TypeScript compiled. ***
 
 
 @REM CALL gulp clean-AdminGuiCompile > make.out || GOTO Error0

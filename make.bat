@@ -25,7 +25,7 @@ git submodule init
 git submodule update
 
 @ECHO.
-call :ColorText *** Submodule 2CS.BaseCode initialized. ***
+call :ColorText *** Submodule 2CS.RhetosBuild initialized. ***
 @ECHO.
 
 if not exist "RhetosPackages\Plugins" mkdir "RhetosPackages\Plugins"
@@ -49,36 +49,14 @@ DevEnv.exe "RhetosPackages\Source\RhetosConceptsAndExtensions\RhetosConceptsAndE
 call :ColorText *** RhetosConceptsAndExtensions.csproj compiled. ***
 @ECHO.
 
-CD 2CS.BaseCode
-CALL npm update > make.out || GOTO Error0
-
-@ECHO.
-call :ColorText *** 2CS.BaseCode NPM PACKAGES UPDATED. ***
-@ECHO.
-
-CD ..\AdminGui  > make.out
-CALL npm update > make.out || GOTO Error0
+CD AdminGui  > make.out
+CALL npm install > make.out || GOTO Error0
 
 @ECHO.
 call :ColorText *** AdminGui NPM PACKAGES UPDATED. ***
 @ECHO.
 
-CD ..\2CS.BaseCode > make.out
-CALL tsc || GOTO Error0
-
-@ECHO.
-call :ColorText *** 2CS.BaseCode TypeScript compiled. ***
-@ECHO.
-
-CALL gulp default > make.out || GOTO Error0
-CD ..\AdminGui  > make.out
-CALL gulp baseCodeRef || GOTO Error0
-
-@ECHO.
-call :ColorText *** 2CS.BaseCode copied to AdminGui. ***
-@ECHO.
-
-CALL tsc || GOTO Error0
+CALL npm run tsc || GOTO Error0
 
 @ECHO.
 call :ColorText *** AdminGui TypeScript compiled. ***

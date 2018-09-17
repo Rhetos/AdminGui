@@ -13,7 +13,9 @@ CALL CreateAndSetDatabase.exe %SqlServer% %DatabaseName% || GOTO Error0
 XCOPY /Y/R ..\..\..\RhetosPackages\*.config ..\ || GOTO Error0
 XCOPY /Y/R ..\..\..\RhetosPackages\*.bat ..\ || GOTO Error0
 CALL DeployPackages.exe /NOPAUSE || GOTO Error0
-CALL Plugins\AdminSetup.exe || GOTO Error0
+IF EXIST " Plugins\AdminSetup.exe" (
+    CALL Plugins\AdminSetup.exe || GOTO Error0
+)
 CALL CreateIISExpressSite.exe %DatabaseName% %Port% || GOTO Error0
 
 CD ..\..\..\

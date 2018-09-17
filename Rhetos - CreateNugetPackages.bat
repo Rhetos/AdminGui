@@ -3,8 +3,15 @@
 CD %~dp0
 %~d0
 CALL ChangeVersions.bat || GOTO Error0
+
+CD AdminGui
+CALL gulp clean
+CALL gulp default
+CD ..
+
 2CS.RhetosBuild\RhetosPackages\.nuget\NuGet.exe pack AdminGui\Rhetos.AdminGui.nuspec -o . || GOTO Error0
 2CS.RhetosBuild\RhetosPackages\.nuget\NuGet.exe pack AdminGui\Rhetos.AdminGuiCompile.nuspec -o . || GOTO Error0
+
 
 @REM ================================================
 
