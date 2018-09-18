@@ -1,12 +1,12 @@
 $rhetosVersion = "2.0.0"
 $url = "http://github.com//Rhetos/Rhetos/releases/download/v$rhetosVersion/Rhetos.$rhetosVersion.zip"
-$zipDstPath = "Rhetos.$rhetosVersion.zip"
+$zipDstPath = "$PSScriptRoot\Rhetos.$rhetosVersion.zip"
 $dstPath = "2CS.RhetosBuild"
 if (!(Test-Path $dstPath)) {
     if (!(Test-Path $zipDstPath)) {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Try {
-            $wc = New-Object Net.WebClient
+            $wc = New-Object System.Net.WebClient
             $wc.DownloadFile($url, $zipDstPath)
         }
         Catch {

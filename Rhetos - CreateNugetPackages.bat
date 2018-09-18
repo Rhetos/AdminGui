@@ -9,6 +9,9 @@ CALL gulp clean
 CALL gulp default
 CD ..
 
+if not exist "RhetosPackages\Plugins" mkdir "RhetosPackages\Plugins"
+if not exist "RhetosPackages\BasecodePlugins" mkdir "RhetosPackages\BasecodePlugins"
+
 2CS.RhetosBuild\RhetosPackages\.nuget\NuGet.exe pack AdminGui\Rhetos.AdminGui.nuspec -o . || GOTO Error0
 2CS.RhetosBuild\RhetosPackages\.nuget\NuGet.exe pack AdminGui\Rhetos.AdminGuiCompile.nuspec -o . || GOTO Error0
 
