@@ -5,7 +5,7 @@ if (!(Test-Path $zipDstPath)) {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $url -OutFile $zipDstPath
 }
-Expand-Archive -Path $zipDstPath -DestinationPath $dstPath
+Expand-Archive -Path $zipDstPath -DestinationPath ($dstPath + "/Rhetos")
 Remove-Item $zipDstPath
 Copy-Item ".\.nuget" -Destination ($dstPath + "/RhetosPackages") -Recurse
 ECHO "Download and unzip successfully RhetosBuild v2.8"
