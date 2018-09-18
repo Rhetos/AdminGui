@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Rhetos.AdminGui</id>
-    <version>1.0.0-A1611031642-031357e</version>
+    <version>1.0.0-A1809181316-8a93fff</version>
     <authors>2ClickSolutions</authors>
     <owners>2CS</owners>
     <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
