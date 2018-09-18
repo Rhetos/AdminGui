@@ -21,12 +21,6 @@ GOTO Error0
 
 CD %~dp0
 %~d0
-git submodule init
-git submodule update
-
-@ECHO.
-call :ColorText *** Submodule 2CS.RhetosBuild initialized. ***
-@ECHO.
 
 if not exist "RhetosPackages\Plugins" mkdir "RhetosPackages\Plugins"
 if not exist "RhetosPackages\BasecodePlugins" mkdir "RhetosPackages\BasecodePlugins"
