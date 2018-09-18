@@ -1,13 +1,27 @@
-$url = "http://github.com//Rhetos/Rhetos/releases/download/v2.8.0/Rhetos.2.8.0.zip"
-$zipDstPath = "Rhetos.2.8.0.zip"
+$rhetosVersion = "2.0.0"
+$url = "http://github.com//Rhetos/Rhetos/releases/download/v$rhetosVersion/Rhetos.$rhetosVersion.zip"
+$zipDstPath = "Rhetos.$rhetosVersion.zip"
 $dstPath = "2CS.RhetosBuild"
 if (!(Test-Path $dstPath)) {
     if (!(Test-Path $zipDstPath)) {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-WebRequest -Uri $url -OutFile $zipDstPath
+        Try {
+            $wc = New-Object Net.WebClient
+            $wc.DownloadFile($url, $zipDstPath)
+        }
+        Catch {
+            Write-Error "$($error[0])"
+            Exit 1
+        }
+        
     }
     Expand-Archive -Path $zipDstPath -DestinationPath ($dstPath + "/Rhetos")
     Remove-Item $zipDstPath
     Copy-Item ".\.nuget" -Destination ($dstPath + "/RhetosPackages/.nuget") -Recurse
+    Write-Host "Download and unzip successfully RhetosBuild v$rhetosVersion"
+    Exit 0
 }
-ECHO "Download and unzip successfully RhetosBuild v2.8"
+else {
+    Write-Warning "The directory $dstPath has already existed."
+    Exit 0
+}
