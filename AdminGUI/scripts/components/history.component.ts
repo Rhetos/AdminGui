@@ -3,13 +3,10 @@ import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { DataTable, Column, LazyLoadEvent, TabViewModule } from 'primeng/primeng';
 
-import { DecoratorRegistrations } from 'interfaces/index';
-import { MenuItem } from 'models/index';
-import { AppSettings, NotificationService } from 'basecode/core';
-import { ControlDefinition } from 'models/index';
+import { AppSettings, NotificationService, ControlDefinition, MenuItem, DecoratorRegistrations } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
-import { InvalidDataService } from '../services/invalidata.service.ts';
-import { IInvalidDataFilter } from '../models/admingui-interface.ts';
+import { InvalidDataService } from '../services/invalidata.service';
+import { IInvalidDataFilter } from '../models/admingui-interface';
 
 @Component({
     selector: 'history',

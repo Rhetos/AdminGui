@@ -73,9 +73,6 @@
     <Reference Include="Rhetos.Utilities">
       <HintPath>..\..\..\2CS.RhetosBuild\Rhetos\bin\Rhetos.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="ServerDom">
-      <HintPath>..\..\references\ServerDom.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />

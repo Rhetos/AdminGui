@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
 
-import { GenericFormComponent } from 'components/generic-form.component';
+import { GenericFormComponent } from 'basecode/core';
 import { GridPrimeControl } from 'basecode/controls';
 
 import { GenericGridComponent } from '../components/generic-grid.component';

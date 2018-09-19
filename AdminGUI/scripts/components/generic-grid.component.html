@@ -19,10 +19,11 @@
         <div *ngIf="filterWithParamsVisible">
             <generic-detail [entityType]="filterType" [entity]="filterData" [submitButtonName]="'Search'" [formTitle]="'Search'" [closeButtonName]="'Hide filter'" (formSubmitted)="searchWithFilter($event)"> </generic-detail>
         </div>
-        <grid-prime [entityType]="entityType" [editLink]="claimLink" [addNewLink]="claimCreateLink" [showRefreshButton]="true" [srclink]="'./css/cog11.svg'" #gridprime></grid-prime>
+        <grid-prime [entityType]="entityType" [editLink]="claimLink" [addNewLink]="claimCreateLink" [showRefreshButton]="true" [srclink]="'./css/cog11.svg'" [parentType]="parentType" #gridprime></grid-prime>
         <router-outlet></router-outlet>
     </div>
     <div *ngIf="isError">
-        <error [errorMessage]="errorMessage"></error>
+        <error-page [errorMessage]="errorMessage"></error-page>
+        <!--{{errorMessage}}-->
     </div>
 </section>

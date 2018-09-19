@@ -84,9 +84,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\2CS.RhetosBuild\Rhetos\bin\Rhetos.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="ServerDom, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\references\ServerDom.dll</HintPath>
+    <Reference Include="ServerDom.Model">
+      <HintPath>..\..\references\ServerDom.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="ServerDom.Repositories">
+      <HintPath>..\..\references\ServerDom.Repositories.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -102,6 +104,9 @@
     <Compile Include="ActionInvalid.cs" />
     <Compile Include="EntityComputedFromCodeGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,9 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { IEmptyConstruct, IEntityDataService, IDataStructure, NotificationService } from 'basecode/core';
-import { GenericFormComponent, EntityChangeService, EntityWithType } from 'components/generic-form.component';
-
+import { IEmptyConstruct, IEntityDataService, IDataStructure, NotificationService, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
 
 @Component({

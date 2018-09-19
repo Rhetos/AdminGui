@@ -43,7 +43,8 @@ namespace Angular2ModelGenerator.Property
 
         public static void GenerateCodeForInvalidData(InvalidDataInfo info, ICodeBuilder codeBuilder)
         {
-            codeBuilder.InsertCode(InvalidCodeSnippet(info), DataStructureCodeGenerator.InvalidDataTag, info.Source);
+            if (!info.FilterType.EndsWith("NewerThanCurrentEntry") && !info.FilterType.EndsWith("OlderThanHistoryEntries"))
+                codeBuilder.InsertCode(InvalidCodeSnippet(info), DataStructureCodeGenerator.InvalidDataTag, info.Source);
         }
         private static string PropertyCodeSnippet(PropertyInfo info, string type, string nameSuffix)
         {
