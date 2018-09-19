@@ -8,39 +8,18 @@ for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1)
 @SET Config=%1%
 @IF [%1] == [] SET Config=Debug
 
-@IF DEFINED VisualStudioVersion GOTO SkipVcvarsall
-IF "%VS140COMNTOOLS%" NEQ "" CALL "%VS140COMNTOOLS%VsDevCmd.bat" x86 && GOTO EndVcvarsall || GOTO Error0
-IF "%VS120COMNTOOLS%" NEQ "" CALL "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" x86 && GOTO EndVcvarsall || GOTO Error0
-IF "%VS110COMNTOOLS%" NEQ "" CALL "%VS110COMNTOOLS%\..\..\VC\vcvarsall.bat" x86 && GOTO EndVcvarsall || GOTO Error0
-IF "%VS100COMNTOOLS%" NEQ "" CALL "%VS100COMNTOOLS%\..\..\VC\vcvarsall.bat" x86 && GOTO EndVcvarsall || GOTO Error0
-ECHO ERROR: Cannot detect Visual Studio, missing VSxxxCOMNTOOLS variable.
-GOTO Error0
-:EndVcvarsall
-@ECHO ON
-:SkipVcvarsall
-
 CD %~dp0
 %~d0
 
 if not exist "RhetosPackages\Plugins" mkdir "RhetosPackages\Plugins"
 if not exist "RhetosPackages\BasecodePlugins" mkdir "RhetosPackages\BasecodePlugins"
 
-DevEnv.exe "RhetosPackages\Source\Angular2ModelGenerator\Angular2ModelGenerator.csproj" /rebuild > make.out || GOTO Error0
+cd RhetosPackages\Source\Angular2ModelGenerator
+CALL dotnet build AdminGuiPlugin.sln
+cd ..\..\..\
 
 @ECHO.
-call :ColorText *** Angular2ModelGenerator compiled. ***
-@ECHO.
-
-DevEnv.exe "RhetosPackages\Source\AdminGuiRhetosExtensions\AdminGuiRhetosExtensions.csproj" /rebuild > make.out || GOTO Error0
-
-@ECHO.
-call :ColorText *** AdminGuiRhetosExtensions compiled. ***
-@ECHO.
-
-DevEnv.exe "RhetosPackages\Source\RhetosConceptsAndExtensions\RhetosConceptsAndExtensions.csproj" /rebuild > make.out || GOTO Error0
-
-@ECHO.
-call :ColorText *** RhetosConceptsAndExtensions.csproj compiled. ***
+call :ColorText *** AdminGUI Plugins compiled. ***
 @ECHO.
 
 CD AdminGui  > make.out
