@@ -75,9 +75,9 @@ var libs = [
     { basePath: paths.npm, relPath: "ng2-file-upload/ng2-file-upload.js" },
     { basePath: paths.npm, relPath: "cropit/dist/jquery.cropit.js" },
 
-    { basePath: paths.bower + "jquery/dist/", relPath: "jquery.min.js" },
-    { basePath: paths.bower + "jquery-ui/", relPath: "jquery-ui.min.js" },
-    { basePath: paths.bower + "bootstrap/dist/js/", relPath: "bootstrap.min.js" },
+    { basePath: paths.npm + "jquery/dist/", relPath: "jquery.min.js" },
+    { basePath: paths.external_libs, relPath: "jquery-ui.min.js" },
+    { basePath: paths.npm + "bootstrap/dist/js/", relPath: "bootstrap.min.js" },
     { basePath: paths.external_libs, relPath: "jquery.datetimepicker.min.js" },
     // { basePath: paths.external_libs, relPath: "kendo.all.min.js" }, // no need for now
     // { basePath: paths.external_libs, relPath: "pqgrid.min.js" }, // no need for now
