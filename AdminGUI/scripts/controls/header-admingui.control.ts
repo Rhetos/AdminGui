@@ -38,18 +38,4 @@ export class HeaderAdminGuiAppComponent {
     navigateProfilePage() {
         this.router.navigateByUrl("/app/profile-page");
     }
-
-    /**
-     * Log Out
-     * @param 
-     */
-    //logOut() {
-    //    var isLogOut = confirm("Are you sure you want to logout?");
-    //    if (isLogOut) {
-    //        this.loginService.logout();
-    //        window.location.href = location.origin + (location.pathname.split('/').splice(0, location.pathname.split('/').length - 3).join('/')) + '/Resources/AspNetFormsAuth/Login.html?ReturnUrl=%2f';
-
-    //    }
-    //}
-
 }

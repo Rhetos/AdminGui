@@ -1,0 +1,393 @@
+body {
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+select {
+  background-color: lightcyan;
+  border-color: #b3cccc;
+  border-radius: .2em;
+  border-style: solid;
+  border-width: 1px;
+  border-right-color: #869999;
+  border-bottom-color: #869999;
+  color: black;
+  padding: .33em .5em;
+  width: 100%;  
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+
+/* Carousel */
+.carousel-caption {
+    z-index: 10 !important;
+}
+
+    .carousel-caption p {
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+@media (min-width: 768px) {
+    .carousel-caption {
+        z-index: 10 !important;
+    }
+}
+/* End basic MVC css styles */
+html {
+  font-family: sans-serif;
+}
+
+form {
+  padding: 10px;
+  max-width: 320px;
+}
+
+label {
+  margin-top: 16px;
+  display: block;
+}
+
+checkbox[aria-checked="true"] > div {
+    background-color: blue;
+}
+checkbox[aria-checked="false"] > div {
+    background-color: red;
+}
+
+input, button {
+  display: block;
+}
+
+input {
+    display: block;
+    width: 100%;
+    height: 27px;
+    padding: 2px 12px;
+    font-size: 14px !important;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+  margin-top: 4px;
+  color: #fff;
+  background-color: #337ab7;
+  border: 1px solid #2e6da4;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 1em;
+  font-weight: 300;
+}
+
+button[disabled] {
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+control-messages div {
+  color: #E82C0C;
+  margin: 6px 0;
+}
+
+.baseTable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+.baseTable td, .baseTable th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+a.view_details {
+    cursor: pointer !important;
+}
+.baseTable a {
+    cursor: pointer !important;
+}
+.baseTable tr:nth-child(even){background-color: #f2f2f2}
+.baseTable tr:hover {background-color: #ddd;}
+.baseTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #1145c1;
+    color: white;
+}
+
+.overlay-div {
+    z-index: 1000;
+}
+
+.overlay-loader {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}
+.overlay-loader .loader-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #2C4762;
+  -webkit-transition: background-color .2s 0s linear,right .2s .3s ease-out;
+  -moz-transition: background-color .2s 0s linear,right .2s .3s ease-out;
+  -ms-transition: background-color .2s 0s linear,right .2s .3s ease-out;
+  -o-transition: background-color .2s 0s linear,right .2s .3s ease-out;
+  transition: background-color .2s 0s linear,right .2s .3s ease-out;
+}
+
+.overlay-loader .loader-background.color-flip .overlay-div .overlay-div.color-flip {
+  -webkit-animation: color-flip 6.5s .6s infinite linear;
+  -moz-animation: color-flip 6.5s .6s infinite linear;
+  -ms-animation: color-flip 6.5s .6s infinite linear;
+  -o-animation: color-flip 6.5s .6s infinite linear;
+  animation: color-flip 6.5s .6s infinite linear;
+}
+
+@-webkit-keyframes color-flip {
+  0% { background-color: #2c4762 }
+  18% { background-color: #2c4762 }
+  20% { background-color: #a77dc2 }
+  38% { background-color: #a77dc2 }
+  40% { background-color: #4aa8d8 }
+  58% { background-color: #4aa8d8 }
+  60% { background-color: #56bc8a }
+  78% { background-color: #56bc8a }
+  80% { background-color: #d95e40 }
+  98% { background-color: #d95e40 }
+  100% { background-color: #2c4762 }
+}
+
+@-moz-keyframes color-flip {
+  0% { background-color: #2c4762 }
+  18% { background-color: #2c4762 }
+  20% { background-color: #a77dc2 }
+  38% { background-color: #a77dc2 }
+  40% { background-color: #4aa8d8 }
+  58% { background-color: #4aa8d8 }
+  60% { background-color: #56bc8a }
+  78% { background-color: #56bc8a }
+  80% { background-color: #d95e40 }
+  98% { background-color: #d95e40 }
+  100% { background-color: #2c4762 }
+}
+
+@-o-keyframes color-flip {
+  0% { background-color: #2c4762 }
+  18% { background-color: #2c4762 }
+  20% { background-color: #a77dc2 }
+  38% { background-color: #a77dc2 }
+  40% { background-color: #4aa8d8 }
+  58% { background-color: #4aa8d8 }
+  60% { background-color: #56bc8a }
+  78% { background-color: #56bc8a }
+  80% { background-color: #d95e40 }
+  98% { background-color: #d95e40 }
+  100% { background-color: #2c4762 }
+}
+
+@keyframes color-flip {
+  0% { background-color: #2c4762 }
+  18% { background-color: #2c4762 }
+  20% { background-color: #a77dc2 }
+  38% { background-color: #a77dc2 }
+  40% { background-color: #4aa8d8 }
+  58% { background-color: #4aa8d8 }
+  60% { background-color: #56bc8a }
+  78% { background-color: #56bc8a }
+  80% { background-color: #d95e40 }
+  98% { background-color: #d95e40 }
+  100% { background-color: #2c4762 }
+}
+
+.overlay-loader .loader-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -48px 0 0 -48px;
+  font-size: 96px;
+  color: #81b8ed;
+}
+
+.overlay-loader .loader-icon.spinning-cog {
+  -webkit-animation: spinning-cog 1.3s infinite ease;
+  -moz-animation: spinning-cog 1.3s infinite ease;
+  -ms-animation: spinning-cog 1.3s infinite ease;
+  -o-animation: spinning-cog 1.3s infinite ease;
+  animation: spinning-cog 1.3s infinite ease;
+}
+
+@-webkit-keyframes spinning-cog {
+  0% { -webkit-transform: rotate(0deg) }
+  20% { -webkit-transform: rotate(-45deg) }
+  100% { -webkit-transform: rotate(360deg) }
+}
+
+@-moz-keyframes spinning-cog {
+  0% { -moz-transform: rotate(0deg) }
+  20% { -moz-transform: rotate(-45deg) }
+  100% { -moz-transform: rotate(360deg) }
+}
+
+@-o-keyframes spinning-cog {
+  0% { -o-transform: rotate(0deg) }
+  20% { -o-transform: rotate(-45deg) }
+  100% { -o-transform: rotate(360deg) }
+}
+
+@keyframes spinning-cog {
+  0% { transform: rotate(0deg) }
+  20% { transform: rotate(-45deg) }
+  100% { transform: rotate(360deg) }
+}
+
+@-webkit-keyframes shrinking-cog {
+  0% { -webkit-transform: scale(1) }
+  20% { -webkit-transform: scale(1.2) }
+  100% { -webkit-transform: scale(0) }
+}
+
+@-moz-keyframes shrinking-cog {
+  0% { -moz-transform: scale(1) }
+  20% { -moz-transform: scale(1.2) }
+  100% { -moz-transform: scale(0) }
+}
+
+@-o-keyframes shrinking-cog {
+  0% { -o-transform: scale(1) }
+  20% { -o-transform: scale(1.2) }
+  100% { -o-transform: scale(0) }
+}
+
+@keyframes shrinking-cog {
+  0% { transform: scale(1) }
+  20% { transform: scale(1.2) }
+  100% { transform: scale(0) }
+}
+
+.overlay-loader .loader-icon.shrinking-cog {
+  -webkit-animation: shrinking-cog .3s 1 ease forwards;
+  -moz-animation: shrinking-cog .3s 1 ease forwards;
+  -ms-animation: shrinking-cog .3s 1 ease forwards;
+  -o-animation: shrinking-cog .3s 1 ease forwards;
+  animation: shrinking-cog .3s 1 ease forwards;
+}
+
+form {
+    position: relative;
+}
+
+.inside-div-overlay {
+    position: absolute;
+    width:100%;
+    height:100%;
+    background-color:burlywood;
+    opacity:0.3;
+    z-index:10000;
+}
+
+.inside-div-overlay .working-icon {
+  opacity:0.9;
+  -webkit-animation: spinning-cog 1.3s infinite ease;
+  -moz-animation: spinning-cog 1.3s infinite ease;
+  -ms-animation: spinning-cog 1.3s infinite ease;
+  -o-animation: spinning-cog 1.3s infinite ease;
+  animation: spinning-cog 1.3s infinite ease;
+  z-index: 10005;
+  position: absolute;
+  width: 30%;
+  top:35%;
+  left:35%;
+}
+
+.tooltip {
+  color: #900;
+  text-decoration: none;
+}
+.tooltip:hover {
+  position: relative;
+  
+}
+/* Tooltip on Top */
+.tooltip-top[data-tooltip]:hover:after {
+  content: attr(data-tooltip);
+  padding: 4px 8px;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  white-space: nowrap;
+  z-index: 20px;
+  background-color: #000;
+  color: #fff;
+}
+
+div.header {
+	background-color: #333;
+	width: 100%;
+	height: 46px;
+}
+
+div.header > div.right  > p {
+	color: #ddd;
+}
+
+div.header > div.right {
+	width: 20%;
+	float: right;
+	text-align: center;
+    padding: 12px;
+}
+
+div.header > div.left {
+	width: 80%;
+	float: left;
+}
+
+div.header > div > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+	overflow: visible;
+    background-color: #333;
+}
+
+div.header > div > ul > li {
+    float: left;
+}
+
+div.header > div > ul > li > span {
+    display: inline-block;
+	color: #999;
+    text-align: center;
+    padding: 12px 13px;
+}
+
+div.header > div > ul > li > span:hover {
+    background-color: #111;
+	cursor: pointer;
+}
