@@ -14,7 +14,6 @@
   <files>
 	<file src="\scripts\**\*" target="Resources\scripts" />
 	<file src="\wwwroot\lib\**\*" target="Resources\node_modules" />
-	<!-- <file src="\typings\**\*" target="Resources\typings" /> -->
 	<file src="\tsconfig.json" target="Resources\tsconfig.json" />
   </files>
 </package>

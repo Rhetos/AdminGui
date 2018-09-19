@@ -55,7 +55,6 @@ CALL npm run tsc || GOTO Error0
 @ECHO.
 call :ColorText *** AdminGui TypeScript compiled. ***
 
-CALL bower update > make.out || GOTO Error0
 CALL gulp default > make.out || GOTO Error0
 
 @ECHO.
