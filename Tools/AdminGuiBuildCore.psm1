@@ -42,7 +42,7 @@ function Initialize-RhetosServer($sqlServer, $databaseName) {
         cd ..\..\..\
     }
     catch {
-        throw
+        throw $_
     }
 
 }
@@ -147,8 +147,10 @@ function Register-IISExpressSite($databaseName, $port) {
 }
 
 function Set-AdminPermissions($sqlServer, $databaseName) {
-    Invoke-Sqlcmd -ServerInstance $sqlServer -Database $databaseName
+    Push-Location
+    Invoke-Sqlcmd -ServerInstance $sqlServer -Database $databaseName -InputFile ".\Tools\SecurityAdminPermissionSetup.sql"
     Write-Host " 		***	SET PERMISSION DONE ***"
+    Pop-Location
 }
 
 function Remove-DebugPackages() {
