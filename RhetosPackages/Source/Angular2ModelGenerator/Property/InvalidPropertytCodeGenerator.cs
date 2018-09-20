@@ -4,12 +4,13 @@ using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
 using System;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator.Property
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(InvalidDataInfo))]
-    public class InvalidPropertytCodeGenerator : IAngular2ModelGenratorPlugin
+    public class InvalidPropertytCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {

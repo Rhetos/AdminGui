@@ -24,12 +24,13 @@ using Rhetos.Extensibility;
 using Rhetos.Utilities;
 using System.ComponentModel.Composition;
 using Angular2ModelGenerator.Property;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator.SimpleBusinessLogic
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(RegExMatchInfo))]
-    public class RegExTagCodeGenerator : IAngular2ModelGenratorPlugin
+    public class RegExTagCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {

@@ -23,12 +23,13 @@ using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
 using Angular2ModelGenerator.Property;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(ReferencePropertyInfo))]
-    public class ReferencePropertyCodeGenerator : IAngular2ModelGenratorPlugin
+    public class ReferencePropertyCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {

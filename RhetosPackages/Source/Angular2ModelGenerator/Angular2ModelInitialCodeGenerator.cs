@@ -4,12 +4,13 @@ using Rhetos.Compiler;
 using Rhetos.Dsl;
 using System.ComponentModel.Composition;
 using Rhetos.Extensibility;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(InitializationConcept))]
-    public class Angular2ModelInitialCodeGenerator : IAngular2ModelGenratorPlugin
+    public class Angular2ModelInitialCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {

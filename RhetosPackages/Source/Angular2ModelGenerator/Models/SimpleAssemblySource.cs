@@ -18,14 +18,11 @@
 */
 
 using Rhetos.Compiler;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Angular2ModelGenerator
+namespace Angular2ModelGenerator.Models
 {
-    class SimpleAssemblySource : IAssemblySource
+    internal class SimpleAssemblySource : IAssemblySource
     {
         public string GeneratedCode { get; set; }
         public IEnumerable<string> RegisteredReferences { get; set; }
