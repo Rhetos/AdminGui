@@ -90,7 +90,6 @@
     <Compile Include="AdditionCodes.cs" />
     <Compile Include="Angular2ModelGenerator.cs" />
     <Compile Include="Angular2ModelGenratorModuleConfiguration.cs" />
-    <Compile Include="BaseAngular2Model.cs" />
     <Compile Include="Contants\CsTagNames.cs" />
     <Compile Include="Contants\Messages.cs" />
     <Compile Include="Contants\RegularExpressions.cs" />

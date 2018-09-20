@@ -17,13 +17,14 @@ namespace Angular2ModelGenerator
     [Export(typeof(IGenerator))]
     public class Angular2ModelGenerator : IGenerator
     {
+        private const string assemblyName = "Rhetos.Angular2.ts";
+
         private readonly IPluginsContainer<IAngular2ModelGeneratorPlugin> _plugins;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IAssemblyGenerator _assemblyGenerator;
         private readonly ILogger _performanceLogger;
-
-        private readonly string _assemblyName = "Rhetos.Angular2.ts";
-        private readonly string _sourceFile = @"D:\models\Rhetos.Angular2.refactor_integrated.ts";// Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/scripts/models", _assemblyName);
+        
+        private readonly string _sourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/scripts/models", assemblyName);
         private readonly string _compliedSourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/dist/admingui.js");
         private readonly string _compliedDestinationFile = Path.Combine(Paths.ResourcesFolder, "AdminGui/js/admingui.js");
 
