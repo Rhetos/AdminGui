@@ -1,13 +1,13 @@
 
-function Download-RhetosServer() {
+function Install-RhetosServer() {
 
 }
 
-function Prepare-RhetosServer() {
+function Initialize-RhetosServer() {
 
 }
 
-function Create-NecessaryDirectories() {
+function New-PluginBinaryDirectories() {
 
 }
 
@@ -19,15 +19,15 @@ function Build-Frontend() {
 
 }
 
-function Create-NugetPackages() {
+function New-NugetPackages() {
 
 }
 
-function Deploy-RhetosServer() {
+function Update-RhetosServer() {
 
 }
 
-function Create-IISExpressSite() {
+function Register-IISExpressSite() {
 
 }
 
@@ -35,28 +35,50 @@ function Set-AdminPermissions() {
 
 }
 
-function Delete-DebugPackages() {
+function Remove-DebugPackages() {
 
 }
 
-function Print-Usage() {
+function Get-Usage() {
     Write-Host "------------------------------"
     Write-Host "Help: "
     Write-Host "To be implemented."
     Write-Host "------------------------------"
 }
-Set-Alias help Print-Usage
 
-Export-ModuleMember -Function Print-Usage -Alias help
+Export-ModuleMember -Function Get-Usage
 
+#####################################################################
 # Core function exporters
-Export-ModuleMember -Function Download-RhetosServer
-Export-ModuleMember -Function Prepare-RhetosServer
-Export-ModuleMember -Function Create-NecessaryDirectories
+
+# Download Rhetos server from GitHub and unzip it locally. No alternation or configuration is performed.
+Export-ModuleMember -Function Install-RhetosServer
+
+# Setup and perform necessary actions to run a Rhetos server on the local machine.
+Export-ModuleMember -Function Initialize-RhetosServer
+
+# Create new directories needed for developing AdminGui Plugins.
+Export-ModuleMember -Function New-PluginBinaryDirectories
+
+#
 Export-ModuleMember -Function Build-Plugins
+
+#
 Export-ModuleMember -Function Build-Frontend
-Export-ModuleMember -Function Create-NugetPackages
-Export-ModuleMember -Function Deploy-RhetosServer
-Export-ModuleMember -Function Create-IISExpressSite
+
+# Create new AdminGui Nuget packages
+Export-ModuleMember -Function New-NugetPackages
+
+#
+Export-ModuleMember -Function Update-RhetosServer
+
+#
+Export-ModuleMember -Function Register-IISExpressSite
+
+#
 Export-ModuleMember -Function Set-AdminPermissions
-Export-ModuleMember -Function Delete-DebugPackages
+
+# Debug Nuget packages are not ready for deployment and production. After we've done with local debugging sessions, thesse will be removed completely.
+Export-ModuleMember -Function Remove-DebugPackages
+
+#####################################################################
