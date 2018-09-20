@@ -112,11 +112,20 @@ function Change-Version($buildVersion, $prereleaseVersion) {
     cd ..
 }
 
-function New-NugetPackages($buildVersion = "1.0.0", $prereleaseVersion = "auto") {
+function New-NugetPackages($buildVersion = "1.0.0", $prereleaseVersion = "auto", $isPublish = $false) {
     try {
         Change-Version $buildVersion $prereleaseVersion
         nuget pack AdminGui\Rhetos.AdminGui.nuspec -OutputDirectory .
         nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -OutputDirectory .
+
+        if ($isPublish) {
+            if (Test-Path -Path ".\PublishOutput") {
+                Remove-Item ".\PublishOutput\*.nupkg" 
+            } else {
+                New-Item -ItemType directory -Path ".\PublishOutput"
+            }
+            Copy-Item -Path ".\*.nupkg" -Destination ".\PublishOutput"
+        }
     }
     catch {
         throw

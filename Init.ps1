@@ -7,23 +7,25 @@ Param (
 )
 Begin {
 	
-	Import-Module .\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
+    Import-Module .\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
 }
 Process {
-	try {
-		Install-RhetosServer
+    try {
+        Install-RhetosServer
 
-		Initialize-RhetosServer $SQLServer $DatabaseName
+        Initialize-RhetosServer $SQLServer $DatabaseName
 
-		New-PluginBinaryDirectories
-	}
-	catch {
-		Write-Error "$($error[0])"
-		$LASTEXITCODE = 1
-		exit $LASTEXITCODE
-	}
+        New-PluginBinaryDirectories
+    }
+    catch {
+        Write-Error "$($error[0])"
+        $LASTEXITCODE = 1
+        exit $LASTEXITCODE
+    }
 
 }
 End {
-	Remove-Module -Name "AdminGuiBuildCore"
+    Write-Host "*** INITIALIZE SUCCESSFULLY ***"
+    
+    Remove-Module -Name "AdminGuiBuildCore"
 }
