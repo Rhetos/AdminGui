@@ -1,4 +1,11 @@
 
+$DatabaseName="TestAdminGui"
+Export-ModuleMember -Variable 'DatabaseName'
+$Port="9000"
+Export-ModuleMember -Variable 'Port'
+$SQLServer="(local)"
+Export-ModuleMember -Variable 'SQLServer'
+
 function Install-RhetosServer($rhetosVersion="2.0.0") {
     $url = "http://github.com//Rhetos/Rhetos/releases/download/v$rhetosVersion/Rhetos.$rhetosVersion.zip"
     $zipDstPath = ".\Rhetos.$rhetosVersion.zip"
@@ -27,11 +34,17 @@ function Install-RhetosServer($rhetosVersion="2.0.0") {
 }
 
 function Initialize-RhetosServer($sqlServer, $databaseName) {
-    cd 2CS.RhetosBuild\Rhetos\bin\
-    .\CreateAndSetDatabase.exe $sqlServer $databaseName
-    Copy-Item -Path "..\..\..\RhetosPackages\*.config" -Destination "..\"
-    Copy-Item -Path "..\..\..\RhetosPackages\*.bat" -Destination "..\"
-    cd ..\..\..\
+    try {
+        cd 2CS.RhetosBuild\Rhetos\bin\
+        .\CreateAndSetDatabase.exe $sqlServer $databaseName
+        Copy-Item -Path "..\..\..\RhetosPackages\*.config" -Destination "..\"
+        Copy-Item -Path "..\..\..\RhetosPackages\*.bat" -Destination "..\"
+        cd ..\..\..\
+    }
+    catch {
+        throw
+    }
+
 }
 
 function New-PluginBinaryDirectories() {
@@ -77,7 +90,6 @@ function RegexReplace ($fileSearch, $replacePattern, $replaceWith)
 
 function Change-Version($buildVersion, $prereleaseVersion) {
     If($prereleaseVersion -eq "auto"){
-        Write-Output ('A' + (get-date -format "yyMMddHHmm") + '-' + (git rev-parse --short HEAD))
         $prereleaseText = ('A' + (get-date -format "yyMMddHHmm") + '-' + (git rev-parse --short HEAD))
         If($prereleaseText.length -gt 20) {
             $prereleaseVersion = $prereleaseText.Substring(0,20)
@@ -99,22 +111,39 @@ function Change-Version($buildVersion, $prereleaseVersion) {
 }
 
 function New-NugetPackages($buildVersion="1.0.0", $prereleaseVersion="auto") {
-    Change-Version $buildVersion $prereleaseVersion
-    nuget pack AdminGui\Rhetos.AdminGui.nuspec -o .
-    nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -o .
+    try {
+        Change-Version $buildVersion $prereleaseVersion
+        nuget pack AdminGui\Rhetos.AdminGui.nuspec -OutputDirectory .
+        nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -OutputDirectory .
+    }
+    catch {
+        throw
+    }
+
 }
 
+
 function Update-RhetosServer() {
-    cd 2CS.RhetosBuild\Rhetos\bin\
-    .\DeployPackages.exe /NOPAUSE
-    If(!(Test-Path "Plugins\AdminSetup.exe")) {
-        .\Plugins\AdminSetup.exe
+    [Cmdletbinding()]
+    Param()
+    try {
+        cd 2CS.RhetosBuild\Rhetos\bin\
+        .\DeployPackages.exe /NOPAUSE
+        If(Test-Path ".\Plugins\AdminSetup.exe") {
+            .\Plugins\AdminSetup.exe
+        }
+        cd ..\..\..\
     }
-    cd ..\..\..\
+    catch {
+        throw
+    }
+
 }
 
 function Register-IISExpressSite($databaseName, $port) {
+    cd 2CS.RhetosBuild\Rhetos\bin\
     .\CreateIISExpressSite.exe $databaseName $port
+    cd ..\..\..\
 }
 
 function Set-AdminPermissions($sqlServer, $databaseName) {
