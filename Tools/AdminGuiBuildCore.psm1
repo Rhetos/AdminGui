@@ -1,42 +1,129 @@
 
-function Install-RhetosServer() {
-
+function Install-RhetosServer($rhetosVersion="2.0.0") {
+    $url = "http://github.com//Rhetos/Rhetos/releases/download/v$rhetosVersion/Rhetos.$rhetosVersion.zip"
+    $zipDstPath = ".\Rhetos.$rhetosVersion.zip"
+    $dstPath = ".\2CS.RhetosBuild"
+    if (!(Test-Path $dstPath)) {
+        if (!(Test-Path $zipDstPath)) {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            Try {
+                Write-Verbose "Downloading Rhetos......."
+                $wc = New-Object System.Net.WebClient
+                $wc.DownloadFile($url, $zipDstPath)
+            }
+            Catch {
+                Write-Error "$($error[0])"
+            }
+        
+        }
+        Expand-Archive -Path $zipDstPath -DestinationPath ($dstPath + "/Rhetos")
+        Remove-Item $zipDstPath
+        # Copy-Item ".\.nuget" -Destination ($dstPath + "/RhetosPackages/.nuget") -Recurse
+        Write-Host "Download and unzip successfully RhetosBuild v$rhetosVersion"
+    }
+    else {
+        Write-Warning "The directory $dstPath has already existed."
+    }
 }
 
-function Initialize-RhetosServer() {
-
+function Initialize-RhetosServer($sqlServer, $databaseName) {
+    cd 2CS.RhetosBuild\Rhetos\bin\
+    .\CreateAndSetDatabase.exe $sqlServer $databaseName
+    Copy-Item -Path "..\..\..\RhetosPackages\*.config" -Destination "..\"
+    Copy-Item -Path "..\..\..\RhetosPackages\*.bat" -Destination "..\"
+    cd ..\..\..\
 }
 
 function New-PluginBinaryDirectories() {
-
+    If(!(Test-Path ".\RhetosPackages\Plugins")) {
+        New-Item -ItemType directory -Path ".\RhetosPackages\Plugins"
+    }
+    If(!(Test-Path ".\RhetosPackages\BasecodePlugins")) {
+        New-Item -ItemType directory -Path ".\RhetosPackages\BasecodePlugins"
+    }
 }
 
 function Build-Plugins() {
-
+    cd RhetosPackages\Source\Angular2ModelGenerator
+    dotnet build AdminGuiPlugin.sln
+    cd ..\..\..\
 }
 
 function Build-Frontend() {
+    cd AdminGUI
+    if (!(Test-Path ".\node_modules")) {
+        npm install
+    } else {
+        npm update
+    }
+    Write-Host "*** AdminGui NPM PACKAGES UPDATED. ***" -ForegroundColor Green
 
+    npm run tsc
+    Write-Host "*** AdminGui TypeScript compiled. ***" -ForegroundColor Green
+
+    gulp default
+    Write-Host "*** AdminGui prepared wwwroot. ***" -ForegroundColor Green
+
+    cd ..
 }
 
-function New-NugetPackages() {
+function RegexReplace ($fileSearch, $replacePattern, $replaceWith)
+{
+    Get-ChildItem $fileSearch -r | % {
+        $c = [IO.File]::ReadAllText($_.FullName, [System.Text.Encoding]::Default) -Replace $replacePattern, $replaceWith;
+        [IO.File]::WriteAllText($_.FullName, $c, [System.Text.Encoding]::UTF8)
+    }
+}
 
+function Change-Version($buildVersion, $prereleaseVersion) {
+    If($prereleaseVersion -eq "auto"){
+        Write-Output ('A' + (get-date -format "yyMMddHHmm") + '-' + (git rev-parse --short HEAD))
+        $prereleaseText = ('A' + (get-date -format "yyMMddHHmm") + '-' + (git rev-parse --short HEAD))
+        If($prereleaseText.length -gt 20) {
+            $prereleaseVersion = $prereleaseText.Substring(0,20)
+        } Else {
+            $prereleaseVersion = $prereleaseText.Substring(0,$prereleaseText.length)
+        }
+    } 
+
+    If (![string]::IsNullOrEmpty($prereleaseVersion)) {
+        $fullVersion = $buildVersion + '-' + $prereleaseVersion
+    } Else {
+        $fullVersion = $buildVersion
+    }
+
+    Write-Output "Setting version $fullVersion"
+    cd AdminGui
+    RegexReplace ".\*.nuspec" '([\n^]\s*\<version\>).*(\<\/version\>\s*)' ('${1}'+$fullVersion+'${2}')
+    cd ..
+}
+
+function New-NugetPackages($buildVersion="1.0.0", $prereleaseVersion="auto") {
+    Change-Version $buildVersion $prereleaseVersion
+    nuget pack AdminGui\Rhetos.AdminGui.nuspec -o .
+    nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -o .
 }
 
 function Update-RhetosServer() {
-
+    cd 2CS.RhetosBuild\Rhetos\bin\
+    .\DeployPackages.exe /NOPAUSE
+    If(!(Test-Path "Plugins\AdminSetup.exe")) {
+        .\Plugins\AdminSetup.exe
+    }
+    cd ..\..\..\
 }
 
-function Register-IISExpressSite() {
-
+function Register-IISExpressSite($databaseName, $port) {
+    .\CreateIISExpressSite.exe $databaseName $port
 }
 
-function Set-AdminPermissions() {
-
+function Set-AdminPermissions($sqlServer, $databaseName) {
+    Invoke-Sqlcmd -ServerInstance $sqlServer -Database $databaseName
+    Write-Host " 		***	SET PERMISSION DONE ***"
 }
 
 function Remove-DebugPackages() {
-
+    Remove-Item ".\*.nupkg" 
 }
 
 function Get-Usage() {
