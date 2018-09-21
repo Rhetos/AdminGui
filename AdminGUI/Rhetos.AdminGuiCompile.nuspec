@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Rhetos.AdminGuiCompile</id>
-    <version>1.0.0-A1809181316-8a93fff</version>
+    <version>1.0.0</version>
     <authors>2ClickSolutions</authors>
     <owners>2CS</owners>
     <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
@@ -12,9 +12,9 @@
     <tags>2ClickSolutions</tags>
   </metadata>
   <files>
-	<file src="\scripts\**\*" target="Resources\scripts" />
-	<file src="\wwwroot\lib\**\*" target="Resources\node_modules" />
-	<file src="\tsconfig.json" target="Resources\tsconfig.json" />
+	<file src=".\scripts\**\*" target="Resources\scripts" />
+	<file src=".\wwwroot\lib\**\*" target="Resources\node_modules" />
+	<file src=".\tsconfig.json" target="Resources\tsconfig.json" />
   </files>
 </package>
 
