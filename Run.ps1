@@ -1,7 +1,6 @@
 <#
     Run.ps1
 #>
-
 [CmdletBinding()]
 Param (
 
@@ -11,14 +10,25 @@ Begin {
  }
 Process {
     try {
+        Write-Verbose "Build the plugins."
         Build-Plugins
+
+        Write-Verbose "Build AdminGui frontend"
         Build-Frontend
+
+        Write-Verbose "Create new nuget packages"
         New-NugetPackages
+
+        Write-Verbose "Update local testing Rhetos server with latest changes of local branch."
         Update-RhetosServer -ErrorAction Stop
+
+        Write-Verbose "Register testing Rhetos server as an IIS Express website."
         Register-IISExpressSite $DatabaseName $Port
+
+        Write-Verbose "Set required admin permissions."
         Set-AdminPermissions $SqlServer $DatabaseName
 
-        #Run IIS Express Site
+        Write-Verbose "Run the testing IIS Express website."
         & "C:\Program Files (x86)\IIS Express\iisexpress.exe" /config:"2CS.RhetosBuild\Rhetos\IISExpress.config"
 
     }
@@ -30,6 +40,6 @@ Process {
 
 }
 End {
-    Remove-DebugPackages
+    Remove-DebugPackages -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
     Remove-Module -Name "AdminGuiBuildCore"
 }

@@ -25,8 +25,7 @@ function Install-RhetosServer($rhetosVersion = "2.0.0") {
         }
         Expand-Archive -Path $zipDstPath -DestinationPath ($dstPath + "/Rhetos")
         Remove-Item $zipDstPath
-        # Copy-Item ".\.nuget" -Destination ($dstPath + "/RhetosPackages/.nuget") -Recurse
-        Write-Host "Download and unzip successfully RhetosBuild v$rhetosVersion"
+        Write-Host "Download and unzip successfully RhetosBuild v$rhetosVersion."
     }
     else {
         Write-Warning "The directory $dstPath has already existed."
@@ -57,6 +56,9 @@ function New-PluginBinaryDirectories() {
 }
 
 function Build-Plugins() {
+    # Ensure the requirements are met if the user runs `publish` command without running `init` first.
+    New-PluginBinaryDirectories
+
     cd RhetosPackages\Source\Angular2ModelGenerator
     dotnet build AdminGuiPlugin.sln
     cd ..\..\..\
@@ -70,13 +72,13 @@ function Build-Frontend() {
     else {
         npm update
     }
-    Write-Host "*** AdminGui NPM PACKAGES UPDATED. ***" -ForegroundColor Green
+    Write-Host "AdminGui NPM packages updated." -ForegroundColor Green
 
     npm run tsc
-    Write-Host "*** AdminGui TypeScript compiled. ***" -ForegroundColor Green
+    Write-Host "AdminGui TypeScript compiled." -ForegroundColor Green
 
     gulp default
-    Write-Host "*** AdminGui prepared wwwroot. ***" -ForegroundColor Green
+    Write-Host "AdminGui prepared wwwroot." -ForegroundColor Green
 
     cd ..
 }
@@ -89,7 +91,7 @@ function RegexReplace ($fileSearch, $replacePattern, $replaceWith) {
 }
 
 function Change-Version($buildVersion, $prereleaseVersion) {
-    If ($prereleaseVersion -eq "auto") {
+    if ($prereleaseVersion -eq "auto") {
         $prereleaseText = ('A' + (get-date -format "yyMMddHHmm") + '-' + (git rev-parse --short HEAD))
         If ($prereleaseText.length -gt 20) {
             $prereleaseVersion = $prereleaseText.Substring(0, 20)
@@ -99,14 +101,14 @@ function Change-Version($buildVersion, $prereleaseVersion) {
         }
     } 
 
-    If (![string]::IsNullOrEmpty($prereleaseVersion)) {
+    if (![string]::IsNullOrEmpty($prereleaseVersion)) {
         $fullVersion = $buildVersion + '-' + $prereleaseVersion
     }
-    Else {
+    else {
         $fullVersion = $buildVersion
     }
 
-    Write-Output "Setting version $fullVersion"
+    Write-Output "Setting version $fullVersion."
     cd AdminGui
     RegexReplace ".\*.nuspec" '([\n^]\s*\<version\>).*(\<\/version\>\s*)' ('${1}' + $fullVersion + '${2}')
     cd ..
@@ -124,7 +126,7 @@ function New-NugetPackages($buildVersion = "1.0.0", $prereleaseVersion = "auto",
             } else {
                 New-Item -ItemType directory -Path ".\PublishOutput"
             }
-            Copy-Item -Path ".\*.nupkg" -Destination ".\PublishOutput"
+            Move-Item -Path ".\*$buildVersion.nupkg" -Destination ".\PublishOutput"
         }
     }
     catch {
@@ -158,24 +160,22 @@ function Register-IISExpressSite($databaseName, $port) {
 }
 
 function Set-AdminPermissions($sqlServer, $databaseName) {
-    Push-Location
+    Push-Location # Save the current path which will be changed by sqlcmd.
     Invoke-Sqlcmd -ServerInstance $sqlServer -Database $databaseName -InputFile ".\Tools\SecurityAdminPermissionSetup.sql"
-    Write-Host " 		***	SET PERMISSION DONE ***"
+    Write-Host "Admin permission set."
     Pop-Location
 }
 
 function Remove-DebugPackages() {
-    Remove-Item ".\*.nupkg" 
+    [CmdletBinding()]
+    Param()
+    Write-Verbose "Prepare to delete debug packages."
+
+    Remove-Item ".\*.nupkg" -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
+    
+    Write-Verbose "All debug packages are removed."
 }
 
-function Get-Usage() {
-    Write-Host "------------------------------"
-    Write-Host "Help: "
-    Write-Host "To be implemented."
-    Write-Host "------------------------------"
-}
-
-Export-ModuleMember -Function Get-Usage
 
 #####################################################################
 # Core function exporters
