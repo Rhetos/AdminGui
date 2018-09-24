@@ -13,5 +13,11 @@
             return $@"{{ name:"" {name} "", filter: ""{filter}"", isComposableFilter: {check.ToString().ToLower()}  }},
             ";
         }
+
+        public static string GetHasReadRowPermissions()
+        {
+            return @"private getHasReadRowPermissions(DataStructure: IEmptyConstruct): boolean { return true; }
+                ";
+        }
     }
 }
