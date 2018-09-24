@@ -8,12 +8,13 @@ using Rhetos.Dsl;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator.Property
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(PropertyInfo))]
-    public class Angular2SimplePropertyCodeGenerator : IAngular2ModelGenratorPlugin
+    public class Angular2SimplePropertyCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         private static IDictionary<Type, string> supportedPropertyTypes = new Dictionary<Type, string>
         {

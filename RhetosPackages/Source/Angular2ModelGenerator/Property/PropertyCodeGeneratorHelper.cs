@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using Rhetos.Compiler;
 using Rhetos.Dsl.DefaultConcepts;
 using Angular2ModelGenerator.SimpleBusinessLogic;
+using Angular2ModelGenerator.Constants;
 
 namespace Angular2ModelGenerator.Property
 {
@@ -30,21 +31,21 @@ namespace Angular2ModelGenerator.Property
         public static readonly CsTag<PropertyInfo> ReturnTag = "Return";
         public static void GenerateCodeForType(PropertyInfo info, ICodeBuilder codeBuilder, string type, string nameSuffix = "", string referenceType = "")
         {
-            codeBuilder.InsertCode(PropertyCodeSnippet(info, type, nameSuffix), DataStructureCodeGenerator.PropertiesTag, info.DataStructure);
+            codeBuilder.InsertCode(PropertyCodeSnippet(info, type, nameSuffix),  CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.Properties), info.DataStructure);
 
             if (nameSuffix != "")
-                codeBuilder.InsertCode(BrowseReferenceFieldsTagCodeSnippet(info, type, nameSuffix, referenceType), DataStructureCodeGenerator.BrowseFieldsTag, info.DataStructure);
+                codeBuilder.InsertCode(BrowseReferenceFieldsTagCodeSnippet(info, type, nameSuffix, referenceType), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.BrowseFields), info.DataStructure);
             else
-                codeBuilder.InsertCode(BrowseFieldsTagCodeSnippet(info, type), DataStructureCodeGenerator.BrowseFieldsTag, info.DataStructure);
+                codeBuilder.InsertCode(BrowseFieldsTagCodeSnippet(info, type), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.BrowseFields), info.DataStructure);
 
-            codeBuilder.InsertCode(SetModelCodeSnippet(info, type, nameSuffix), DataStructureCodeGenerator.SetModelDataTag, info.DataStructure);
-            codeBuilder.InsertCode(ReturnValidatorCodeSnippet(info, type, nameSuffix), DataStructureCodeGenerator.ValidatorTag, info.DataStructure);
+            codeBuilder.InsertCode(SetModelCodeSnippet(info, type, nameSuffix), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.SetModelData), info.DataStructure);
+            codeBuilder.InsertCode(ReturnValidatorCodeSnippet(info, type, nameSuffix), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.Validators), info.DataStructure);
         }
 
         public static void GenerateCodeForInvalidData(InvalidDataInfo info, ICodeBuilder codeBuilder)
         {
             if (!info.FilterType.EndsWith("NewerThanCurrentEntry") && !info.FilterType.EndsWith("OlderThanHistoryEntries"))
-                codeBuilder.InsertCode(InvalidCodeSnippet(info), DataStructureCodeGenerator.InvalidDataTag, info.Source);
+                codeBuilder.InsertCode(InvalidCodeSnippet(info), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.InvalidData), info.Source);
         }
         private static string PropertyCodeSnippet(PropertyInfo info, string type, string nameSuffix)
         {

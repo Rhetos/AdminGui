@@ -23,12 +23,13 @@ using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
 using Angular2ModelGenerator.Property;
+using Angular2ModelGenerator.Generators.Interfaces;
 
 namespace Angular2ModelGenerator.SimpleBusinessLogic
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(MinLengthInfo))]
-    public class MinLengthTagCodeGenerator : IAngular2ModelGenratorPlugin
+    public class MinLengthTagCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {

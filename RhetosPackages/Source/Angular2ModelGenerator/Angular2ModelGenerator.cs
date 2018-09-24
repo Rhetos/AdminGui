@@ -1,31 +1,47 @@
-﻿using Rhetos.Compiler;
+﻿using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Helpers;
+using Angular2ModelGenerator.Models;
+using Angular2ModelGenerator.Templates;
+using Rhetos.Compiler;
 using Rhetos.Extensibility;
 using Rhetos.Logging;
 using Rhetos.Utilities;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
-using ICodeGenerator = Rhetos.Compiler.ICodeGenerator;
-using System;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.SimpleBusinessLogic;
 
 namespace Angular2ModelGenerator
 {
     [Export(typeof(IGenerator))]
     public class Angular2ModelGenerator : IGenerator
     {
-        private readonly IPluginsContainer<IAngular2ModelGenratorPlugin> _plugins;
+        private const string assemblyName = "Rhetos.Angular2.ts";
+
+        private readonly IPluginsContainer<IAngular2ModelGeneratorPlugin> _plugins;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IAssemblyGenerator _assemblyGenerator;
         private readonly ILogger _performanceLogger;
-        public const string AssemblyName = "Rhetos.Angular2";
+        
+        private readonly string _sourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/scripts/models", assemblyName);
+        private readonly string _compliedSourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/dist/admingui.js");
+        private readonly string _compliedDestinationFile = Path.Combine(Paths.ResourcesFolder, "AdminGui/js/admingui.js");
+
+        private readonly KeyValuePair<string, string>[] _replacements = new KeyValuePair<string, string>[]
+        {
+            new KeyValuePair<string, string>(RegularExpressions.DetectLineTag, "\n"),
+            new KeyValuePair<string, string>(RegularExpressions.DetectTag, ""),
+            new KeyValuePair<string, string>(RegularExpressions.DetectLastComma, "}\r\n    ];\r\n\r\n"),
+            new KeyValuePair<string, string>(RegularExpressions.DetectLastComma2, "}\r\n            ],\r\n"),
+            new KeyValuePair<string, string>(RegularExpressions.DetectLastComma3, "]\r\n        };\r\n"),
+            new KeyValuePair<string, string>(RegularExpressions.DetectLastComma4, "}\r\n        ];")
+        };
+
+        public IEnumerable<string> Dependencies => null;
 
         public Angular2ModelGenerator(
-            IPluginsContainer<IAngular2ModelGenratorPlugin> plugins,
+            IPluginsContainer<IAngular2ModelGeneratorPlugin> plugins,
             ICodeGenerator codeGenerator,
             IAssemblyGenerator assemblyGenerator,
             ILogProvider logProvider
@@ -37,68 +53,52 @@ namespace Angular2ModelGenerator
             _performanceLogger = logProvider.GetLogger("Performance");
         }
 
-        const string detectLineTag = @"\n\s*/\*.*?\*/\s*\r?\n";
-        const string detectTag = @"/\*.*?\*/";
-        const string detectLastComma = "},\r\n    ];\r\n\r\n";
-        const string detectLastComma2 = "},\r\n            ],\r\n";
-        const string detectLastComma3 = "],\r\n        };\r\n";
-        const string detectLastComma4 = "},\r\n        ];";
-
-        public IEnumerable<string> Dependencies
+        public void Generate()
         {
-            get { return null; }
+            var stopwatch = Stopwatch.StartNew();
+            var assemblySource = GenerateSource();
+
+            File.WriteAllText(_sourceFile, assemblySource.GeneratedCode);
+
+            CompileFileTS();
+            CopyCompiledFile();
+
+            _performanceLogger.Write(stopwatch, "Angular2ModelGenerator.Generate");
         }
 
-        private static void CompileFileTS()
+        private void CompileFileTS()
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C cd /d " + Paths.ResourcesFolder + "/AdminGuiCompile/scripts" + " & tsc";
-            process.StartInfo = startInfo;
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    Arguments = "/C cd /d " + Paths.ResourcesFolder + "/AdminGuiCompile/scripts" + " & tsc",
+                }
+            };
+
             process.Start();
             process.WaitForExit();
         }
-        private static void CopyCompiledFile()
+
+        private void CopyCompiledFile()
         {
-            string sourceFile = Path.Combine(Paths.ResourcesFolder + "/AdminGuiCompile/dist/admingui.js");
-            string destinationFile = Path.Combine(Paths.ResourcesFolder + "/AdminGui/js/admingui.js");
-            File.Copy(sourceFile, destinationFile, true);
-        }
-        public void Generate()
-        {
-
-            var sw = Stopwatch.StartNew();
-            SimpleAssemblySource assemblySource = GenerateSource();
-
-
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectLineTag, "\n");
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectTag, "");
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectLastComma, "}\r\n    ];\r\n\r\n");
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectLastComma2, "}\r\n            ],\r\n");
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectLastComma3, "]\r\n        };\r\n");
-            assemblySource.GeneratedCode = Regex.Replace(assemblySource.GeneratedCode, detectLastComma4, "}\r\n        ];");
-            assemblySource.GeneratedCode += AppEntityProviderCodeGenerator.GenerateAppEntityProvider();
-            assemblySource.GeneratedCode += AppMenuItemCodeGenerator.GenerateMenuItemProvider();
-
-            string sourceFile = Path.Combine(Paths.ResourcesFolder + "/AdminGuiCompile/scripts/models/", AssemblyName + ".ts");
-            File.WriteAllText(sourceFile, assemblySource.GeneratedCode);
-            CompileFileTS();
-            CopyCompiledFile();
-            //File.WriteAllText("D:\\resultList.txt", AppEntityProviderRepository.GetAllEntityProviders()[0]);
-            _performanceLogger.Write(sw, "Angular2ModelGenerator.Generate");
+            File.Copy(_compliedSourceFile, _compliedDestinationFile, true);
         }
 
         private SimpleAssemblySource GenerateSource()
         {
-            IAssemblySource generatedSource = _codeGenerator.ExecutePlugins(_plugins, "/*", "*/", null);
-            SimpleAssemblySource assemblySource = new SimpleAssemblySource
+            var generatedSource = _codeGenerator.ExecutePlugins(_plugins, "/*", "*/", null);
+
+            return new SimpleAssemblySource
             {
-                GeneratedCode = generatedSource.GeneratedCode,
+                GeneratedCode = string.Concat(
+                    InitialTemplates.Import,
+                    StringHelper.RegexReplace(generatedSource.GeneratedCode, _replacements),
+                    AdditionCodes.Instance.ToString()),
                 RegisteredReferences = generatedSource.RegisteredReferences
             };
-            return assemblySource;
         }
     }
 }

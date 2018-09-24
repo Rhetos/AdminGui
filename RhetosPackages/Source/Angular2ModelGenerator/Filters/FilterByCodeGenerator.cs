@@ -6,12 +6,14 @@ using System.ComponentModel.Composition;
 using System;
 using System.Threading;
 using Angular2ModelGenerator.Repository;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Constants;
 
 namespace Angular2ModelGenerator.Property
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(FilterByInfo))]
-    public class FilterByCodeGenerator : IAngular2ModelGenratorPlugin
+    public class FilterByCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         private static string FilterBySnippet(FilterByInfo info)
         {
@@ -39,7 +41,7 @@ namespace Angular2ModelGenerator.Property
             FilterByInfo info = (FilterByInfo)conceptInfo;
             if (info.Parameter.Split('.').Length > 2) return; // ignore internal filters
             if (info.Parameter.EndsWith("Filter") && info.Parameter.Contains("_")) return; // ignore filters by InvalidData and similar
-            codeBuilder.InsertCode(FilterBySnippet(info), DataStructureCodeGenerator.FiltersTag, info.Source);
+            codeBuilder.InsertCode(FilterBySnippet(info), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.Filters), info.Source);
         }
     }
 }

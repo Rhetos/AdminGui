@@ -23,17 +23,19 @@ using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
 using Angular2ModelGenerator.Property;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Constants;
 
 namespace Angular2ModelGenerator.SimpleBusinessLogic
 {
-    [Export(typeof(IAngular2ModelGenratorPlugin))]
+    [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(RowPermissionsReadInfo))]
-    public class RowPermissionsCodeGenerator : IAngular2ModelGenratorPlugin
+    public class RowPermissionsCodeGenerator : IAngular2ModelGeneratorPlugin
     {
         public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {
             var info = (RowPermissionsReadInfo)conceptInfo;
-            codeBuilder.InsertCode(RowPermissionsCodeSnippet(info), DataStructureCodeGenerator.AdditionalFunctionsTag, info.Source);
+            codeBuilder.InsertCode(RowPermissionsCodeSnippet(info), CsTagsManager.Instance.Get<DataStructureInfo>(CsTagNames.AdditionalFunctions), info.Source);
         }
 
         private static string RowPermissionsCodeSnippet(RowPermissionsReadInfo info)
