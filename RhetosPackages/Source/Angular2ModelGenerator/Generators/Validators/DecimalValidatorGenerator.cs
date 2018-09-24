@@ -25,7 +25,7 @@ using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
 
-namespace Angular2ModelGenerator.Plugins.Validators
+namespace Angular2ModelGenerator.Generators.Validators
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(DecimalPropertyInfo))]
