@@ -16,25 +16,30 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using System;
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+
+using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Properties.Base;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator
+namespace Angular2ModelGenerator.Generators.Properties
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(ReferencePropertyInfo))]
-    public class ReferencePropertyCodeGenerator : IAngular2ModelGeneratorPlugin
+    public class ReferencePropertyGenerator : BasePropertyGenerator<ReferencePropertyInfo>, IAngular2ModelGeneratorPlugin
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string PropertyNameSuffix => "ID";
+
+        protected override string GetPropertyType(ReferencePropertyInfo info)
         {
-            ReferencePropertyInfo info = (ReferencePropertyInfo)conceptInfo;
-            PropertyCodeGeneratorHelper.GenerateCodeForType(info, codeBuilder, "string", "ID", info.Referenced.ToString());
+            return TypeScript.Types.String;
+        }
+
+        protected override string GetReferenceType(ReferencePropertyInfo info)
+        {
+            return info.Referenced.ToString();
         }
     }
 }

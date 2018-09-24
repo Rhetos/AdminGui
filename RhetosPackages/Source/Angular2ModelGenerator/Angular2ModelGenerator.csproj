@@ -93,6 +93,7 @@
     <Compile Include="Contants\CsTagNames.cs" />
     <Compile Include="Contants\Messages.cs" />
     <Compile Include="Contants\RegularExpressions.cs" />
+    <Compile Include="Contants\TypeScript.cs" />
     <Compile Include="Contants\UrlPaths.cs" />
     <Compile Include="CsTagsManager.cs" />
     <Compile Include="Enums\MenuItemType.cs" />
@@ -103,6 +104,12 @@
     <Compile Include="Generators\Entities\DataStructureGenerator.cs" />
     <Compile Include="Generators\Entities\Interfaces\IEntityGenerator.cs" />
     <Compile Include="Generators\Interfaces\IAngular2ModelGeneratorPlugin.cs" />
+    <Compile Include="Generators\Properties\Base\BaseInvalidPropertyGenerator.cs" />
+    <Compile Include="Generators\Properties\Base\BasePropertyGenerator.cs" />
+    <Compile Include="Generators\Properties\Interfaces\IPropertyGenerator.cs" />
+    <Compile Include="Generators\Properties\InvalidPropertyGenerator.cs" />
+    <Compile Include="Generators\Properties\ReferencePropertyGenerator.cs" />
+    <Compile Include="Generators\Properties\PrimitivePropertyGenerator.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Html\HomePageLink.cs" />
     <Compile Include="Models\AppEntityProviders.cs" />
@@ -111,11 +118,8 @@
     <Compile Include="Models\BaseAngular2Model.cs" />
     <Compile Include="Models\SimpleAssemblySource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Property\Angular2SimplePropertyCodeGenerator.cs" />
-    <Compile Include="Property\InvalidPropertytCodeGenerator.cs" />
-    <Compile Include="Property\PropertyCodeGeneratorHelper.cs" />
-    <Compile Include="Property\ReferencePropertyCodeGenerator.cs" />
     <Compile Include="Property\DecimalPropertyCodeGenerator.cs" />
+    <Compile Include="Property\PropertyCodeGeneratorHelper.cs" />
     <Compile Include="Repository\ComposableFilterRepository.cs" />
     <Compile Include="SimpleBusinessLogic\MaxLengthTagCodeGenerator.cs" />
     <Compile Include="SimpleBusinessLogic\MinLengthTagCodeGenerator.cs" />
