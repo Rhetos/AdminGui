@@ -17,33 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator.SimpleBusinessLogic
+namespace Angular2ModelGenerator.Plugins.Validation
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
-    [ExportMetadata(MefProvider.Implements, typeof(RequiredPropertyInfo))]
-    public class RequiredTagCodeGenerator : IAngular2ModelGeneratorPlugin
+    [ExportMetadata(MefProvider.Implements, typeof(MaxLengthInfo))]
+    public class MaxLengthValidatorGenerator : BaseValidatorGenerator<MaxLengthInfo>
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string GenerateCode(MaxLengthInfo info)
         {
-            var info = (RequiredPropertyInfo)conceptInfo;
-            codeBuilder.InsertCode(ValidatorsCodeSnippet(info),PropertyCodeGeneratorHelper.ReturnTag,info.Property);
+            return ValidatorTemplates.MaxLength(info.Property.Name, info.Length);
         }
 
-        private static string ValidatorsCodeSnippet(RequiredPropertyInfo info)
+        protected override PropertyInfo GetConceptInfo(MaxLengthInfo info)
         {
-            string result = string.Format(
-                @"{{Validator :Validators.required, ErrorCode: 'required', ErrorMessage: ""{0} is required"" }},
-                ",
-                info.Property.Name);
-            return result;
+            return info.Property;
         }
     }
 }

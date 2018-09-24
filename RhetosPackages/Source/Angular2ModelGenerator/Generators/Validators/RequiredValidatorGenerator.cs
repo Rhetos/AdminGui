@@ -17,34 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator.SimpleBusinessLogic
+namespace Angular2ModelGenerator.Plugins.Validation
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
-    [ExportMetadata(MefProvider.Implements, typeof(MinLengthInfo))]
-    public class MinLengthTagCodeGenerator : IAngular2ModelGeneratorPlugin
+    [ExportMetadata(MefProvider.Implements, typeof(RequiredPropertyInfo))]
+    public class RequiredTagCodeGenerator : BaseValidatorGenerator<RequiredPropertyInfo>
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string GenerateCode(RequiredPropertyInfo info)
         {
-            var info = (MinLengthInfo)conceptInfo;
-            codeBuilder.InsertCode(ValidatorsCodeSnippet(info), PropertyCodeGeneratorHelper.ReturnTag, info.Property);
-
+            return ValidatorTemplates.Required(info.Property.Name);
         }
-        private static string ValidatorsCodeSnippet(MinLengthInfo info)
+
+        protected override PropertyInfo GetConceptInfo(RequiredPropertyInfo info)
         {
-            string result = string.Format(
-                @"{{Validator :Validators.minLength({1}), ErrorCode: 'minlength', ErrorMessage: ""{0} has minimum length of {1} characters"" }},
-                ",
-                info.Property.Name,
-                info.Length);
-            return result;
+            return info.Property;
         }
     }
 }

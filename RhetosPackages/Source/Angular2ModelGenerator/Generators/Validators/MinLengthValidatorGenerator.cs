@@ -17,35 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator.SimpleBusinessLogic
+namespace Angular2ModelGenerator.Plugins.Validation
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
-    [ExportMetadata(MefProvider.Implements, typeof(MaxLengthInfo))]
-    public class MaxLengthTagCodeGenerator : IAngular2ModelGeneratorPlugin
+    [ExportMetadata(MefProvider.Implements, typeof(MinLengthInfo))]
+    public class MinLengthValidatorGenerator : BaseValidatorGenerator<MinLengthInfo>
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string GenerateCode(MinLengthInfo info)
         {
-            var info = (MaxLengthInfo)conceptInfo;
-
-            codeBuilder.InsertCode(ValidatorsCodeSnippet(info), PropertyCodeGeneratorHelper.ReturnTag, info.Property);
+            return ValidatorTemplates.MinLength(info.Property.Name, info.Length);
         }
 
-        private static string ValidatorsCodeSnippet(MaxLengthInfo info)
+        protected override PropertyInfo GetConceptInfo(MinLengthInfo info)
         {
-            string result = string.Format(
-                @"{{Validator :Validators.maxLength({1}), ErrorCode: 'maxlength', ErrorMessage: ""{0} has maximum length of {1} characters"" }},
-                ",
-                info.Property.Name,
-                info.Length);
-            return result;
+            return info.Property;
         }
     }
 }
