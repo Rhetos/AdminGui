@@ -16,12 +16,6 @@ namespace Angular2ModelGenerator.Generators.Filters.Base
             }
         }
 
-        protected virtual bool IsParameterValid(string parameter)
-        {
-            // ignore internal filters & filters by InvalidData and similar
-            return parameter.Split('.').Length <= 2 && !(parameter.EndsWith("Filter") && parameter.Contains("_"));
-        }
-
         protected abstract DataStructureInfo GetPropertyInfo(T info);
 
         protected abstract string GenerateCode(T info);
