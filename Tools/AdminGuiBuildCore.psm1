@@ -89,7 +89,6 @@ function Build-Plugins($buildConfiguration = "Debug") {
     Push-Location .\Angular2ModelGenerator
     
     & $script:BuildToolPath AdminGuiPlugin.sln /t:rebuild /p:configuration=$buildConfiguration
-    #dotnet build AdminGuiPlugin.sln --configuration $buildConfiguration
     Pop-Location
 
     Push-Location .\AdminGuiRhetosExtensions\bin\$buildConfiguration
