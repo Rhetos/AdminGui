@@ -1,7 +1,7 @@
 ﻿using Angular2ModelGenerator.Models;
 using System;
 
-namespace Angular2ModelGenerator
+namespace Angular2ModelGenerator.Generators
 {
     public class AdditionCodes
     {

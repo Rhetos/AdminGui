@@ -17,37 +17,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator.Property
+namespace Angular2ModelGenerator.Generators.Validators
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(DecimalPropertyInfo))]
-    public class DecimalPropertyCodeGenerator : IAngular2ModelGeneratorPlugin
+    public class DecimalValidatorGenerator : BaseValidatorGenerator<DecimalPropertyInfo>
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string GenerateCode(DecimalPropertyInfo info)
         {
-            var info = (DecimalPropertyInfo)conceptInfo;
-
-            codeBuilder.InsertCode(ValidatorsCodeSnippet(info), PropertyCodeGeneratorHelper.ReturnTag, info);
+            return ValidatorTemplates.Decimal(RegularExpressions.Decimal.Replace("\\", "\\\\"), Messages.Errors.Decimal);
         }
 
-        private static string ValidatorsCodeSnippet(DecimalPropertyInfo info)
+        protected override PropertyInfo GetConceptInfo(DecimalPropertyInfo info)
         {
-            string RegularExpression = "^-?[0-9]+(\\.[0-9]+)?$";
-            string ErrorMessage = "Example: 100.0, 100.10 ";
-            string result = string.Format(
-                @"{{Validator: RegexValidatorFactory(""{0}""), ErrorCode: 'notMatchingRegex', ErrorMessage: ""{1}"" }},
-                ",
-                RegularExpression.Replace("\\","\\\\"),
-                ErrorMessage
-                );
-            return result;
+            return info;
         }
     }
 }

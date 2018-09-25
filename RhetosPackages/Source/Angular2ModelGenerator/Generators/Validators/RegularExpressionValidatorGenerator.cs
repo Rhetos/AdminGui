@@ -17,36 +17,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using Rhetos.Compiler;
-using Rhetos.Dsl;
+using Angular2ModelGenerator.Generators.Interfaces;
+using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
-using Rhetos.Utilities;
 using System.ComponentModel.Composition;
-using Angular2ModelGenerator.Property;
-using Angular2ModelGenerator.Generators.Interfaces;
 
-namespace Angular2ModelGenerator.SimpleBusinessLogic
+namespace Angular2ModelGenerator.Generators.Validators
 {
     [Export(typeof(IAngular2ModelGeneratorPlugin))]
     [ExportMetadata(MefProvider.Implements, typeof(RegExMatchInfo))]
-    public class RegExTagCodeGenerator : IAngular2ModelGeneratorPlugin
+    public class RegExTagCodeGenerator : BaseValidatorGenerator<RegExMatchInfo>
     {
-        public void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
+        protected override string GenerateCode(RegExMatchInfo info)
         {
-            var info = (RegExMatchInfo)conceptInfo;
-            codeBuilder.InsertCode(ValidatorsCodeSnippet(info), PropertyCodeGeneratorHelper.ReturnTag, info.Property);
-            
+            return ValidatorTemplates.Regex(info.RegularExpression.Replace("\\", "\\\\"), info.ErrorMessage);
         }
-        private static string ValidatorsCodeSnippet(RegExMatchInfo info)
+
+        protected override PropertyInfo GetConceptInfo(RegExMatchInfo info)
         {
-            string result = string.Format(
-                @"{{Validator: RegexValidatorFactory(""{1}""), ErrorCode: 'notMatchingRegex', ErrorMessage: ""{2}"" }},
-                ",
-                info.Property.Name,
-                info.RegularExpression.Replace("\\","\\\\"),
-                info.ErrorMessage);
-            return result;
+            return info.Property;
         }
     }
 }
