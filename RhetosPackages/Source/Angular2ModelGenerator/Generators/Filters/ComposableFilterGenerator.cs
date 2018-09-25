@@ -1,4 +1,5 @@
 ﻿using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Filters;
 using Angular2ModelGenerator.Generators.Filters.Base;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Templates;
@@ -14,8 +15,6 @@ namespace Angular2ModelGenerator.Plugins.Filters
     [ExportMetadata(MefProvider.Implements, typeof(ComposableFilterByInfo))]
     public class ComposableFilterGenerator : BaseFilterGenerator<ComposableFilterByInfo>
     {
-        public override bool IsComposable => true;
-
         public override void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {
             if (conceptInfo is RowPermissionsReadInfo info)
@@ -26,14 +25,22 @@ namespace Angular2ModelGenerator.Plugins.Filters
             base.GenerateCode(conceptInfo, codeBuilder);
         }
 
-        protected override string GetParameter(ComposableFilterByInfo info)
-        {
-            return info.Parameter;
-        }
-
         protected override DataStructureInfo GetPropertyInfo(ComposableFilterByInfo info)
         {
             return info.Source;
+        }
+
+        protected override string GenerateCode(ComposableFilterByInfo info)
+        {
+            if (info.Parameter.Split('.').Length <= 2
+                && !(info.Parameter.EndsWith("Filter") && info.Parameter.Contains("_")))
+            {
+                FilterParameters.Instance.Add(info.Parameter);
+
+                return FilterTemplates.Composable(info.Parameter.Contains(".") ? info.Parameter.Split('.')[1] : info.Parameter, info.Parameter, true);
+            }
+
+            return string.Empty;
         }
     }
 }

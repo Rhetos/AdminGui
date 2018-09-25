@@ -2,15 +2,9 @@
 {
     public class FilterTemplates
     {
-        public static string Composable(string filter, bool check)
+        public static string Composable(string name, string filter, bool isComposable)
         {
-            return $@"{{ name:"" {filter} "", filter: ""{filter}"", isComposableFilter: {check.ToString().ToLower()} }},
-            ";
-        }
-
-        public static string Composable(string name, string filter, bool check)
-        {
-            return $@"{{ name:"" {name} "", filter: ""{filter}"", isComposableFilter: {check.ToString().ToLower()}  }},
+            return $@"{{ name:"" {name} "", filter: ""{filter}"", isComposableFilter: {isComposable.ToString().ToLower()}  }},
             ";
         }
 
