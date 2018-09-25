@@ -137,6 +137,7 @@ gulp.task("appCopy", function () {
     gulp.src("scripts/**/*").pipe(gulp.dest("wwwroot/Scripts/"));
     gulp.src("scripts/services/login.info.ts").pipe(gulp.dest("wwwroot/Scripts/services/"));
     gulp.src("css/**/*").pipe(gulp.dest(paths.componentCss));
+    gulp.src("dist/admingui.js").pipe(gulp.dest(paths.appjs));
 });
 
 gulp.task("appCopyWithCompile", ['compile-ts', 'appCopy'], function () {
