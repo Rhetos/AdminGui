@@ -55,13 +55,58 @@ function New-PluginBinaryDirectories() {
     }
 }
 
-function Build-Plugins() {
+function Set-MSBuildRegistryPath($toolVersion) {
+    return "Registry::HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\$toolVersion"
+}
+
+$BuildToolPath = ""
+function Set-BuildTools() {
+    $version = 14
+    $toolVersion = "$version.0"
+    $registryKey = Set-MSBuildRegistryPath($toolVersion)
+    $script:BuildToolPath = Join-Path -Path (Get-ItemProperty -Path $registryKey -Name "MSBuildToolsPath").MSBuildToolsPath -ChildPath "MSBuild.exe"
+
+    if (!$?) {
+        do {
+            $version = $version - 1
+            $toolVersion = "$version.0"
+            $registryKey = Set-MSBuildRegistryPath($toolVersion)
+            $script:BuildToolPath = Join-Path -Path (Get-ItemProperty -Path $registryKey -Name "MSBuildToolsPath").MSBuildToolsPath -ChildPath "MSBuild.exe"
+
+        } while ($? -eq "False")
+    }
+}
+Export-ModuleMember -Function Set-BuildTools
+Export-ModuleMember -Variable 'BuildToolPath'
+function Build-Plugins($buildConfiguration = "Debug") {
     # Ensure the requirements are met if the user runs `publish` command without running `init` first.
     New-PluginBinaryDirectories
 
-    cd RhetosPackages\Source\Angular2ModelGenerator
-    dotnet build AdminGuiPlugin.sln
-    cd ..\..\..\
+    Set-BuildTools
+
+    Push-Location .\RhetosPackages\Source
+
+    Push-Location .\Angular2ModelGenerator
+    
+    & $script:BuildToolPath AdminGuiPlugin.sln /t:rebuild /p:configuration=$buildConfiguration
+    #dotnet build AdminGuiPlugin.sln --configuration $buildConfiguration
+    Pop-Location
+
+    Push-Location .\AdminGuiRhetosExtensions\bin\$buildConfiguration
+    Copy-Item -Path AdminGuiRhetosExtensions.dll -Destination ..\..\..\..\Plugins\ -Force
+    Pop-Location
+
+    Push-Location .\Angular2ModelGenerator\bin\$buildConfiguration
+    Copy-Item -Path Angular2ModelGenerator.dll -Destination ..\..\..\..\Plugins\ -Force
+    Pop-Location
+
+    Push-Location .\RhetosConceptsAndExtensions\bin\$buildConfiguration
+    Copy-Item -Path RhetosConceptsAndExtensions.dll -Destination ..\..\..\..\BasecodePlugins\ -Force
+    Pop-Location
+
+    Pop-Location
+
+
 }
 
 function Build-Frontend() {

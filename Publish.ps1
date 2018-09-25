@@ -12,7 +12,7 @@ Begin {
 Process {
     try {
         Write-Verbose "Build plugins"
-        Build-Plugins
+        Build-Plugins -buildConfiguration "Release"
 
         Write-Verbose "Build AdminGui frontend"
         Build-Frontend
