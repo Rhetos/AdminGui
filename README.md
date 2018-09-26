@@ -32,6 +32,7 @@ To simply build the packages from source:
 If you plan to jump on the development train, welcome onboard! Beside tools above, here are a few more things you are going to need:
 - An IDE or a simple text editor (Visual Studio, Visual Studio Code, Sublime, Notepad++, etc.)
 - .NET Framework SDK v4.5.1+.
+- IIS Express.
 
 ## Build from source
 1. Fork the `AdminGui` repository and clone it locally.
