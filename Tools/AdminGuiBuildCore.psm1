@@ -60,7 +60,14 @@ function Set-MSBuildRegistryPath($toolVersion) {
 }
 
 $BuildToolPath = ""
+$BuildToolCommand = ""
+# Try to find the most recent version first (dotnet/msbuild 15). Eventually fall back to earlier versions.
 function Set-BuildTools() {
+    if (Get-Command dotnet) {
+        $script:BuildToolPath = "dotnet"
+        return
+    }
+
     $version = 14
     $toolVersion = "$version.0"
     $registryKey = Set-MSBuildRegistryPath($toolVersion)
@@ -68,16 +75,15 @@ function Set-BuildTools() {
 
     if (!$?) {
         do {
+            if ($version -eq 9) { break; }
             $version = $version - 1
             $toolVersion = "$version.0"
             $registryKey = Set-MSBuildRegistryPath($toolVersion)
             $script:BuildToolPath = Join-Path -Path (Get-ItemProperty -Path $registryKey -Name "MSBuildToolsPath").MSBuildToolsPath -ChildPath "MSBuild.exe"
-
         } while ($? -eq "False")
     }
 }
-Export-ModuleMember -Function Set-BuildTools
-Export-ModuleMember -Variable 'BuildToolPath'
+
 function Build-Plugins($buildConfiguration = "Debug") {
     # Ensure the requirements are met if the user runs `publish` command without running `init` first.
     New-PluginBinaryDirectories
@@ -88,7 +94,10 @@ function Build-Plugins($buildConfiguration = "Debug") {
 
     Push-Location .\Angular2ModelGenerator
     
-    & $script:BuildToolPath AdminGuiPlugin.sln /t:rebuild /p:configuration=$buildConfiguration
+    if ($script:BuildToolPath -eq "dotnet") {
+        $buildToolCommand = "msbuild"
+    }
+    & $script:BuildToolPath $buildToolCommand AdminGuiPlugin.sln /t:rebuild /p:configuration=$buildConfiguration
     Pop-Location
 
     Push-Location .\AdminGuiRhetosExtensions\bin\$buildConfiguration
@@ -160,21 +169,21 @@ function Change-Version($buildVersion, $prereleaseVersion) {
 
 function New-NugetPackages($buildVersion = "1.0.0", $prereleaseVersion = "auto", $isPublish = $false) {
     try {
-        Change-Version $buildVersion $prereleaseVersion
-        nuget pack AdminGui\Rhetos.AdminGui.nuspec -OutputDirectory .
-        nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -OutputDirectory .
-
+        $OutputDIrectory = "."
         if ($isPublish) {
             if (Test-Path -Path ".\PublishOutput") {
                 Remove-Item ".\PublishOutput\*.nupkg" 
             } else {
                 New-Item -ItemType directory -Path ".\PublishOutput"
             }
-            Move-Item -Path ".\*$buildVersion.nupkg" -Destination ".\PublishOutput"
+            $OutputDIrectory = ".\PublishOutput"
         }
+        Change-Version $buildVersion $prereleaseVersion
+        nuget pack AdminGui\Rhetos.AdminGui.nuspec -OutputDirectory $OutputDIrectory
+        nuget pack AdminGui\Rhetos.AdminGuiCompile.nuspec -OutputDirectory $OutputDIrectory
     }
     catch {
-        throw
+        throw $_
     }
 
 }
