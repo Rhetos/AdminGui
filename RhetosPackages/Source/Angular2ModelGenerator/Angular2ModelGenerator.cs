@@ -1,4 +1,5 @@
 ﻿using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Generators;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Helpers;
 using Angular2ModelGenerator.Models;

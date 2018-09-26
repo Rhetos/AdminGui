@@ -87,8 +87,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Filters\ComposableFilterByCodeGenerator.cs" />
-    <Compile Include="Filters\FilterByCodeGenerator.cs" />
     <Compile Include="Generators\AdditionCodes.cs" />
     <Compile Include="Angular2ModelGenerator.cs" />
     <Compile Include="Angular2ModelGenratorModuleConfiguration.cs" />
@@ -103,6 +101,11 @@
     <Compile Include="Generators\Entities\ComputedStructureGenerator.cs" />
     <Compile Include="Generators\Entities\DataStructureGenerator.cs" />
     <Compile Include="Generators\Entities\Interfaces\IEntityGenerator.cs" />
+    <Compile Include="Generators\Filters\Base\BaseFilterGenerator.cs" />
+    <Compile Include="Generators\Filters\ComposableFilterGenerator.cs" />
+    <Compile Include="Generators\Filters\FilterGenerator.cs" />
+    <Compile Include="Generators\Filters\FilterParameters.cs" />
+    <Compile Include="Generators\Filters\Interfaces\IFilterGenerator.cs" />
     <Compile Include="Generators\Interfaces\IAngular2ModelGeneratorPlugin.cs" />
     <Compile Include="Generators\Properties\Base\BaseInvalidPropertyGenerator.cs" />
     <Compile Include="Generators\Properties\Base\BasePropertyGenerator.cs" />
@@ -125,9 +128,6 @@
     <Compile Include="Models\BaseAngular2Model.cs" />
     <Compile Include="Models\SimpleAssemblySource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Property\PropertyCodeGeneratorHelper.cs" />
-    <Compile Include="Repository\ComposableFilterRepository.cs" />
-    <Compile Include="SimpleBusinessLogic\RowPermissionsCodeGenerator.cs" />
     <Compile Include="Templates\EntityTemplates.cs" />
     <Compile Include="Templates\FilterTemplates.cs" />
     <Compile Include="Templates\InitialTemplates.cs" />
