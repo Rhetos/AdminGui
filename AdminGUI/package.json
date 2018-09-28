@@ -2,7 +2,8 @@
     "name": "adminGui",
     "version": "1.0.0",
     "scripts": {
-        "tsc": "tsc"
+        "tsc": "tsc",
+		"gulp": "gulp"
     },
     "dependencies": {
         "@angular/common": "^2.2.0",
