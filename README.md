@@ -37,8 +37,9 @@ If you plan to jump on the development train, welcome onboard! Beside tools abov
 ## Build from source
 1. Fork the `AdminGui` repository and clone it locally.
 2. Ensure you have `nuget` and `npm` commands available at your %PATH%. NuGet version 4.0+ is recommended. Older versions are not tested.
-3. Get inside AdminGui directory, run `.\Publish` in Powershell.
-4. After it's done, the publish outputs are located inside `PublishOutput` directory.
+3. From root directory, run `.\Init` in PowerShell. 
+4. Then, also in PowerShell, run `.\Publish`.
+5. After it's done, the publish outputs are located inside `PublishOutput` directory.
 
 Note, you can specify a version for the packages by passing the `BuildVersion` parameter to the command. For example, `.\Publish -BuildVersion "1.2.0"`.
 
@@ -54,6 +55,7 @@ Note, you can specify a version for the packages by passing the `BuildVersion` p
 .\Run
 ```
 Please note, we currently do not support hot-reloaded, which means if you make new changes in the source code, you have to stop the server and excute the command `.\Run` again.  
+If you just want to build and set up the testing Rhetos server binaries but do not want to run the website right away, pass `-SkipIISExpress` when calling the `run` command.
 
 5. And feel free to open issues or pull requests.
 
