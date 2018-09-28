@@ -1,6 +1,6 @@
-﻿using Autofac;
+﻿using Angular2ModelGenerator.Generators.Interfaces;
+using Autofac;
 using System.ComponentModel.Composition;
-using System.Diagnostics.Contracts;
 
 namespace Angular2ModelGenerator
 {
@@ -9,7 +9,7 @@ namespace Angular2ModelGenerator
         [Export(typeof(Module))]
         protected override void Load(ContainerBuilder builder)
         {
-            Rhetos.Extensibility.Plugins.FindAndRegisterPlugins<IAngular2ModelGenratorPlugin>(builder);
+            Rhetos.Extensibility.Plugins.FindAndRegisterPlugins<IAngular2ModelGeneratorPlugin>(builder);
 
             base.Load(builder);
         }
