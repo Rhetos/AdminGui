@@ -211,7 +211,7 @@ function Register-IISExpressSite($databaseName, $port) {
 
 function Set-AdminPermissions($sqlServer, $databaseName) {
     Push-Location # Save the current path which will be changed by sqlcmd.
-    Invoke-Sqlcmd -ServerInstance $sqlServer -Database $databaseName -InputFile ".\Tools\SecurityAdminPermissionSetup.sql"
+    sqlcmd -s $sqlServer -d $databaseName -i ".\Tools\SecurityAdminPermissionSetup.sql"
     Write-Host "Admin permission set."
     Pop-Location
 }
