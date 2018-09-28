@@ -130,7 +130,7 @@ function Build-Frontend() {
     npm run tsc
     Write-Host "AdminGui TypeScript compiled." -ForegroundColor Green
 
-    gulp default
+    npm run gulp default
     Write-Host "AdminGui prepared wwwroot." -ForegroundColor Green
 
     cd ..
@@ -195,9 +195,6 @@ function Update-RhetosServer() {
     try {
         cd 2CS.RhetosBuild\Rhetos\bin\
         .\DeployPackages.exe /NOPAUSE
-        If (Test-Path ".\Plugins\AdminSetup.exe") {
-            .\Plugins\AdminSetup.exe
-        }
         cd ..\..\..\
     }
     catch {
