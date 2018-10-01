@@ -75,7 +75,7 @@ export class HistoryComponent implements AfterViewInit {
                     this.getInitPaginator();
                 }
             },
-            error => this.messageService.emitError('Error occurred', error.toString())
+            error => this.messageService.emitError('Error', error.toString())
         );
     }
 
@@ -105,7 +105,7 @@ export class HistoryComponent implements AfterViewInit {
 
                 (<any>jQuery(this.historyPopupModal.nativeElement)).modal('show');
             },
-            error => this.messageService.emitError('Error occurred', error.toString())
+            error => this.messageService.emitError('Error', error.toString())
         );
     }
 

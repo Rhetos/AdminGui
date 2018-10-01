@@ -107,7 +107,7 @@ export class GenericGridComponent implements AfterViewInit {
                     else
                         this.claimCreateLink = "";
                 },
-                error => this.messageService.emitError('Error occurred', error.toString())
+                error => this.messageService.emitError('Error', error.toString())
             );
 
             // Initial value when router changes
@@ -139,7 +139,7 @@ export class GenericGridComponent implements AfterViewInit {
             setTimeout(() => this.zone.run(() => {
                 if (this.gridPrime && !this.isError) this.gridPrime.loadData();
                 if (this.isError) {
-                    this.messageService.emitError('Error orcurred', this.errorMessage);
+                    this.messageService.emitError('Error', this.errorMessage);
                 } else if (this.gridPrime) {
                     this.gridPrime.loadData();
                 }
@@ -186,7 +186,7 @@ export class GenericGridComponent implements AfterViewInit {
                     if (that.listInvalidData.length > 0) {
                     }
                 }),
-                error => this.messageService.emitError('Error occurred', error.toString())
+                error => this.messageService.emitError('Error', error.toString())
         })
     }
 

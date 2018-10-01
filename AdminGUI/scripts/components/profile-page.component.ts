@@ -27,7 +27,7 @@ export class ProfilePageComponent {
                     this.roleName.push(userData.records[i].HasRole);
                 }
             },
-            error => this.messageService.emitError('Error occurred', error.toString())
+            error => this.messageService.emitError('Error', error.toString())
         );
 
         activeMenuItem.Crumbs = [];

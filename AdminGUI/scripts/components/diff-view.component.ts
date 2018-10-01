@@ -100,7 +100,7 @@ export class DiffViewComponent {
             //Check models that user could edit or not
             this.entityService.userHasPermission(this.entityType, 'Edit').then(
                 (result: boolean) => that.zone.run(() => that.showSubmitBuntton = result),
-                error => this.messageService.emitError('Error occurred', error.toString())
+                error => this.messageService.emitError('Error', error.toString())
             );
 
             //Get entity by entity type and entity ID and show generic-form
@@ -111,7 +111,7 @@ export class DiffViewComponent {
                         that.entity = entity;
                         EntityChangeService.entityChange.emit(that.entity);
                     }),
-                    error => this.messageService.emitError('Error occurred', error.toString())
+                    error => this.messageService.emitError('Error', error.toString())
                 );
             }
 

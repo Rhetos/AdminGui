@@ -1,6 +1,6 @@
 ﻿import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
-import { GenericFormComponent, IEmptyConstruct, NotificationService, AppSettings } from "basecode/core";
+import { GenericFormComponent, IEmptyConstruct, AppSettings } from "basecode/core";
 import { Http } from "@angular/http";
 import { AppSettings } from "basecode/core";
 import { MessageService } from "../services/message.service";
@@ -71,7 +71,7 @@ export class DiffComponent {
                 this.stateBusy.emit(false);
             },
             error => {
-                this.messageService.emitError('Error occurred', 'Data fetch failure: ' + error.toString());
+                this.messageService.emitError('Error', 'Data fetch failure: ' + error.toString());
                 this.stateBusy.emit(false);
             },
             () => {
