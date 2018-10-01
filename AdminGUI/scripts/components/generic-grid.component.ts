@@ -1,12 +1,11 @@
 ﻿import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-
 import { GridPrimeControl } from 'basecode/controls';
 import { IButtonInfo, ButtonInfo, FieldFilter, FilterMatchMode, IComposableFilter, IEmptyConstruct, IEntityDataService, ErrorInCommand, ErrorService } from 'basecode/core';
-
 import { EntityClassProvider } from '../models/entity-class.provider';
 import { InvalidDataService } from '../services/invalidata.service';
+import { MessageService } from '../services/message.service';
 //import { Err } from 'basecode/core';
 
 @Component({
@@ -30,7 +29,7 @@ export class GenericGridComponent implements AfterViewInit {
     /** Router subscription */
     private routerSub: any = null;
 
-    private errorSub: any = null; 
+    private errorSub: any = null;
     /** Name invalid filter is chosen on Invalidfilter-dropdown */
     private nameFilter: string = "";
 
@@ -75,13 +74,16 @@ export class GenericGridComponent implements AfterViewInit {
      * @param router
      * @param entityService
      * @param zone
+     * @param messageService
      */
     constructor(
         private router: ActivatedRoute,
         private entityService: IEntityDataService,
         private zone: NgZone,
         private invalidDataService: InvalidDataService,
-        private errorService: ErrorService) { }
+        private errorService: ErrorService,
+        private messageService: MessageService
+    ) { }
     /**
     /**
      * @ngOnInit
@@ -98,15 +100,18 @@ export class GenericGridComponent implements AfterViewInit {
             if (parentName)
                 this.parentType = EntityClassProvider.mapEntity.getByID(parentName);
             this.claimLink = "/generic-grid/" + claim;
-            this.entityService.userHasPermission(this.entityType, 'New').then((result: boolean) => {
-                if (result)
-                    this.claimCreateLink = "/generic-grid/" + claim + "/add";
-                else
-                    this.claimCreateLink = "";
-            });
+            this.entityService.userHasPermission(this.entityType, 'New').then(
+                (result: boolean) => {
+                    if (result)
+                        this.claimCreateLink = "/generic-grid/" + claim + "/add";
+                    else
+                        this.claimCreateLink = "";
+                },
+                error => this.messageService.emitError('Error occurred', error.toString())
+            );
 
             // Initial value when router changes
-            
+
             this.currentFilterWithParams = "";
             this.isError = false;
             this.errorMessage = null;
@@ -121,19 +126,23 @@ export class GenericGridComponent implements AfterViewInit {
             this.availableFilters = (new this.entityType()).getFilterDefinitions();
 
             this.nameFilter = "";
-            
+
 
             if (this.invalidDataService.currentFilter != "") {
                 this.nameFilter = this.invalidDataService.currentFilter;
                 this.gridPrime.itemFilter = (this.nameFilter != "") ? [{ FilterName: this.nameFilter }] : null;
 
-                this.invalidDataService.currentFilter = "";                
+                this.invalidDataService.currentFilter = "";
             }
 
             // Auto refresh grid when router change
             setTimeout(() => this.zone.run(() => {
-                console.log(this.isError);
                 if (this.gridPrime && !this.isError) this.gridPrime.loadData();
+                if (this.isError) {
+                    this.messageService.emitError('Error orcurred', this.errorMessage);
+                } else if (this.gridPrime) {
+                    this.gridPrime.loadData();
+                }
             }), 100);
 
         })
@@ -150,7 +159,7 @@ export class GenericGridComponent implements AfterViewInit {
      * @param
      */
     ngOnDestroy() {
-        if (this.routerSub) this.routerSub.unsubscribe();      
+        if (this.routerSub) this.routerSub.unsubscribe();
         if (this.observableFilterSubcription) this.observableFilterSubcription.unsubscribe();
         if (this.observableInvalidSubcription) this.observableInvalidSubcription.unsubscribe();
     }
@@ -164,13 +173,20 @@ export class GenericGridComponent implements AfterViewInit {
         this.listInvalidData = [];
         this.invalidDataFilters.map(filter => {
             let that = this;
-            this.entityService.loadData(this.entityType, [], [{ FilterName: filter.filter }]).then((data: any) =>
-            {
+            this.entityService.loadData(this.entityType, [], [{ FilterName: filter.filter }]).then((data: any) => {
                 that.zone.run(() => that.listInvalidData.push({ name: filter.filter, value: data.totalCount }));
                 if (that.listInvalidData.length > 0) {
                     that.hideInvalidData = true;
                 }
             })
+            this.entityService.loadData(this.entityType, [], [{ FilterName: filter.filter }]).then(
+                (data: any) => {
+                    that.zone.run(() => that.listInvalidData.push({ name: filter.filter, value: data.totalCount }));
+
+                    if (that.listInvalidData.length > 0) {
+                    }
+                }),
+                error => this.messageService.emitError('Error occurred', error.toString())
         })
     }
 
@@ -180,7 +196,6 @@ export class GenericGridComponent implements AfterViewInit {
      * @Hide list of invalid data when user click on button "Hide invalid data result"
      */
     hideInvalidFiltersOnClick() {
-        this.hideInvalidData = false;
     }
 
     /**
@@ -188,12 +203,12 @@ export class GenericGridComponent implements AfterViewInit {
      * @param filterData
      * @Search value based on parameters of filters
      */
-	searchWithFilter(filterData: any) {
+    searchWithFilter(filterData: any) {
         let that = this;
-		that.zone.run(() => {
+        that.zone.run(() => {
             that.gridPrime.itemFilter = [{ FilterName: that.currentFilterWithParams, FilterData: filterData.data[0] }];
-			that.gridPrime.loadData();
-		});
+            that.gridPrime.loadData();
+        });
     }
 
     /**
@@ -204,13 +219,13 @@ export class GenericGridComponent implements AfterViewInit {
     ngAfterViewInit() {
         let that = this;
         let dropdownFilter = document.getElementById('invalidDataFilter');
-		let availableFilterWithParameter = document.getElementById('availableFilters');
+        let availableFilterWithParameter = document.getElementById('availableFilters');
 
         // Filter the grid with invalid data filter when user selects invalid data on dropdown
         this.observableInvalidSubcription = Observable.fromEvent(dropdownFilter, 'change').debounceTime(100).subscribe((_: any) => {
             that.zone.run(() => {
                 that.gridPrime.itemFilter = (that.nameFilter != "") ? [{ FilterName: that.nameFilter }] : null;
-                that.gridPrime.loadData();               
+                that.gridPrime.loadData();
             });
         });
 
@@ -218,19 +233,15 @@ export class GenericGridComponent implements AfterViewInit {
         this.observableFilterSubcription = Observable.fromEvent(availableFilterWithParameter, 'change').debounceTime(100).subscribe((_: any) => {
             that.zone.run(() => {
                 if (that.currentFilterWithParams && that.currentFilterWithParams != "") {
-                    // Start filter data
-                    that.filterType = EntityClassProvider.mapEntity.getByID(that.currentFilterWithParams);
                     that.filterWithParamsVisible = false;
                     setTimeout(() => that.filterWithParamsVisible = true, 100);
                 }
-                else
-                {
+                else {
                     // When user choose "Not selected"
                     that.filterWithParamsVisible = false;
                     that.gridPrime.itemFilter = null;
                     that.gridPrime.loadData();
                 }
-                    
             });
         });
     }

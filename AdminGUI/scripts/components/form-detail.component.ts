@@ -1,9 +1,8 @@
 ﻿import { Component, OnInit, OnDestroy, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { IEmptyConstruct, IEntityDataService, IDataStructure, NotificationService, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
+import { IEmptyConstruct, IEntityDataService, IDataStructure, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
-
+import { MessageService } from '../services/message.service';
 
 @Component({
     selector: 'claim-form',
@@ -30,8 +29,6 @@ export class FormDetailComponent {
     /** Show or hide Update button */
     public showSubmitBuntton: boolean = true;
 
-    private title: string = "";
-    private subTitle: string = "";
 
     /** Get form popup from DOM */
     @ViewChild("lookupPopupModal") modalPopup: ElementRef;
@@ -42,14 +39,16 @@ export class FormDetailComponent {
      * @param router Router
      * @param entityService IEntityDataService
      * @param zone NgZone
-     * @param notifications NotificationService
+     * @param messageService MessageService
      */
     constructor(
         private activated_router: ActivatedRoute,
         private router: Router,
         private entityService: IEntityDataService,
         private zone: NgZone,
-        private notifications: NotificationService) { }
+        private messageService: MessageService
+    ) {
+    }
 
     /**
      * @ngOnInit
@@ -74,18 +73,21 @@ export class FormDetailComponent {
             let that = this;
 
             //Check models that user could edit or not
-            this.entityService.userHasPermission(this.entityType, 'Edit').then((result: boolean) => {
-                that.zone.run(() => that.showSubmitBuntton = result);
-            });
+            this.entityService.userHasPermission(this.entityType, 'Edit').then(
+                (result: boolean) => that.zone.run(() => that.showSubmitBuntton = result),
+                error => this.messageService.emitError('Error occurred', error.toString())
+            );
 
             //Get entity by entity type and entity ID and show generic-form
-            this.entityService.fetchEntity(this.entityType, this.entityID).then((entity: any) =>
-                that.zone.run(() => {
+            this.entityService.fetchEntity(this.entityType, this.entityID).then(
+                (entity: any) => that.zone.run(() => {
                     that.entityType = this.entityType;
                     that.entity = entity;
                     (<any>jQuery(this.modalPopup.nativeElement)).modal('show');
                     EntityChangeService.entityChange.emit(that.entity);
-                }));
+                }),
+                error => this.messageService.emitError('Error occurred', error.toString())
+            );
         });
 
         //When has a emit from EntityChangeService.entiTyIDChange, it will emit a array of entity type based on entiTyIDChange
@@ -119,7 +121,7 @@ export class FormDetailComponent {
      * @Emit the flag to show notifaction for update data successfull or failed
      */
     onNotification(entity: IDataStructure) {
-        this.notifications.emitter.emit({ severity: 'info', summary: 'Update Success', detail: 'You updated the data with ID: ' + entity.ID });
+        this.messageService.emitInfo('Update Success', 'You updated the data with ID: ' + entity.ID);
     }
 
     /**
