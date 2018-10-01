@@ -17,22 +17,21 @@ namespace AdminGuiRhetosExtensions
 
             if (oldHistory != null)
             {
-                string status;
-
-                repository.CheckingInvalid.InvalidCheckingHistory.Update(new[] { new CheckingInvalid.InvalidCheckingHistory
-                {
-                    ID = oldHistory.ID,
-                    CurrentUser = oldHistory.CurrentUser,
-                    IsChecked = oldHistory.IsChecked,
-                    StartTime = oldHistory.StartTime,
-                    EndTime = oldHistory.EndTime,
-                    Status = oldHistory.Status,
-                    Lasted = false
-                }}); ;
+                repository.CheckingInvalid.InvalidCheckingHistory.Save(null, new[]{
+                    new CheckingInvalid.InvalidCheckingHistory
+                    {
+                        ID = oldHistory.ID,
+                        CurrentUser = oldHistory.CurrentUser,
+                        IsChecked = oldHistory.IsChecked,
+                        StartTime = oldHistory.StartTime,
+                        EndTime = oldHistory.EndTime,
+                        Status = oldHistory.Status,
+                        Lasted = false
+                    }
+                }, null);
             }
-           
 
-            repository.CheckingInvalid.InvalidCheckingHistory.Insert(new[] { new CheckingInvalid.InvalidCheckingHistory
+            repository.CheckingInvalid.InvalidCheckingHistory.Save(new[] { new CheckingInvalid.InvalidCheckingHistory
                     {
                         CurrentUser = userInfo.UserName,
                         IsChecked = false,
@@ -40,7 +39,8 @@ namespace AdminGuiRhetosExtensions
                         EndTime = null,
                         Status = "Checking is progress",
                         Lasted = true
-                    }}); ;
+                    }
+            }, null, null);
         }
 
         private static void CreateInvalidEntity(string ListEntity, DomRepository repository, IUserInfo userInfo, ExecutionContext context)
@@ -52,19 +52,20 @@ namespace AdminGuiRhetosExtensions
             {
                 string[] listInvalidEntity = ListEntity.Split(',');
 
-               
+
                 foreach (var invalidEntity in listInvalidEntity)
                 {
                     var entityGenericRepository = context.GenericRepository(invalidEntity);
                     int totalCount = (int)entityGenericRepository.Query().Count();
-
-                    repository.CheckingInvalid.InvalidEntity.Insert(new[] { new CheckingInvalid.InvalidEntity
-                    {
-                        EntityName = invalidEntity,                       
-                        NumRecord = totalCount,
-                        IsChecked = false,
-                        InvalidCheckingHistoryID = history.ID
-                    }}); ;
+                    repository.CheckingInvalid.InvalidEntity.Save(new[] {
+                        new CheckingInvalid.InvalidEntity
+                        {
+                            EntityName = invalidEntity,
+                            NumRecord = totalCount,
+                            IsChecked = false,
+                            InvalidCheckingHistoryID = history.ID
+                        }
+                    }, null, null);
                 }
             }
         }
@@ -82,13 +83,15 @@ namespace AdminGuiRhetosExtensions
 
                     foreach (var invalidFilter in listInvalidFilter)
                     {
-                        repository.CheckingInvalid.InvalidFilter.Insert(new[] { new CheckingInvalid.InvalidFilter
-                        {
-                            FilterName = invalidFilter,
-                            Status ="Check not started",
-                            IsChecked = false,
-                            InvalidEntityID = invalidEntity.ID
-                        }}); ;
+                        repository.CheckingInvalid.InvalidFilter.Save(new[] {
+                            new CheckingInvalid.InvalidFilter
+                            {
+                                FilterName = invalidFilter,
+                                Status ="Check not started",
+                                IsChecked = false,
+                                InvalidEntityID = invalidEntity.ID
+                            }
+                        }, null, null);
                     }
                 }
             }
@@ -148,15 +151,17 @@ namespace AdminGuiRhetosExtensions
                     var listFilters = repository.CheckingInvalid.InvalidFilter.Query().Where(item => item.InvalidEntityID == invalidEntity.ID && item.IsChecked == false).ToArray();
                     foreach (var filter in listFilters)
                     {
-                        repository.CheckingInvalid.InvalidChunk.Insert(new[] { new CheckingInvalid.InvalidChunk
-                    {
-                        StartID = chunk.Item1,
-                        EndID = chunk.Item2,
-                        NumRecord = recordPerChunk,
-                        NumInvalid = 0,
-                        IsChecked = false,
-                        InvalidFilterID = filter.ID
-                    }});
+                        repository.CheckingInvalid.InvalidChunk.Save(new[] {
+                            new CheckingInvalid.InvalidChunk
+                            {
+                                StartID = chunk.Item1,
+                                EndID = chunk.Item2,
+                                NumRecord = recordPerChunk,
+                                NumInvalid = 0,
+                                IsChecked = false,
+                                InvalidFilterID = filter.ID
+                            }
+                        }, null, null);
                     }
                 }
             }
@@ -170,7 +175,7 @@ namespace AdminGuiRhetosExtensions
 
             foreach (Newtonsoft.Json.Linq.JObject entity in data.data)
             {
-               if (!first)
+                if (!first)
                 {
                     listEntityName += ",";
                 }
@@ -197,16 +202,18 @@ namespace AdminGuiRhetosExtensions
 
             if (oldChunk != null)
             {
-                repository.CheckingInvalid.InvalidChunk.Update(new[] { new CheckingInvalid.InvalidChunk
-                {
-                    ID = oldChunk.ID,
-                    StartID = oldChunk.StartID,
-                    EndID = oldChunk.EndID,
-                    NumRecord = oldChunk.NumRecord,
-                    NumInvalid = NumInvalid,
-                    IsChecked = true,
-                    InvalidFilterID = oldChunk.InvalidFilterID
-                }}); ;
+                repository.CheckingInvalid.InvalidChunk.Save(null, new[] {
+                    new CheckingInvalid.InvalidChunk
+                    {
+                        ID = oldChunk.ID,
+                        StartID = oldChunk.StartID,
+                        EndID = oldChunk.EndID,
+                        NumRecord = oldChunk.NumRecord,
+                        NumInvalid = NumInvalid,
+                        IsChecked = true,
+                        InvalidFilterID = oldChunk.InvalidFilterID
+                    }
+                }, null);
             }
         }
 
@@ -242,14 +249,16 @@ namespace AdminGuiRhetosExtensions
 
                 if (listUnCheckChunks.Count() == 0 || listCheckedChunks.Count() > 0)
                 {
-                    repository.CheckingInvalid.InvalidFilter.Update(new[] { new CheckingInvalid.InvalidFilter
-                {
-                    ID = oldFilter.ID,
-                    FilterName = oldFilter.FilterName,
-                    Status = status,
-                    IsChecked = isChecked,
-                    InvalidEntityID = oldFilter.InvalidEntityID
-                }}); ;
+                    repository.CheckingInvalid.InvalidFilter.Save(null, new[] {
+                        new CheckingInvalid.InvalidFilter
+                        {
+                            ID = oldFilter.ID,
+                            FilterName = oldFilter.FilterName,
+                            Status = status,
+                            IsChecked = isChecked,
+                            InvalidEntityID = oldFilter.InvalidEntityID
+                        }
+                    }, null);
                 }
 
             }
@@ -262,14 +271,16 @@ namespace AdminGuiRhetosExtensions
 
             if (oldEntity != null && listFilters.Count() == 0)
             {
-                repository.CheckingInvalid.InvalidEntity.Update(new[] { new CheckingInvalid.InvalidEntity
-                {
-                    ID = oldEntity.ID,
-                    EntityName = oldEntity.EntityName,
-                    NumRecord = oldEntity.NumRecord,
-                    IsChecked = true,
-                    InvalidCheckingHistoryID = oldEntity.InvalidCheckingHistoryID,
-                }}); ;
+                repository.CheckingInvalid.InvalidEntity.Save(null, new[] {
+                    new CheckingInvalid.InvalidEntity
+                    {
+                        ID = oldEntity.ID,
+                        EntityName = oldEntity.EntityName,
+                        NumRecord = oldEntity.NumRecord,
+                        IsChecked = true,
+                        InvalidCheckingHistoryID = oldEntity.InvalidCheckingHistoryID,
+                    }
+                }, null);
             }
         }
 
@@ -280,16 +291,18 @@ namespace AdminGuiRhetosExtensions
 
             if (oldHistory != null && listEntitys.Count() == 0)
             {
-                repository.CheckingInvalid.InvalidCheckingHistory.Update(new[] { new CheckingInvalid.InvalidCheckingHistory
-                {
-                    ID = oldHistory.ID,
-                    CurrentUser = oldHistory.CurrentUser,
-                    IsChecked = true,
-                    StartTime = oldHistory.StartTime,
-                    EndTime = DateTime.Now,
-                    Status = "Check Completed",
-                    Lasted = oldHistory.Lasted
-                }}); ;
+                repository.CheckingInvalid.InvalidCheckingHistory.Save(null, new[] {
+                    new CheckingInvalid.InvalidCheckingHistory
+                    {
+                        ID = oldHistory.ID,
+                        CurrentUser = oldHistory.CurrentUser,
+                        IsChecked = true,
+                        StartTime = oldHistory.StartTime,
+                        EndTime = DateTime.Now,
+                        Status = "Check Completed",
+                        Lasted = oldHistory.Lasted
+                    }
+                }, null);
             }
         }
 
