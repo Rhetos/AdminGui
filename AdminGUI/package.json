@@ -2,7 +2,8 @@
     "name": "adminGui",
     "version": "1.0.0",
     "scripts": {
-        "tsc": "tsc"
+        "tsc": "tsc",
+		"gulp": "gulp"
     },
     "dependencies": {
         "@angular/common": "^2.2.0",
@@ -14,8 +15,8 @@
         "@angular/platform-browser-dynamic": "^2.2.0",
         "@angular/router": "^3.2.0",
         "@angular/upgrade": "^2.2.0",
-        "@types/node": "^10.9.4",
-        "angular2-cookie": "^1.2.0",
+        "@types/node": "10.11.0",
+        "angular2-cookie": "1.2.0",
         "angular2-in-memory-web-api": "0.0.7",
         "basecode": "1.2.0",
         "es6-shim": "0.35.0",
