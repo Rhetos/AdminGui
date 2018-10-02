@@ -6,7 +6,8 @@ RhetosPackages/Source/RhetosConceptsAndExtensions/bin/
 RhetosPackages/Source/RhetosConceptsAndExtensions/obj/
 make.out
 *.suo
-RhetosPackages/BasecodePlugins/RhetosConceptsAndExtensions.dll
+RhetosPackages/BasecodePlugins/
+RhetosPackages/Plugins/
 RhetosPackages/Source/Angular2ModelGenerator/bin/*
 RhetosPackages/Source/AdminGuiRhetosExtensions/bin/
 RhetosPackages/Source/Angular2ModelGenerator/obj/
@@ -14,3 +15,5 @@ RhetosPackages/Source/AdminGuiRhetosExtensions/obj/
 2CS.RhetosBuild/
 RhetosPackages/Source/Angular2ModelGenerator/.vs
 RhetosPackages/Source/Angular2ModelGenerator/packages
+# Visual Studio 2015/2017 cache/options directory
+.vs/
