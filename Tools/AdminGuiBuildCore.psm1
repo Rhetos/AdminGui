@@ -97,6 +97,7 @@ function Build-Plugins($buildConfiguration = "Debug") {
     if ($script:BuildToolPath -eq "dotnet") {
         $buildToolCommand = "msbuild"
     }
+	nuget restore
     & $script:BuildToolPath $buildToolCommand AdminGuiPlugin.sln /t:rebuild /p:configuration=$buildConfiguration
     Pop-Location
 
