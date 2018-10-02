@@ -1,8 +1,6 @@
 ﻿import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
 import { GenericFormComponent, IEmptyConstruct, AppSettings } from "basecode/core";
-import { Http } from "@angular/http";
-import { AppSettings } from "basecode/core";
 import { MessageService } from "../services/message.service";
 
 @Component({

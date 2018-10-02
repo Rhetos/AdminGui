@@ -1,6 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
 import { IEmptyConstruct, IEntityDataService, IDataStructure, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
 import { MessageService } from '../services/message.service';
@@ -128,7 +127,7 @@ export class DiffViewComponent {
                         that.entitySource = entity;
                         EntityChangeService.entityChange.emit(that.entitySource);
                     }),
-                    error => this.messageService.emitError('Error occurred', error.toString())
+                    error => this.messageService.emitError('Error', error.toString())
                 );
             }
 

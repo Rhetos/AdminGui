@@ -86,7 +86,7 @@ export class InvalidDataService {
         this.isUnderChecking = false;
         let body = "{}";
         this.http.post(AppSettings.API_ENDPOINT + "CheckingInvalid/StopCheckingInvalid/", body, options).subscribe(
-            (_) => this.messageService.emitInfo('Info', 'Stop success'),
+            (_) => { },
             (_) => this.messageService.emitError('Error', 'Stop fail')
         );
     }
@@ -113,8 +113,6 @@ export class InvalidDataService {
                 } else {
                     this.needResumeEmmiter.emit(false);
                 }
-
-                this.messageService.emitInfo('Info', 'Check need resume success');
             },
             (_) => {
                 this.needResumeEmmiter.emit(false);
@@ -143,10 +141,7 @@ export class InvalidDataService {
                 if (!this.pauseCheckingInvalid && !this.stopCheckingInvalid) {
                     this.checkingInvalidResult = data.json().Records;
                     this.checkSizeInvalidResult();
-                    this.checkingInvalidResultChangedEmitter.emit("get checking result success");
                 }
-
-                this.messageService.emitInfo('Info', 'Get result success');
             },
             (_) => this.messageService.emitError('Error', 'Get result fail')
         );
@@ -179,7 +174,6 @@ export class InvalidDataService {
 
                 this.checkSizeInvalidResult();
                 this.loadCheckingStructureEmitter.emit("load completed");
-                this.messageService.emitInfo('Info', 'Load success');
             },
             (_) => this.messageService.emitError('Error', 'Load fail')
         );
@@ -192,7 +186,6 @@ export class InvalidDataService {
         this.http.post(AppSettings.API_ENDPOINT + "CheckingInvalid/InitialCheckingAction/", body, options).subscribe(
             (_) => {
                 this.createCheckingStructureEmitter.emit("create completed");
-                this.messageService.emitInfo('Info', 'Create success');
             },
             (_) => this.messageService.emitError('Error', 'Create fail')
         );

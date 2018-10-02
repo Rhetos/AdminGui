@@ -29,7 +29,9 @@ export class FormDetailComponent {
     /** Show or hide Update button */
     public showSubmitBuntton: boolean = true;
 
-
+    private title: string = "";
+    private subTitle: string = "";
+    
     /** Get form popup from DOM */
     @ViewChild("lookupPopupModal") modalPopup: ElementRef;
 
