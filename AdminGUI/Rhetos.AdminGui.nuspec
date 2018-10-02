@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Rhetos.AdminGui</id>
-    <version>1.0.0-A1809181316-8a93fff</version>
+    <version>1.0.0-A1809251708-f6b78c6</version>
     <authors>2ClickSolutions</authors>
     <owners>2CS</owners>
     <licenseUrl>http://opensource.org/licenses/AGPL-3.0</licenseUrl>
@@ -12,7 +12,7 @@
     <tags>2ClickSolutions</tags>
   </metadata>
   <files>
-    <file src="\wwwroot\**\*" target="Resources" />
+    <file src="wwwroot\**\*" target="Resources" />
     <file src="..\RhetosPackages\DataMigration\**\*.sql" target="DataMigration" />
     <file src="..\RhetosPackages\DslScripts\**\*.rhe" target="DslScripts" />
     <file src="..\RhetosPackages\Plugins\*" target="Plugins" />
