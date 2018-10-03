@@ -1,4 +1,4 @@
-# AdminGui
+# AdminGui [![Build status](https://ci.appveyor.com/api/projects/status/ufxb331nb3cso6sa/branch/master?svg=true)](https://ci.appveyor.com/project/nguyenlamlll/admingui-0mw9b/branch/master)
 AdminGui plugin provides a beautiful dashboard to manage data tables of a Rhetos server.
 
 <p align="center">
