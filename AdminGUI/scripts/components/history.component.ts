@@ -3,10 +3,11 @@ import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { DataTable, Column, LazyLoadEvent, TabViewModule } from 'primeng/primeng';
 
-import { AppSettings, NotificationService, ControlDefinition, MenuItem, DecoratorRegistrations } from 'basecode/core';
+import { AppSettings, ControlDefinition, MenuItem, DecoratorRegistrations } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
 import { InvalidDataService } from '../services/invalidata.service';
 import { IInvalidDataFilter } from '../models/admingui-interface';
+import { MessageService } from '../services/message.service';
 
 @Component({
     selector: 'history',
@@ -54,44 +55,58 @@ export class HistoryComponent implements AfterViewInit {
     constructor(private invalidDataService: InvalidDataService,
         private http: Http,
         private router: Router,
-        private notifications: NotificationService) {
+        private messageService: MessageService
+    ) {
 
     }
 
     loadCheckingHistory() {
         this.pureData = [];
-        this.invalidDataService.getHistoryChecking().then((data: any) => {
-            if (data) {
-                data.map((item: any) => {
-                    this.pureData.push({ ID: item.ID, CheckingDate: item.CheckingDate, CheckingTime: item.CheckingTime, Status: item.Status });
-                });
-                this.getInitPaginator();
-            }
+        this.invalidDataService.getHistoryChecking().then(
+            (data: any) => {
+                if (data) {
+                    data.map((item: any) => this.pureData.push({
+                        ID: item.ID,
+                        CheckingDate: item.CheckingDate,
+                        CheckingTime: item.CheckingTime,
+                        Status: item.Status
+                    }));
 
-        });
-        
-        
+                    this.getInitPaginator();
+                }
+            },
+            error => this.messageService.emitError('Error', error.toString())
+        );
     }
 
     ngAfterViewInit() {
-
     }
 
     doubleClick(event: any) {
         this.detailData = [];
-        this.invalidDataService.getHistoryCheckingResultByID(event.data.ID).then((data: any) => {
-            if (data) {
-                data.map((item: any) => {
-                    let module: string = item.EntityName.split('.')[0];
-                    let table: string = item.EntityName.split('.')[1];
-                    this.detailData.push({ Module: module, Table: table, InvalidData: item.FilterName, Status: item.Status, NumInvalid: item.NumInvalid });
-                });
-                this.getInitDetailPaginator();
-            }
-            (<any>jQuery(this.historyPopupModal.nativeElement)).modal('show');
-        });
+        this.invalidDataService.getHistoryCheckingResultByID(event.data.ID).then(
+            (data: any) => {
+                if (data) {
+                    data.map((item: any) => {
+                        let module: string = item.EntityName.split('.')[0];
+                        let table: string = item.EntityName.split('.')[1];
+                        
+                        this.detailData.push({
+                            Module: module,
+                            Table: table,
+                            InvalidData: item.FilterName, 
+                            Status: item.Status, 
+                            NumInvalid: item.NumInvalid
+                        });
+                    });
 
-        
+                    this.getInitDetailPaginator();
+                }
+
+                (<any>jQuery(this.historyPopupModal.nativeElement)).modal('show');
+            },
+            error => this.messageService.emitError('Error', error.toString())
+        );
     }
 
     changePageSize(event: any) {

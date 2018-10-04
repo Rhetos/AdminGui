@@ -1,8 +1,7 @@
 ﻿import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
-
-import { GenericFormComponent, IEmptyConstruct, NotificationService, AppSettings } from "basecode/core";
-
+import { GenericFormComponent, IEmptyConstruct, AppSettings } from "basecode/core";
+import { MessageService } from "../services/message.service";
 
 @Component({
     selector: 'diff',
@@ -43,7 +42,9 @@ export class DiffComponent {
     /**  Emit flag to show busy overlay*/
     @Output() stateBusy: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(private http: Http, private notificationService: NotificationService) { }
+    constructor(
+        private http: Http, 
+        private messageService: MessageService) { }
 
     /**
      * @onDiff
@@ -67,8 +68,8 @@ export class DiffComponent {
                 this.diffEvent.emit(jsonData);
                 this.stateBusy.emit(false);
             },
-            (_) => {
-                console.log('Data fetch failure: ' + _);
+            error => {
+                this.messageService.emitError('Error', 'Data fetch failure: ' + error.toString());
                 this.stateBusy.emit(false);
             },
             () => {

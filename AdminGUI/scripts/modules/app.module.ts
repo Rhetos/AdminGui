@@ -17,13 +17,14 @@ import { GenericViewModule } from './generic-view.module';
 import { Growl, DataTableModule } from 'primeng/primeng';
 import { ComputedModule } from './computed.module';
 import { ErrorService } from 'basecode/core';
+import { MessageService } from '../services/message.service'
 
 @NgModule({
     providers: [
-        InvalidDataService, AllModels, AllMenuItemModels, 
-
+        InvalidDataService, AllModels, AllMenuItemModels,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        ErrorService
+        ErrorService,
+        MessageService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [AdminGuiComponent, HeaderAdminGuiAppComponent, HomeComponent, ProfilePageComponent ],

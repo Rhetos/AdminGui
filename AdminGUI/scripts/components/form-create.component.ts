@@ -1,8 +1,8 @@
 ﻿import { Component, OnInit, OnDestroy, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { IEmptyConstruct, IEntityDataService, IDataStructure, NotificationService, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
+import { IEmptyConstruct, IEntityDataService, IDataStructure, GenericFormComponent, EntityChangeService, EntityWithType } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
+import { MessageService } from '../services/message.service';
 
 @Component({
     selector: 'create-form',
@@ -33,14 +33,14 @@ export class FormCreateComponent {
      * @param router Router
      * @param entityService IEntityDataService
      * @param zone NgZone
-     * @param notifications NotificationService
+     * @param messageService MessageService
      */
     constructor(
         private activated_router: ActivatedRoute,
         private router: Router,
         private entityService: IEntityDataService,
         private zone: NgZone,
-        private notifications: NotificationService) { }
+        private messageService: MessageService) { }
 
     /**
      * @ngOnInit
@@ -89,7 +89,7 @@ export class FormCreateComponent {
      * @Emit the flag to show notifaction for creating new data successfull or failed
      */
     onNotification(entity: IDataStructure) {
-        this.notifications.emitter.emit({ severity: 'info', summary: 'Create Success', detail: 'You added new data with ID: ' + entity.ID });
+        this.messageService.emitInfo('Create Success', 'You added new data with ID: ' + entity.ID);
     }
 
     /**

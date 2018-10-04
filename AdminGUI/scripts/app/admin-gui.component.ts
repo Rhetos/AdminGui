@@ -1,12 +1,11 @@
 import { Component, AfterViewInit, NgZone, ViewChild } from '@angular/core';
 import { Router} from '@angular/router';
-
 import { MenuComponent } from 'basecode/controls';
-import { ActiveMenuItem, AppSettings, AppSettingsDefault, IEmptyConstruct, AppMenuItem, NotificationService, LoginService, LoginInfo, TestLogger  } from 'basecode/core';
+import { ActiveMenuItem, AppSettings, AppSettingsDefault, IEmptyConstruct, AppMenuItem, LoginService, LoginInfo, TestLogger  } from 'basecode/core';
 import { Message } from 'primeng/primeng';
 import { DomHandler } from 'primeng/components/dom/domhandler';
-
 import { AllModels, AllMenuItemModels } from '../models/rhetos.angular2';
+import { MessageService } from '../services/message.service';
 
 declare var jQuery: JQueryStatic;
 
@@ -56,7 +55,7 @@ export class AdminGuiComponent implements AfterViewInit {
         private allMenuItem: AllMenuItemModels,
         private activeMenuItem: ActiveMenuItem,
         private router: Router,
-        private notifications: NotificationService
+        private messageService: MessageService
     ) {    
         var that = this;
         loginService.UserLoginInfoObservable.subscribe((info: LoginInfo) => {
@@ -73,8 +72,6 @@ export class AdminGuiComponent implements AfterViewInit {
         }
 
         DomHandler.zindex = 10000;
-
-        console.log("quan");
     }
 
     home() {
@@ -88,7 +85,7 @@ export class AdminGuiComponent implements AfterViewInit {
         jQuery('#global-loader-icon').removeClass('spinning-cog').remove();
         jQuery('#global-loader-background').delay(800).fadeOut();
         jQuery('#loader').removeClass('overlay-loader');
-        console.log('loading finished');
+        
         this.logger.log("Application initialized!");
 
         let that = this;
@@ -99,8 +96,6 @@ export class AdminGuiComponent implements AfterViewInit {
         });
 
         this.menuComponent.sortMenuItem();
-        this.notifications.emitter.subscribe((next: Message) => that.zone.run(() => that.msgs.push(next)))
-        
+        this.messageService.subcribe((next: Message) => that.zone.run(() => that.msgs.push(next)));
     }
 }
-

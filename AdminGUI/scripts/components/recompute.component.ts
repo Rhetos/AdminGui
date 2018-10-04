@@ -1,8 +1,7 @@
 ﻿import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
-
-import { IEmptyConstruct, NotificationService, AppSettings } from "basecode/core";
-
+import { IEmptyConstruct, AppSettings } from "basecode/core";
+import { MessageService } from "../services/message.service";
 
 @Component({
     selector: 'recompute',
@@ -24,10 +23,11 @@ export class ReComputeComponent {
     @Input() nameFilter: string = "";
 
     @Output() reComputeEvent: EventEmitter<any> = new EventEmitter<any>();
-
     @Output() hideRecomputePopup: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(private http: Http, private notificationService: NotificationService) { }
+    constructor(
+        private http: Http, 
+        private messageService: MessageService) { }
     /**
      * @Recompute the data of target which have difference with data source
      * @param
@@ -47,19 +47,17 @@ export class ReComputeComponent {
 
         this.http.post(AppSettings.API_ENDPOINT + "AdminGui/Recompute/", body, options).subscribe(
             (_) => {
-                this.notificationService.emitter.emit({ severity: 'info', summary: 'Computed Success', detail: 'You updated the table: ' + this.target });
+                this.messageService.emitInfo('Computed Success','You updated the table: ' + this.target);
                 this.reComputeEvent.emit("");
             },
             (_) => {
-                this.notificationService.emitter.emit({ severity: 'warn', summary: 'Computed Fail', detail: 'You fail to update the table: ' + this.target });
+                this.messageService.emitError('Computed Fail','You fail to update the table: ' + this.target);
                 this.reComputeEvent.emit("");
             },
             () => {
                 this.reComputeEvent.emit("");
             }
         );
-
-        
     }
     
 }

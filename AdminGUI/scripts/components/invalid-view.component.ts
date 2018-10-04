@@ -2,12 +2,12 @@
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { DataTable, Column, LazyLoadEvent, TabViewModule } from 'primeng/primeng';
-
-import { AppSettings, NotificationService, MenuItem, DecoratorRegistrations, ControlDefinition } from 'basecode/core';
+import { AppSettings, MenuItem, DecoratorRegistrations, ControlDefinition } from 'basecode/core';
 import { EntityClassProvider } from '../models/entity-class.provider';
 import { InvalidDataService } from '../services/invalidata.service';
 import { IInvalidDataFilter } from '../models/admingui-interface';
 import { HistoryComponent } from './history.component';
+import { MessageService } from '../services/message.service';
 
 @Component({
     templateUrl: './templates/components/invalid-view.component.html',
@@ -89,7 +89,12 @@ export class InvalidViewComponent implements AfterViewInit {
     private totalRecords: number = 0;
 
     private _http: Http;
-    constructor(private invalidDataService: InvalidDataService, private http: Http, private router: Router, private notifications: NotificationService) {
+
+    constructor(
+        private invalidDataService: InvalidDataService, 
+        private http: Http,
+        private router: Router, 
+        private messageService: MessageService) {
         DecoratorRegistrations.registeredDecorators.filter(x => x instanceof MenuItem).map(exDecorated => {
             if (exDecorated.Name == "Tables")
                 this.plainMenu.push(exDecorated);
@@ -158,8 +163,7 @@ export class InvalidViewComponent implements AfterViewInit {
         this.enablePause = false;
         this.enableResume = true;
         this.invalidDataService.pauseCheckingInvalidProcess();
-
-        this.notifications.emitter.emit({ severity: 'info', summary: 'Pause', detail: 'Checking is paused by user' });
+        this.messageService.emitInfo('Pause','Checking is paused by user');
     }
 
     onResume() {
@@ -174,8 +178,7 @@ export class InvalidViewComponent implements AfterViewInit {
     onCancel() {
         this.setDefaultButtons();
         this.invalidDataService.stopChecking();
-     
-        this.notifications.emitter.emit({ severity: 'info', summary: 'Stop', detail: 'Checking is stopped by user' });
+        this.messageService.emitInfo('Stop', 'Checking is stopped by user');
     }
 
     onShowPopup() {
@@ -365,9 +368,8 @@ export class InvalidViewComponent implements AfterViewInit {
         if (this.data[event.data.ID].Status == 'Check completed') {
             this.invalidDataService.currentFilter = this.data[event.data.ID].InvalidData;
             this.router.navigateByUrl("/generic-grid/" + this.data[event.data.ID].Module + '.' + this.data[event.data.ID].Table);
-        }
-        else {
-            this.notifications.emitter.emit({ severity: 'info', summary: 'Navigate failed', detail: 'This row still not complete' });
+        } else {
+            this.messageService.emitInfo('Navigate failed', 'This row still not complete');
         }
     }
 
