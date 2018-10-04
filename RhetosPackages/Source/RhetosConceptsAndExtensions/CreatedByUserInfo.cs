@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Dsl;
-
 using Rhetos.Compiler;
 using Rhetos.Extensibility;
 using System;
