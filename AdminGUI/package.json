@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
         "tsc": "tsc",
-		"gulp": "gulp"
+        "gulp": "gulp"
     },
     "dependencies": {
         "@angular/common": "^2.2.0",
@@ -20,6 +20,7 @@
         "angular2-in-memory-web-api": "0.0.7",
         "basecode": "1.2.0",
         "es6-shim": "0.35.0",
+        "gulp-typescript": "^4.0.2",
         "moment": "2.22.2",
         "ng2-file-upload": "1.0.3",
         "primeng": "1.0.0-beta.15",
@@ -30,23 +31,10 @@
         "zone.js": "0.6.26"
     },
     "devDependencies": {
-        "babel-core": "",
-        "babel-plugin-transform-cjs-system-wrapper": "",
-        "bluebird": "",
-        "data-uri-to-buffer": "",
-        "es6-template-strings": "",
         "glob": "",
         "gulp": "3.9.1",
-        "gulp-typescript": "",
-        "gulp-util": "",
-        "mkdirp": "",
-        "pure-cjs": "",
         "rimraf": "2.2.8",
-        "source-map": "",
         "systemjs-builder": "",
-        "traceur": "",
-        "typescript": "2.0.3",
-        "uglify-js": "",
-        "vinyl-fs": ""
+        "typescript": "2.0.3"
     }
 }
