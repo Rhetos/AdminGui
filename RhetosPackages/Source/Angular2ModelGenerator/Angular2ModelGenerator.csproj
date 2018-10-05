@@ -177,6 +177,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\TypeScriptException.cs" />
     <Compile Include="Generators\AdditionCodes.cs" />
     <Compile Include="Angular2ModelGenerator.cs" />
     <Compile Include="Angular2ModelGenratorModuleConfiguration.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Generators\Validators\MinLengthValidatorGenerator.cs" />
     <Compile Include="Generators\Validators\RegularExpressionValidatorGenerator.cs" />
     <Compile Include="Generators\Validators\RequiredValidatorGenerator.cs" />
+    <Compile Include="Helpers\LoggerExtension.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Html\HomePageLink.cs" />
     <Compile Include="Models\AppEntityProviders.cs" />
