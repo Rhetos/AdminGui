@@ -20,7 +20,6 @@
         "angular2-in-memory-web-api": "0.0.7",
         "basecode": "1.2.0",
         "es6-shim": "0.35.0",
-        "gulp-typescript": "^4.0.2",
         "moment": "2.22.2",
         "ng2-file-upload": "1.0.3",
         "primeng": "1.0.0-beta.15",

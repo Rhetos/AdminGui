@@ -95,7 +95,7 @@ namespace Angular2ModelGenerator
                 if (process.StandardError.Peek() > -1)
                 {
                     _deployPackagesLogger.Error(process.StandardError);
-                    throw new TypeScriptException("Compiled TypeScript model file failed.");
+                    throw new TypeScriptException("Compiling TypeScript models failed.");
                 }
             }
             finally
