@@ -6,11 +6,12 @@ Param (
     [string]$BuildVersion = "1.0.0"
 )
 Begin {
-    Push-Location $PSScriptRoot
-    Import-Module .\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
+    Import-Module $PSScriptRoot\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
 }
 Process {
     try {
+        Push-Location $PSScriptRoot
+
         Write-Verbose "Build plugins"
         Build-Plugins -buildConfiguration "Release"
 
@@ -19,6 +20,8 @@ Process {
 
         Write-Verbose "Create new nuget packages"
         New-NugetPackages -buildVersion $BuildVersion -prereleaseVersion "" -isPublish $true
+
+        Pop-Location
     }
     catch {
         Write-Error "$($error[0])"
@@ -32,6 +35,4 @@ End {
     Write-Host "`nAdminGui NuGet packages are published succesfully.`n" -ForegroundColor Green
 
     Remove-Module -Name "AdminGuiBuildCore"
-    
-    Pop-Location
 }
