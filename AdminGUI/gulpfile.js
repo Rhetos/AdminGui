@@ -1,8 +1,6 @@
 ﻿/// <binding AfterBuild='default' Clean='clean' />
 var gulp = require('gulp');
 var rimraf = require('rimraf');
-var exec = require('child_process').exec;
-var http = require('http');
 
 var Builder = require("systemjs-builder");
 
@@ -34,11 +32,6 @@ gulp.task("build-RxJS-System", function () {
         gulp.src("node_modules/.tmp/Rx.umd.min.js").pipe(gulp.dest('wwwroot/lib/rxjs'));
     });
 });
-
-var compileTS = require('gulp-typescript');
-var projects = [
-    { name: 'currentApp', files: 'scripts', project: compileTS.createProject('tsconfig.json'), rootDir: '' }
-];
 
 var paths = {
     npm: "./node_modules/",
@@ -89,30 +82,6 @@ var libs = [
 var lastChangeID = 1;
 var busyBuild = false;
 
-function buildProject(tsProject, path, cb) {
-    lastChangeID++;
-    var currChange = lastChangeID;
-    setTimeout(function () {
-        if (currChange == lastChangeID && !busyBuild) {
-            busyBuild = true;
-            log('Build of ${tsProject.name} initiated from ${path}');
-            exec('cd "' + tsProject.rootDir + '" & ' + 'tsc', function (err, stdout, stderr) {
-                if (cb) {
-                    cb(tsProject.name);
-                }
-                log('Build of ${tsProject.name} completed');
-                busyBuild = false;
-            });
-        }
-    }, 1000);
-}
-
-
-
-gulp.task('compile-ts', function () {
-    return projects.map(function (tsProject) { buildProject(tsProject, 'compile-ts') });
-});
-
 var log = console.log.bind(console);
 
 // to ensure that rxjs is builded once more and that last version will be used
@@ -138,9 +107,6 @@ gulp.task("appCopy", function () {
     gulp.src("scripts/services/login.info.ts").pipe(gulp.dest("wwwroot/Scripts/services/"));
     gulp.src("css/**/*").pipe(gulp.dest(paths.componentCss));
     gulp.src("dist/admingui.js").pipe(gulp.dest(paths.appjs));
-});
-
-gulp.task("appCopyWithCompile", ['compile-ts', 'appCopy'], function () {
 });
 
 gulp.task('templates', function () {

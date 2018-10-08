@@ -1,4 +1,5 @@
 ﻿using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Exceptions;
 using Angular2ModelGenerator.Generators;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Helpers;
@@ -24,7 +25,8 @@ namespace Angular2ModelGenerator
         private readonly ICodeGenerator _codeGenerator;
         private readonly IAssemblyGenerator _assemblyGenerator;
         private readonly ILogger _performanceLogger;
-        
+        private readonly ILogger _deployPackagesLogger;
+
         private readonly string _sourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/scripts/models", assemblyName);
         private readonly string _compliedSourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/dist/admingui.js");
         private readonly string _compliedDestinationFile = Path.Combine(Paths.ResourcesFolder, "AdminGui/js/admingui.js");
@@ -52,6 +54,7 @@ namespace Angular2ModelGenerator
             _codeGenerator = codeGenerator;
             _assemblyGenerator = assemblyGenerator;
             _performanceLogger = logProvider.GetLogger("Performance");
+            _deployPackagesLogger = logProvider.GetLogger("DeployPackages");
         }
 
         public void Generate()
@@ -69,18 +72,36 @@ namespace Angular2ModelGenerator
 
         private void CompileFileTS()
         {
+            var arguments = $"/C cd /d {Paths.ResourcesFolder}/AdminGuiCompile/scripts & npm install --loglevel=error & npm run tsc";
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = "/C cd /d " + Paths.ResourcesFolder + "/AdminGuiCompile/scripts" + " & tsc",
+                    Arguments = arguments,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 }
             };
 
+            _deployPackagesLogger.Trace("Compiling TypeScript model file.");
+            
             process.Start();
-            process.WaitForExit();
+            try
+            {
+                _deployPackagesLogger.Trace(process.StandardOutput);
+                if (process.StandardError.Peek() > -1)
+                {
+                    _deployPackagesLogger.Error(process.StandardError);
+                    throw new TypeScriptException("Compiling TypeScript models failed.");
+                }
+            }
+            finally
+            {
+                process.WaitForExit();
+            }
         }
 
         private void CopyCompiledFile()
