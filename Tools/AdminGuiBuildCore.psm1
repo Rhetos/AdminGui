@@ -100,7 +100,7 @@ function Build-Plugins($buildConfiguration = "Debug") {
 
     $AdminGuiPluginFolder = '.\Plugins\AdminGuiPlugin\'
 
-	nuget restore
+	nuget restore $AdminGuiPluginFolder
     & $script:BuildToolPath $buildToolCommand $AdminGuiPluginFolder\AdminGuiPlugin.sln  /t:rebuild /p:configuration=$buildConfiguration
 
     Copy-Item -Path $AdminGuiPluginFolder\AdminGuiRhetosExtensions\bin\$buildConfiguration\AdminGuiRhetosExtensions.dll -Destination .\RhetosPackages\Plugins\ -Force
