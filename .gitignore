@@ -17,3 +17,6 @@ RhetosPackages/Source/Angular2ModelGenerator/.vs
 RhetosPackages/Source/Angular2ModelGenerator/packages
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+bin/
+obj/
+packages/
