@@ -6,10 +6,12 @@ Param (
     [switch]$SkipIISExpress = $false
 )
 Begin {
-    Import-Module .\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
+    Import-Module $PSScriptRoot\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
  }
 Process {
     try {
+        Push-Location $PSScriptRoot
+
         Write-Verbose "Build the plugins."
         Build-Plugins
 
@@ -31,18 +33,17 @@ Process {
         if ($SkipIISExpress -eq $false) {
             Write-Verbose "Run the testing IIS Express website."
             & "C:\Program Files (x86)\IIS Express\iisexpress.exe" /config:"2CS.RhetosBuild\Rhetos\IISExpress.config"
-        }
-        else 
-        { 
+        } else  { 
             Write-Verbose "Skipped the command: Running IIS Express website."
         }
+
+        Pop-Location
     }
     catch {
         Write-Error "$($error[0])"
         $LASTEXITCODE = 1
         exit $LASTEXITCODE
     }
-
 }
 End {
     Remove-DebugPackages -Verbose:($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent -eq $true)
