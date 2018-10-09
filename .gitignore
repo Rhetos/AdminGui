@@ -17,3 +17,16 @@ RhetosPackages/Source/Angular2ModelGenerator/.vs
 RhetosPackages/Source/Angular2ModelGenerator/packages
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+
+
+#Plugin binary directories
+Plugins/AdminGuiPlugin/Angular2ModelGenerator/bin/
+Plugins/AdminGuiPlugin/Angular2ModelGenerator/obj/
+
+Plugins/AdminGuiPlugin/AdminGuiRhetosExtensions/bin/
+Plugins/AdminGuiPlugin/AdminGuiRhetosExtensions/obj/
+
+Plugins/AdminGuiPlugin/RhetosConceptsAndExtensions/bin/
+Plugins/AdminGuiPlugin/RhetosConceptsAndExtensions/obj/
+
+Plugins/AdminGuiPlugin/packages/
