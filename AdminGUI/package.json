@@ -30,10 +30,9 @@
         "zone.js": "0.6.26"
     },
     "devDependencies": {
-        "glob": "",
-        "gulp": "3.9.1",
+        "gulp": "^4.0.0",
         "rimraf": "2.2.8",
-        "systemjs-builder": "",
+        "systemjs-builder": "^0.16.13",
         "typescript": "2.0.3"
     }
 }
