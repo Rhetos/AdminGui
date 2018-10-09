@@ -6,10 +6,13 @@ Param (
 
 )
 Begin {
-    Import-Module .\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
+    Import-Module $PSScriptRoot\Tools\AdminGuiBuildCore.psm1 -Force -DisableNameChecking
 }
 Process {
+    
     try {
+        Push-Location $PSScriptRoot
+
         Write-Verbose "Download and install Rhetos server."
         Install-RhetosServer
 
@@ -18,6 +21,8 @@ Process {
 
         Write-Verbose "Prepare directories required by the projects."
         New-PluginBinaryDirectories
+
+        Pop-Location
     }
     catch {
         Write-Error "$($error[0])"
