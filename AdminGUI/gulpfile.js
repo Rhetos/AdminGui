@@ -28,7 +28,7 @@ builder.config({
 });
 
 gulp.task("build-RxJS-System", function () {
-    builder.bundle('rxjs', 'node_modules/.tmp/Rx.umd.min.js', builderOptions).then(function (output) {
+    return builder.bundle('rxjs', 'node_modules/.tmp/Rx.umd.min.js', builderOptions).then(function (output) {
         gulp.src("node_modules/.tmp/Rx.umd.min.js").pipe(gulp.dest('wwwroot/lib/rxjs'));
     });
 });
@@ -99,19 +99,17 @@ gulp.task("libs", function () {
 
     gulp.src('./scripts/**/*.css').pipe(gulp.dest(paths.componentCss));
     gulp.src('./scripts/es5-shim.js').pipe(gulp.dest('wwwroot/lib/es6-shim/'));
-    gulp.src("./scripts/systemjs.config.js").pipe(gulp.dest('wwwroot/js/'));
+    return gulp.src("./scripts/systemjs.config.js").pipe(gulp.dest('wwwroot/js/'));
 });
 
 gulp.task("appCopy", function () {
     gulp.src("scripts/**/*").pipe(gulp.dest("wwwroot/Scripts/"));
-    gulp.src("scripts/services/login.info.ts").pipe(gulp.dest("wwwroot/Scripts/services/"));
     gulp.src("css/**/*").pipe(gulp.dest(paths.componentCss));
-    gulp.src("dist/admingui.js").pipe(gulp.dest(paths.appjs));
+    return gulp.src("dist/admingui.js", { allowEmpty: true }).pipe(gulp.dest(paths.appjs));
 });
 
 gulp.task('templates', function () {
-    gulp.src('./scripts/**/*.html').pipe(gulp.dest(paths.componentTemplates));
-
+    return gulp.src('./scripts/**/*.html').pipe(gulp.dest(paths.componentTemplates));
 });
 
 gulp.task("clean", function (callback) {
@@ -123,28 +121,4 @@ gulp.task("clean", function (callback) {
     rimraf(paths.componentTemplates, callback);
 });
 
-gulp.task('default', ['build-RxJS-System', 'libs', 'templates', 'appCopy'], function () {
-    // nothing
-});
-
-gulp.task('webserver', function () {
-    connect.server({
-        root: 'wwwroot',
-        port: 8888
-    });
-});
-
-gulp.task('htmlreload', function () {
-    gulp.src('./wwwroot/**/*.html')
-        .pipe(connect.reload());
-});
-
-gulp.task('jsreload', function () {
-    gulp.src('./wwwroot/**/*.js')
-        .pipe(connect.reload());
-});
-
-gulp.task('watch-wwwroot', function () {
-    gulp.watch(['./wwwroot/**/*.html'], ['htmlreload']);
-    gulp.watch(['./wwwroot/**/*.js'], ['jsreload']);
-});
+gulp.task('default', gulp.series(['build-RxJS-System', 'libs', 'templates', 'appCopy']));
