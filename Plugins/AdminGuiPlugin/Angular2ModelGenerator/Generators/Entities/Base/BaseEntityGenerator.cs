@@ -13,6 +13,8 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
 {
     public abstract class BaseEntityGenerator<T> : IEntityGenerator where T : IConceptInfo
     {
+        protected virtual string Id => string.Empty;
+
         public virtual void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {
             if (conceptInfo is T info)
@@ -34,13 +36,14 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
         protected virtual string GenerateCode(T info)
         {
             return EntityTemplates.Entity(
-                    GetClassName(info),
-                    GetModuleName(info),
-                    GetEntityName(info),
-                    GenerateProperties(info),
-                    GenerateFields(info),
-                    GenerateSetMethods(info),
-                    GenerateGetMethods(info));
+                   GetClassName(info),
+                   GetModuleName(info),
+                   GetEntityName(info),
+                   GenerateProperties(info),
+                   GenerateFields(info),
+                   GenerateSetMethods(info),
+                   GenerateGetMethods(info),
+                   GenerateIdField(info));
         }
 
         protected virtual string GenerateProperties(T info)
@@ -55,7 +58,7 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
 
         protected virtual string GenerateSetMethods(T info)
         {
-            return EntityTemplates.SetMethods.ModelData(GetClassName(info), CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info));
+            return EntityTemplates.SetMethods.ModelData(GetClassName(info), CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info), GenerateSetIdField(info));
         }
 
         protected virtual string GenerateGetMethods(T info)
@@ -66,6 +69,16 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
                 EntityTemplates.GetMethods.InvalidDataDefinitions(CsTagsManager.Instance.Get<T>(CsTagNames.InvalidData).Evaluate(info)),
                 EntityTemplates.GetMethods.FilterDefinitions(CsTagsManager.Instance.Get<T>(CsTagNames.Filters).Evaluate(info))
             );
+        }
+
+        protected virtual string GenerateIdField(T info)
+        {
+            return "public ID : string";
+        }
+
+        protected virtual string GenerateSetIdField(T info)
+        {
+            return "this.ID = modelData.ID;";
         }
 
         protected abstract KeyValuePair<MenuItemType, AppMenuItem> GenerateAppMenuItems(T info);

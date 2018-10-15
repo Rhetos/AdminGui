@@ -18,16 +18,19 @@
 */
 
 using Angular2ModelGenerator.Constants;
+using Angular2ModelGenerator.Contants;
 using Angular2ModelGenerator.Enums;
 using Angular2ModelGenerator.Generators.Entities.Base;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Models;
 using Angular2ModelGenerator.Templates;
+using Rhetos.Dsl;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Reflection;
 
 namespace Angular2ModelGenerator.Generators.Entities
 {
@@ -98,6 +101,31 @@ namespace Angular2ModelGenerator.Generators.Entities
             }
 
             return new KeyValuePair<MenuItemType, AppMenuItem>(_itemType, null);
+        }
+
+        protected override string GenerateIdField(DataStructureInfo info)
+        {
+            if (IsSimplerDataStructures(info))
+            {
+                return string.Empty;
+            }
+
+            return base.GenerateIdField(info);
+        }
+
+        protected override string GenerateSetIdField(DataStructureInfo info)
+        {
+            if (IsSimplerDataStructures(info))
+            {
+                return string.Empty;
+            }
+
+            return base.GenerateSetIdField(info);
+        }
+
+        private bool IsSimplerDataStructures(DataStructureInfo info)
+        {
+            return ConceptKeywords.SimplerDataStructures.Contains(info.GetType().GetCustomAttribute<ConceptKeywordAttribute>()?.Keyword);
         }
 
         private bool IsValidType(DataStructureInfo info)
