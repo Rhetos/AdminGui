@@ -14,21 +14,27 @@ Process {
 
         Write-Verbose "Build the plugins."
         Build-Plugins
+        if (!$?) { throw }
 
         Write-Verbose "Build AdminGui frontend"
         Build-Frontend
+        if (!$?) { throw }
 
         Write-Verbose "Create new nuget packages"
         New-NugetPackages
+        if (!$?) { throw }
 
         Write-Verbose "Update local testing Rhetos server with latest changes of local branch."
         Update-RhetosServer -ErrorAction Stop
+        if (!$?) { throw }
         
         Write-Verbose "Register testing Rhetos server as an IIS Express website."
         Register-IISExpressSite $DatabaseName $Port
+        if (!$?) { throw }
 
         Write-Verbose "Set required admin permissions."
         Set-AdminPermissions $SqlServer $DatabaseName
+        if (!$?) { throw }
 
         if ($SkipIISExpress -eq $false) {
             Write-Verbose "Run the testing IIS Express website."

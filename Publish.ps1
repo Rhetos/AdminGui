@@ -14,12 +14,15 @@ Process {
 
         Write-Verbose "Build plugins"
         Build-Plugins -buildConfiguration "Release"
+		if (!$?) { throw }
 
         Write-Verbose "Build AdminGui frontend"
         Build-Frontend
+		if (!$?) { throw }
 
         Write-Verbose "Create new nuget packages"
         New-NugetPackages -buildVersion $BuildVersion -prereleaseVersion "" -isPublish $true
+		if (!$?) { throw }
 
         Pop-Location
     }
