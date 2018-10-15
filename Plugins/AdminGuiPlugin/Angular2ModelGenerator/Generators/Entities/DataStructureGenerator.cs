@@ -103,24 +103,24 @@ namespace Angular2ModelGenerator.Generators.Entities
             return new KeyValuePair<MenuItemType, AppMenuItem>(_itemType, null);
         }
 
-        protected override string GenerateIdField(DataStructureInfo info)
+        protected override string GenerateIdFieldDefinition(DataStructureInfo info)
         {
             if (IsSimplerDataStructures(info))
             {
                 return string.Empty;
             }
 
-            return base.GenerateIdField(info);
+            return base.GenerateIdFieldDefinition(info);
         }
 
-        protected override string GenerateSetIdField(DataStructureInfo info)
+        protected override string GenerateIdFieldInitialization(DataStructureInfo info)
         {
             if (IsSimplerDataStructures(info))
             {
                 return string.Empty;
             }
 
-            return base.GenerateSetIdField(info);
+            return base.GenerateIdFieldInitialization(info);
         }
 
         private bool IsSimplerDataStructures(DataStructureInfo info)

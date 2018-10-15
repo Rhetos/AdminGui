@@ -9,13 +9,11 @@
             string properties = "",
             string fields = "",
             string setMethods = "",
-            string getMethods = "",
-            string idProperty = "")
+            string getMethods = "")
         {
             return $@"
 export class {className} extends BaseEntity implements BaseEntityWithFilters
 {{
-    {idProperty}
     {properties}
 
     getInstance(): IEmptyConstruct {{ return  {className}; }}
@@ -42,12 +40,11 @@ export class {className} extends BaseEntity implements BaseEntityWithFilters
 
         public class SetMethods
         {
-            public static string ModelData(string className, string setModels, string setIdField = "")
+            public static string ModelData(string className, string setModels)
             {
                 return
     $@"public setModelData(modelData: {className}) {{
         if (modelData) {{
-            {setIdField}
             {setModels}
         }}
     }}

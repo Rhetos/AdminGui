@@ -42,13 +42,15 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
                    GenerateProperties(info),
                    GenerateFields(info),
                    GenerateSetMethods(info),
-                   GenerateGetMethods(info),
-                   GenerateIdField(info));
+                   GenerateGetMethods(info));
         }
 
         protected virtual string GenerateProperties(T info)
         {
-            return CsTagsManager.Instance.Get<T>(CsTagNames.Properties).Evaluate(info);
+            return string.Join(
+                Environment.NewLine,
+                GenerateIdFieldDefinition(info),
+                StringHelper.Spaces(4) + CsTagsManager.Instance.Get<T>(CsTagNames.Properties).Evaluate(info));
         }
 
         protected virtual string GenerateFields(T info)
@@ -58,7 +60,12 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
 
         protected virtual string GenerateSetMethods(T info)
         {
-            return EntityTemplates.SetMethods.ModelData(GetClassName(info), CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info), GenerateSetIdField(info));
+            return EntityTemplates.SetMethods.ModelData(
+                GetClassName(info),
+                string.Join(
+                    Environment.NewLine,
+                    GenerateIdFieldInitialization(info),
+                    StringHelper.Spaces(12) + CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info)));
         }
 
         protected virtual string GenerateGetMethods(T info)
@@ -71,12 +78,12 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
             );
         }
 
-        protected virtual string GenerateIdField(T info)
+        protected virtual string GenerateIdFieldDefinition(T info)
         {
             return "public ID : string";
         }
 
-        protected virtual string GenerateSetIdField(T info)
+        protected virtual string GenerateIdFieldInitialization(T info)
         {
             return "this.ID = modelData.ID;";
         }
