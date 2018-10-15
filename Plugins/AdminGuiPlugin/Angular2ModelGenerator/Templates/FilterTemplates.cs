@@ -4,7 +4,7 @@
     {
         public static string Composable(string name, string filter, bool isComposable)
         {
-            return $@"{{ name:"" {name} "", filter: ""{filter}"", isComposableFilter: {isComposable.ToString().ToLower()}  }},
+            return $@"{{ name:' {name} ', filter: '{filter}', isComposableFilter: {isComposable.ToString().ToLower()}  }},
             ";
         }
 

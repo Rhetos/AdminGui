@@ -20,8 +20,8 @@ export class {className} extends BaseEntity implements BaseEntityWithFilters
 
     getInstance(): IEmptyConstruct {{ return  {className}; }}
     getNewInstance(): IDataStructure {{ return new {className}(); }}
-    getModuleName(): string {{ return ""{module}""; }}
-    getEntityName(): string {{ return ""{name}""; }}
+    getModuleName(): string {{ return '{module}'; }}
+    getEntityName(): string {{ return '{name}'; }}
     {fields}
     {setMethods}
     {getMethods}
@@ -114,15 +114,15 @@ export class AllMenuItemModels{}";
                 return $@"
 @AppMenuItem(
     {{
-        Name: ""{name}"",
-        Link: """",
-        Icon: ""{icon}"",
-        Tooltip: """",
+        Name: '{name}',
+        Link: '',
+        Icon: '{icon}',
+        Tooltip: '',
         Children:
         [
             {items}
         ],
-        ClaimResource: """"
+        ClaimResource: ''
     }})
 ";
             }
@@ -131,16 +131,16 @@ export class AllMenuItemModels{}";
             {
                 return $@"
             {{
-                Name: ""{name}"",
-                Link: """",
-                Icon: ""{icon}"",
-                Tooltip: """",
-                Parent: ""{parent}"",
+                Name: '{name}',
+                Link: '',
+                Icon: '{icon}',
+                Tooltip: '',
+                Parent: '{parent}',
                 Children:
                 [
                     {items}
                 ],
-                ClaimResource: """"
+                ClaimResource: ''
             }},
 ";
             }
@@ -157,13 +157,13 @@ export class AllMenuItemModels{}";
             {
                 return $@"
                     {{
-                        Name: ""{moduleName} {entityName}"",
-                        Link: ""{urlPath}"",
-                        Tooltip: ""{tooltip}"",
-                        Icon: ""{icon}"",
-                        ClaimResource: ""{moduleName}.{entityName}"",
-                        Parent: ""{parent}"",
-                        ClaimRight: ""Read"",
+                        Name: '{moduleName} {entityName}',
+                        Link: '{urlPath}',
+                        Tooltip: '{tooltip}',
+                        Icon: '{icon}',
+                        ClaimResource: '{moduleName}.{entityName}',
+                        Parent: '{parent}',
+                        ClaimRight: 'Read',
                         Children: []
                     }},
 ";

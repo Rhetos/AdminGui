@@ -12,7 +12,7 @@ $@"public {name}{suffix} : {type};
         public static string BrowseFields(string name, string type, string pipe)
         {
             return 
-$@"{{ Name: ""{name}"", Title: ""{name}"", Pipe: ""{pipe}"", DataType: DataTypeEnum.{type}, IsFilterEnabled: true }},
+$@"{{ Name: '{name}', Title: '{name}', Pipe: '{pipe}', DataType: DataTypeEnum.{type}, IsFilterEnabled: true }},
         ";
         }
 
@@ -25,7 +25,7 @@ $@"{{ Name: ""{name}"", Title: ""{name}"", Pipe: ""{pipe}"", DataType: DataTypeE
             string spaces = "")
         {
             return 
-$@"{{ Name: ""{name}{suffix}"", Title: ""{name}{suffix}"", Pipe: ""{pipe}"", DataType: DataTypeEnum.{type}, IsFilterEnabled: true, ReferenceType: ""{referenceType}"" }},
+$@"{{ Name: '{name}{suffix}', Title: '{name}{suffix}', Pipe: '{pipe}', DataType: DataTypeEnum.{type}, IsFilterEnabled: true, ReferenceType: '{referenceType}' }},
         ";
         }
 
@@ -39,21 +39,21 @@ $@"this.{name}{suffix} = modelData.{name}{suffix};
         public static string Invalid(string name, string module)
         {
             return 
-$@"{{ name:"" {name} "", filter: ""{module}.{name}"" }},
+$@"{{ name:' {name} ', filter: '{module}.{name}' }},
             ";
         }
 
         public static string Invalid(string name, string module, string errorMessage)
         {
             return 
-$@"{{ name:"" {name} "", filter: ""{module}.{name}"", message: ""{errorMessage}"" }},
+$@"{{ name:' {name} ', filter: '{module}.{name}', message: '{errorMessage}' }},
             ";
         }
 
         public static string ReturnValues(string name, string suffix, string values)
         {
             return 
-$@"""{name}{suffix}"":[
+$@"'{name}{suffix}':[
                 {values}
             ],
             ";
