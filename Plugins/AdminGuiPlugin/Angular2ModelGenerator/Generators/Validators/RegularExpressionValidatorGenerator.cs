@@ -25,6 +25,7 @@ using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.ComponentModel.Composition;
+using System.Text.RegularExpressions;
 
 namespace Angular2ModelGenerator.Generators.Validators
 {
@@ -35,7 +36,7 @@ namespace Angular2ModelGenerator.Generators.Validators
         protected override string GenerateCode(RegExMatchInfo info)
         {
             return ValidatorTemplates.Regex(
-                StringHelper.EscapeSpecialCharacters(info.RegularExpression, TypeScript.SpecialCharacters),
+                Regex.Replace(info.RegularExpression, RegularExpressions.SingleQuoteEscape, RegularExpressions.SingleQuoteReplacement),
                 StringHelper.EscapeSpecialCharacters(info.ErrorMessage, TypeScript.SpecialCharacters)
             );
         }
