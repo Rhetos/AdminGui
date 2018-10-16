@@ -17,8 +17,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using Angular2ModelGenerator.Constants;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Generators.Validators.Base;
+using Angular2ModelGenerator.Helpers;
 using Angular2ModelGenerator.Templates;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
@@ -32,7 +34,10 @@ namespace Angular2ModelGenerator.Generators.Validators
     {
         protected override string GenerateCode(RegExMatchInfo info)
         {
-            return ValidatorTemplates.Regex(info.RegularExpression.Replace("\\", "\\\\"), info.ErrorMessage);
+            return ValidatorTemplates.Regex(
+                StringHelper.EscapeSpecialCharacters(info.RegularExpression, TypeScript.SpecialCharacters),
+                StringHelper.EscapeSpecialCharacters(info.ErrorMessage, TypeScript.SpecialCharacters)
+            );
         }
 
         protected override PropertyInfo GetConceptInfo(RegExMatchInfo info)
