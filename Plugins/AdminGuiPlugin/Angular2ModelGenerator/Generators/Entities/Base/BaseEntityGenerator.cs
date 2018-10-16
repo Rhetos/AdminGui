@@ -13,6 +13,8 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
 {
     public abstract class BaseEntityGenerator<T> : IEntityGenerator where T : IConceptInfo
     {
+        protected virtual string Id => string.Empty;
+
         public virtual void GenerateCode(IConceptInfo conceptInfo, ICodeBuilder codeBuilder)
         {
             if (conceptInfo is T info)
@@ -34,18 +36,21 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
         protected virtual string GenerateCode(T info)
         {
             return EntityTemplates.Entity(
-                    GetClassName(info),
-                    GetModuleName(info),
-                    GetEntityName(info),
-                    GenerateProperties(info),
-                    GenerateFields(info),
-                    GenerateSetMethods(info),
-                    GenerateGetMethods(info));
+                   GetClassName(info),
+                   GetModuleName(info),
+                   GetEntityName(info),
+                   GenerateProperties(info),
+                   GenerateFields(info),
+                   GenerateSetMethods(info),
+                   GenerateGetMethods(info));
         }
 
         protected virtual string GenerateProperties(T info)
         {
-            return CsTagsManager.Instance.Get<T>(CsTagNames.Properties).Evaluate(info);
+            return string.Join(
+                Environment.NewLine,
+                GenerateIdFieldDefinition(info),
+                StringHelper.Spaces(4) + CsTagsManager.Instance.Get<T>(CsTagNames.Properties).Evaluate(info));
         }
 
         protected virtual string GenerateFields(T info)
@@ -55,7 +60,12 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
 
         protected virtual string GenerateSetMethods(T info)
         {
-            return EntityTemplates.SetMethods.ModelData(GetClassName(info), CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info));
+            return EntityTemplates.SetMethods.ModelData(
+                GetClassName(info),
+                string.Join(
+                    Environment.NewLine,
+                    GenerateIdFieldInitialization(info),
+                    StringHelper.Spaces(12) + CsTagsManager.Instance.Get<T>(CsTagNames.SetModelData).Evaluate(info)));
         }
 
         protected virtual string GenerateGetMethods(T info)
@@ -66,6 +76,16 @@ namespace Angular2ModelGenerator.Generators.Entities.Base
                 EntityTemplates.GetMethods.InvalidDataDefinitions(CsTagsManager.Instance.Get<T>(CsTagNames.InvalidData).Evaluate(info)),
                 EntityTemplates.GetMethods.FilterDefinitions(CsTagsManager.Instance.Get<T>(CsTagNames.Filters).Evaluate(info))
             );
+        }
+
+        protected virtual string GenerateIdFieldDefinition(T info)
+        {
+            return "public ID : string";
+        }
+
+        protected virtual string GenerateIdFieldInitialization(T info)
+        {
+            return "this.ID = modelData.ID;";
         }
 
         protected abstract KeyValuePair<MenuItemType, AppMenuItem> GenerateAppMenuItems(T info);

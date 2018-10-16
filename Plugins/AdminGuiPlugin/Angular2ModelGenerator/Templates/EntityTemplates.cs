@@ -12,11 +12,9 @@
             string getMethods = "")
         {
             return $@"
-
 export class {className} extends BaseEntity implements BaseEntityWithFilters
 {{
     {properties}
-    public ID : string;
 
     getInstance(): IEmptyConstruct {{ return  {className}; }}
     getNewInstance(): IDataStructure {{ return new {className}(); }}
@@ -47,7 +45,6 @@ export class {className} extends BaseEntity implements BaseEntityWithFilters
                 return
     $@"public setModelData(modelData: {className}) {{
         if (modelData) {{
-            this.ID = modelData.ID;
             {setModels}
         }}
     }}
