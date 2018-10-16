@@ -177,7 +177,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contants\ConceptKeywords.cs" />
+    <Compile Include="Contants\DataStructures.cs" />
     <Compile Include="Exceptions\TypeScriptException.cs" />
     <Compile Include="Generators\AdditionCodes.cs" />
     <Compile Include="Angular2ModelGenerator.cs" />

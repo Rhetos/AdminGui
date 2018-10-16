@@ -24,13 +24,11 @@ using Angular2ModelGenerator.Generators.Entities.Base;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Models;
 using Angular2ModelGenerator.Templates;
-using Rhetos.Dsl;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Reflection;
 
 namespace Angular2ModelGenerator.Generators.Entities
 {
@@ -125,7 +123,7 @@ namespace Angular2ModelGenerator.Generators.Entities
 
         private bool IsSimplerDataStructures(DataStructureInfo info)
         {
-            return ConceptKeywords.SimplerDataStructures.Contains(info.GetType().GetCustomAttribute<ConceptKeywordAttribute>()?.Keyword);
+            return !DataStructures.Types.AutoId.Any(t => info.GetType().IsInstanceOfType(t));
         }
 
         private bool IsValidType(DataStructureInfo info)
