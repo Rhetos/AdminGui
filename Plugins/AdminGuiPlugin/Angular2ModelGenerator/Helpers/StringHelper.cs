@@ -7,7 +7,7 @@ namespace Angular2ModelGenerator.Helpers
     public class StringHelper
     {
         public static string RegexReplace(string input, params KeyValuePair<string, string>[] replacements)
-        {
+        { 
             if (replacements.Length == 0)
                 return input;
 
@@ -25,6 +25,17 @@ namespace Angular2ModelGenerator.Helpers
         public static string Spaces(int number)
         {
             return string.Concat(Enumerable.Repeat(" ", number));
+        }
+
+        public static string EscapeSpecialCharacters(string input, params string[] patterns)
+        {
+            if (patterns.Length == 0)
+                return input;
+
+            if (patterns.Length == 1)
+                return input.Replace(patterns[0], $@"\{patterns[0]}");
+
+            return EscapeSpecialCharacters(input.Replace(patterns[0], $@"\{patterns[0]}"), patterns.Skip(1).ToArray());
         }
     }
 }

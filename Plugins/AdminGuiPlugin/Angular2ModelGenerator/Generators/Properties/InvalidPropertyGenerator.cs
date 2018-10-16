@@ -1,8 +1,10 @@
 ﻿using Angular2ModelGenerator.Constants;
 using Angular2ModelGenerator.Generators.Interfaces;
 using Angular2ModelGenerator.Generators.Properties.Base;
+using Angular2ModelGenerator.Helpers;
 using Rhetos.Dsl.DefaultConcepts;
 using Rhetos.Extensibility;
+using System;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 
@@ -14,7 +16,11 @@ namespace Angular2ModelGenerator.Generators.Properties
     {
         protected override string GetErrorMessage(InvalidDataInfo info)
         {
-            return Regex.Replace(info.ErrorMessage, RegularExpressions.DetectEscape, m => m.Value.Replace("\"", ""));
+            return Regex.Replace(
+                StringHelper.EscapeSpecialCharacters(info.ErrorMessage, TypeScript.SpecialCharacters),
+                RegularExpressions.DetectEscape,
+                m => m.Value.Replace("\"", "")
+                );
         }
 
         protected override string GetModuleName(InvalidDataInfo info)

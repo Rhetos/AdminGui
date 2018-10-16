@@ -2,6 +2,8 @@
 {
     public class TypeScript
     {
+        public static readonly string[] SpecialCharacters = new string[] { "'" };
+
         public class Types
         {
             public const string Binary = "binary";
