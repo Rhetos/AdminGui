@@ -28,7 +28,7 @@
 
         public static string Decimal(string regex, string errorMessage)
         {
-            return $@"{{Validator: RegexValidatorFactory('{regex}'), ErrorCode: 'notMatchingRegex', ErrorMessage: '{errorMessage}'}}
+            return $@"{{Validator: RegexValidatorFactory('{regex}'), ErrorCode: 'notMatchingRegex', ErrorMessage: '{errorMessage}'}},
                 ";
         }
     }
