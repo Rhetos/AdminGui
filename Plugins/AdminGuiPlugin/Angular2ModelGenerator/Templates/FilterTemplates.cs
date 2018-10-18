@@ -10,7 +10,7 @@
 
         public static string GetHasReadRowPermissions()
         {
-            return @"private getHasReadRowPermissions(DataStructure: IEmptyConstruct): boolean { return true; }
+            return @"public getHasReadRowPermissions(): boolean { return true; }
                 ";
         }
     }
