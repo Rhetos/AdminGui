@@ -42,7 +42,7 @@ namespace Angular2ModelGenerator.Generators.Entities
 
         protected override string GetClassName(EntityComputedFromInfo info)
         {
-            return $"{info.Source.Module}{info.Source.Name}_{info.Target.Name}";
+            return $"{info.Source.Module.Name}{info.Source.Name}_{info.Target.Name}";
         }
 
         protected override string GetModuleName(EntityComputedFromInfo info)
@@ -58,17 +58,17 @@ namespace Angular2ModelGenerator.Generators.Entities
         protected override KeyValuePair<MenuItemType, AppMenuItem> GenerateAppMenuItems(EntityComputedFromInfo info)
         {
             var items = EntityTemplates.AppMenuItem.ModuleItem(
-                    $"{info.Source.Module}{info.Source.Name}_{info.Target.Name}",
+                    $"{info.Source.Module.Name}{info.Source.Name}_{info.Target.Name}",
                     info.Target.Module.Name,
                     info.Target.Name,
-                    $"{UrlPaths.ComputedStructure}/{info.Source.Module}_{info.Source.Name}.{info.Target.Name}",
+                    $"{UrlPaths.ComputedStructure}/{info.Source.Module.Name}_{info.Source.Name}.{info.Target.Name}",
                     _moduleItemIcon,
-                    $"{info.Source.Module}_{info.Target.Name}",
+                    $"{info.Source.Module.Name}_{info.Target.Name}",
                     $"{_itemName}/{info.Target.Module.Name}.{info.Source.Name}");
 
             return new KeyValuePair<MenuItemType, AppMenuItem>(_itemType, new AppMenuItem(_itemName, _itemIcon, _moduleIcon)
             {
-                { $"{info.Source.Module}.{info.Source.Name}", items }
+                { $"{info.Source.Module.Name}.{info.Source.Name}", items }
             });
         }
     }
