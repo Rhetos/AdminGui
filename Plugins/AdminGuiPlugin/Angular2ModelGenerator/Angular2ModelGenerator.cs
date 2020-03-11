@@ -25,7 +25,7 @@ namespace Angular2ModelGenerator
         private readonly ICodeGenerator _codeGenerator;
         private readonly IAssemblyGenerator _assemblyGenerator;
         private readonly ILogger _performanceLogger;
-        private readonly ILogger _deployPackagesLogger;
+        private readonly ILogger _logger;
 
         private readonly string _sourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/scripts/models", assemblyName);
         private readonly string _compliedSourceFile = Path.Combine(Paths.ResourcesFolder, "AdminGuiCompile/dist/admingui.js");
@@ -54,7 +54,7 @@ namespace Angular2ModelGenerator
             _codeGenerator = codeGenerator;
             _assemblyGenerator = assemblyGenerator;
             _performanceLogger = logProvider.GetLogger("Performance");
-            _deployPackagesLogger = logProvider.GetLogger("DeployPackages");
+            _logger = logProvider.GetLogger(GetType().Name);
         }
 
         public void Generate()
@@ -86,15 +86,15 @@ namespace Angular2ModelGenerator
                 }
             };
 
-            _deployPackagesLogger.Trace("Compiling TypeScript model file.");
+            _logger.Info("Compiling TypeScript model file.");
             
             process.Start();
             try
             {
-                _deployPackagesLogger.Trace(process.StandardOutput);
+                _logger.Info(process.StandardOutput);
                 if (process.StandardError.Peek() > -1)
                 {
-                    _deployPackagesLogger.Error(process.StandardError);
+                    _logger.Error(process.StandardError);
                     throw new TypeScriptException("Compiling TypeScript models failed.");
                 }
             }

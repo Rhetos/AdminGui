@@ -14,6 +14,15 @@ namespace Angular2ModelGenerator.Helpers
             }
         }
 
+        public static void Info(this ILogger log, StreamReader streamReader)
+        {
+            while(!streamReader.EndOfStream)
+            {
+                string line = streamReader.ReadLine();
+                log.Info(line);
+            }
+        }
+
         public static void Error(this ILogger log, StreamReader streamReader)
         {
             while (!streamReader.EndOfStream)
