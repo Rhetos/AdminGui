@@ -41,7 +41,7 @@ namespace Angular2ModelGenerator
             new KeyValuePair<string, string>(RegularExpressions.DetectLastComma4, "}\r\n        ];")
         };
 
-        public IEnumerable<string> Dependencies => null;
+        public IEnumerable<string> Dependencies => new[] { "Rhetos.Deployment.ResourcesGenerator" }; // Required since Rhetos v4.1, because at build-time it uses files from the generated Resources folder.
 
         public Angular2ModelGenerator(
             IPluginsContainer<IAngular2ModelGeneratorPlugin> plugins,
