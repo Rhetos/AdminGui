@@ -4,9 +4,9 @@ using System.ComponentModel.Composition;
 
 namespace Angular2ModelGenerator
 {
+    [Export(typeof(Module))]
     public class Angular2ModelGenratorModuleConfiguration : Module
     {
-        [Export(typeof(Module))]
         protected override void Load(ContainerBuilder builder)
         {
             Rhetos.Extensibility.Plugins.FindAndRegisterPlugins<IAngular2ModelGeneratorPlugin>(builder);
